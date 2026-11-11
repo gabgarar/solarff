@@ -1,5 +1,7 @@
 # solarff
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24133574.svg)](https://doi.org/10.5281/zenodo.24133574)
+[![Release](https://img.shields.io/github/v/release/gabgarar/solarff)](https://github.com/gabgarar/solarff/releases)
 [![tests](https://github.com/gabgarar/solarff/actions/workflows/tests.yml/badge.svg)](https://github.com/gabgarar/solarff/actions/workflows/tests.yml)
 [![docs](https://github.com/gabgarar/solarff/actions/workflows/docs.yml/badge.svg)](https://gabgarar.github.io/solarff/)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
@@ -102,3 +104,8 @@ maintenance remain the responsibility of the author.
 `solarff` is distributed under the [BSD 3-Clause](LICENSE) license. If you use it in academic work,
 please cite the software (`CITATION.cff`; GitHub shows it under "Cite this repository") and, once
 published, the associated paper.
+
+> García, G. (2026). *solarff: NLFFF extrapolations with a calibrated per-line confidence* (v1.0.0).
+> Zenodo. <https://doi.org/10.5281/zenodo.24133575>
+
+The DOI [10.5281/zenodo.24133574](https://doi.org/10.5281/zenodo.24133574) always resolves to the latest version.
