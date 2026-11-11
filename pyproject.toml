@@ -9,6 +9,8 @@ description = "Extrapolation of solar magnetic fields (potential, LFFF, NLFFF) f
 readme = "README.md"
 license = "BSD-3-Clause"
 license-files = ["LICENSE"]
+authors = [{ name = "Gabriel García" }]
+keywords = ["solar physics", "NLFFF", "magnetic field extrapolation", "field-line reliability"]
 requires-python = ">=3.10"
 dependencies = [
     "numpy>=1.24",
@@ -25,6 +27,11 @@ calibration = ["scikit-learn>=1.3"]  # comparison of classifiers (solarff.calibr
 aia = ["sunpy[map]>=6.0", "drms>=0.7"]  # validation with AIA loops (solarff.aia)
 dev = ["pytest>=7"]
 docs = ["mkdocs-material>=9.5", "mkdocstrings[python]>=0.25"]  # documentation site (mkdocs serve)
+
+[project.urls]
+Homepage = "https://github.com/gabgarar/solarff"
+Documentation = "https://gabgarar.github.io/solarff/"
+Issues = "https://github.com/gabgarar/solarff/issues"
 
 [tool.setuptools.packages.find]
 include = ["solarff*"]
