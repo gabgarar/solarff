@@ -15,7 +15,7 @@ GitHub shows a ready-made citation under "Cite this repository", generated from 
 
 ## Paper
 
-> García, G. *Which field lines can we trust? Calibrating geometric reliability in nonlinear
+> García, G. *Which coronal field lines can we trust? Per-line reliability in nonlinear
 > force-free extrapolations*. In preparation.
 
 ## License
