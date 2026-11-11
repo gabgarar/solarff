@@ -1,0 +1,10 @@
+/* A reference reached from a citation is not hidden by the header and is highlighted. */
+.md-typeset li > a[id] {
+  scroll-margin-top: 6rem;
+}
+
+.md-typeset li:has(> a[id]:target) {
+  background: var(--md-accent-fg-color--transparent);
+  border-radius: 0.2rem;
+  outline: 0.3rem solid var(--md-accent-fg-color--transparent);
+}

@@ -1,0 +1,108 @@
+{
+ "labels": {
+  "rel5": {
+   "bad_rate": 0.5374474229392932,
+   "auc_refit": 0.8662142648827518,
+   "ece_refit": 0.05345786641366645,
+   "accepted": 0.18293678196999183,
+   "bad_accepted": 0.11187371310912834,
+   "auc_published_model": 0.8785949258758852
+  },
+  "rel10": {
+   "bad_rate": 0.29305041119969866,
+   "auc_refit": 0.8969065009043429,
+   "ece_refit": 0.04042592478151786,
+   "accepted": 0.5094167869922782,
+   "bad_accepted": 0.04103764865364471,
+   "auc_published_model": 0.9150608912378695
+  },
+  "rel20": {
+   "bad_rate": 0.18274844623014627,
+   "auc_refit": 0.9079276064075116,
+   "ece_refit": 0.03441240489118771,
+   "accepted": 0.6933894155314206,
+   "bad_accepted": 0.04305115436849253,
+   "auc_published_model": 0.925799545633483
+  },
+  "abs2mm": {
+   "bad_rate": 0.5329273651829995,
+   "auc_refit": 0.9100052233947284,
+   "ece_refit": 0.038919637699988734,
+   "accepted": 0.2392177788938414,
+   "bad_accepted": 0.04933735730219131,
+   "auc_published_model": 0.8865050493871259
+  },
+  "mixed": {
+   "bad_rate": 0.28470086006654527,
+   "auc_refit": 0.8942007234508423,
+   "ece_refit": 0.03808348421084892,
+   "accepted": 0.5046142256262164,
+   "bad_accepted": 0.03831798954963921,
+   "auc_published_model": 0.9057525198952853
+  },
+  "rel10_or_end2mm": {
+   "bad_rate": 0.5065289723146462,
+   "auc_refit": 0.8855734301031768,
+   "ece_refit": 0.04732626416452694,
+   "accepted": 0.26527088957247785,
+   "bad_accepted": 0.05845462075494024,
+   "auc_published_model": 0.9048909093408206
+  },
+  "rel10_or_end5mm": {
+   "bad_rate": 0.3394123924916818,
+   "auc_refit": 0.8949608780487097,
+   "ece_refit": 0.04317097749090208,
+   "accepted": 0.44651264988385964,
+   "bad_accepted": 0.03620386643233743,
+   "auc_published_model": 0.914878694298902
+  }
+ },
+ "nested": {
+  "auc": 0.8811623407812161,
+  "ece": 0.03170911316100426,
+  "chosen": {
+   "LFFF-bip": [
+    "alpha_spread",
+    "div",
+    "buffer",
+    "base_change",
+    "length",
+    "length_sq"
+   ],
+   "LFFF-quad": [
+    "alpha_spread",
+    "buffer",
+    "length",
+    "length_sq"
+   ],
+   "LL-I": [
+    "alpha_spread",
+    "div",
+    "buffer",
+    "length",
+    "length_sq"
+   ],
+   "LL-II": [
+    "alpha_spread",
+    "div",
+    "apex",
+    "length",
+    "length_sq"
+   ],
+   "LL-III": [
+    "alpha_spread",
+    "div",
+    "buffer",
+    "length",
+    "length_sq"
+   ],
+   "TD-relax": [
+    "alpha_spread",
+    "div",
+    "length",
+    "length_sq"
+   ]
+  },
+  "auc_non_nested_3": 0.8969065009043429
+ }
+}

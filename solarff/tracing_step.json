@@ -1,0 +1,27 @@
+{
+ "tag": "harp377",
+ "n_lines": 763,
+ "dx_Mm": 1.4576989572526875,
+ "steps": {
+  "0.5": {
+   "end_shift_px_median": 0.0035527617829000067,
+   "end_shift_px_p95": 0.01471469629908047,
+   "frac_end_shift_gt_2px": 0.0,
+   "length_rel_median": 8.383717422813915e-05,
+   "length_rel_p95": 0.0006883569510581121,
+   "apex_shift_Mm_median": 0.0010602429977226713,
+   "apex_shift_Mm_p95": 0.007780894232166077,
+   "frac_closed_changed": 0.0
+  },
+  "0.25": {
+   "end_shift_px_median": 0.000852965757725067,
+   "end_shift_px_p95": 0.0037858214353018536,
+   "frac_end_shift_gt_2px": 0.0,
+   "length_rel_median": 1.839541918141651e-05,
+   "length_rel_p95": 0.0001684959605243852,
+   "apex_shift_Mm_median": 0.00020203684823627555,
+   "apex_shift_Mm_p95": 0.0019288493557819914,
+   "frac_closed_changed": 0.0
+  }
+ }
+}

@@ -1,0 +1,20 @@
+{
+ "suite": "data/calibration_suite_s32-48_r2_mc4_plus_TD-relax.pkl",
+ "n_cases": 72,
+ "features": [
+  "alpha_spread",
+  "buffer",
+  "length",
+  "length_sq"
+ ],
+ "6_familias": {
+  "auc": 0.897454237140516,
+  "auc_with_mc": 0.8992446411721332,
+  "delta_auc": 0.001790404031617232
+ },
+ "sin_cuerda": {
+  "auc": 0.8844750889833961,
+  "auc_with_mc": 0.8923434750421728,
+  "delta_auc": 0.00786838605877671
+ }
+}

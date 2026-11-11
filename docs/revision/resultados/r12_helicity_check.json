@@ -1,0 +1,130 @@
+[
+ {
+  "case": "LL-a (n=1, m=1, l=0.3, Φ=π/4)",
+  "n": 32,
+  "variant": "actual",
+  "H_top_over_flux2": 0.03646208976496717,
+  "H_bottom_over_flux2": 0.03819443744422492,
+  "gauge_diff": 0.04535602027880327
+ },
+ {
+  "case": "LL-a (n=1, m=1, l=0.3, Φ=π/4)",
+  "n": 32,
+  "variant": "anterior",
+  "H_top_over_flux2": 0.04807562192239709,
+  "H_bottom_over_flux2": 0.04611417585972412,
+  "gauge_diff": 0.04079918229324427
+ },
+ {
+  "case": "LL-a (n=1, m=1, l=0.3, Φ=π/4)",
+  "n": 48,
+  "variant": "actual",
+  "H_top_over_flux2": 0.03592004227905123,
+  "H_bottom_over_flux2": 0.03665478734130351,
+  "gauge_diff": 0.020044995907651846
+ },
+ {
+  "case": "LL-a (n=1, m=1, l=0.3, Φ=π/4)",
+  "n": 48,
+  "variant": "anterior",
+  "H_top_over_flux2": 0.04367425510631261,
+  "H_bottom_over_flux2": 0.04219496668419921,
+  "gauge_diff": 0.03387094796493916
+ },
+ {
+  "case": "LL-a (n=1, m=1, l=0.3, Φ=π/4)",
+  "n": 64,
+  "variant": "actual",
+  "H_top_over_flux2": 0.035762568665059835,
+  "H_bottom_over_flux2": 0.03616833965257225,
+  "gauge_diff": 0.011218955346310872
+ },
+ {
+  "case": "LL-a (n=1, m=1, l=0.3, Φ=π/4)",
+  "n": 64,
+  "variant": "anterior",
+  "H_top_over_flux2": 0.041580499136503205,
+  "H_bottom_over_flux2": 0.04044716511030834,
+  "gauge_diff": 0.027256383394395452
+ },
+ {
+  "case": "LL-a (n=1, m=1, l=0.3, Φ=π/4)",
+  "n": 96,
+  "variant": "actual",
+  "H_top_over_flux2": 0.03560255622812165,
+  "H_bottom_over_flux2": 0.03577985911988998,
+  "gauge_diff": 0.004955382612721473
+ },
+ {
+  "case": "LL-a (n=1, m=1, l=0.3, Φ=π/4)",
+  "n": 96,
+  "variant": "anterior",
+  "H_top_over_flux2": 0.039471415190464466,
+  "H_bottom_over_flux2": 0.03871624106136162,
+  "gauge_diff": 0.01913217769007877
+ },
+ {
+  "case": "LL-b (n=1, m=1, l=0.3, Φ=π/2)",
+  "n": 32,
+  "variant": "actual",
+  "H_top_over_flux2": 0.025172671920496513,
+  "H_bottom_over_flux2": 0.025902050254156428,
+  "gauge_diff": 0.0281590965388106
+ },
+ {
+  "case": "LL-b (n=1, m=1, l=0.3, Φ=π/2)",
+  "n": 32,
+  "variant": "anterior",
+  "H_top_over_flux2": 0.03296935075561633,
+  "H_bottom_over_flux2": 0.0315849602516066,
+  "gauge_diff": 0.04199022644611534
+ },
+ {
+  "case": "LL-b (n=1, m=1, l=0.3, Φ=π/2)",
+  "n": 48,
+  "variant": "actual",
+  "H_top_over_flux2": 0.02449511786334661,
+  "H_bottom_over_flux2": 0.024804288678412483,
+  "gauge_diff": 0.012464409646020204
+ },
+ {
+  "case": "LL-b (n=1, m=1, l=0.3, Φ=π/2)",
+  "n": 48,
+  "variant": "anterior",
+  "H_top_over_flux2": 0.02962247757084938,
+  "H_bottom_over_flux2": 0.028691671960455092,
+  "gauge_diff": 0.03142227412167125
+ },
+ {
+  "case": "LL-b (n=1, m=1, l=0.3, Φ=π/2)",
+  "n": 64,
+  "variant": "actual",
+  "H_top_over_flux2": 0.024352855036373237,
+  "H_bottom_over_flux2": 0.024523663446800674,
+  "gauge_diff": 0.006965044631197701
+ },
+ {
+  "case": "LL-b (n=1, m=1, l=0.3, Φ=π/2)",
+  "n": 64,
+  "variant": "anterior",
+  "H_top_over_flux2": 0.028188737134312625,
+  "H_bottom_over_flux2": 0.027497273083550797,
+  "gauge_diff": 0.02452979881529156
+ },
+ {
+  "case": "LL-b (n=1, m=1, l=0.3, Φ=π/2)",
+  "n": 96,
+  "variant": "actual",
+  "H_top_over_flux2": 0.0242724199397204,
+  "H_bottom_over_flux2": 0.024347186653804455,
+  "gauge_diff": 0.00307085640518449
+ },
+ {
+  "case": "LL-b (n=1, m=1, l=0.3, Φ=π/2)",
+  "n": 96,
+  "variant": "anterior",
+  "H_top_over_flux2": 0.02682331440197282,
+  "H_bottom_over_flux2": 0.026371011611768067,
+  "gauge_diff": 0.01686230058771146
+ }
+]

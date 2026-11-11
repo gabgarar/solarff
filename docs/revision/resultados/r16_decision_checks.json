@@ -1,0 +1,236 @@
+{
+ "threshold": 0.8,
+ "n_boot": 2000,
+ "variants": {
+  "original": {
+   "n_lines": 31858,
+   "penalised": {
+    "auc": 0.8964093589732164,
+    "ece_10": 0.04115838052906948,
+    "cal_slope": 1.2201164172206322,
+    "cal_intercept": 0.15620159861123586,
+    "accepted_at_0.8": 0.5071253688241572,
+    "risk_at_0.8": 0.04004704134686804,
+    "risk_at_coverage_50": 0.0384204909284952,
+    "coverage_at_risk_5": 0.543442777324377
+   },
+   "unpenalised": {
+    "auc": 0.8939179015255686,
+    "ece_10": 0.024120739972594618,
+    "cal_slope": 0.8656357746979623,
+    "cal_intercept": -0.028005693859925507,
+    "accepted_at_0.8": 0.5499089710590747,
+    "risk_at_0.8": 0.056338832125121294,
+    "risk_at_coverage_50": 0.04218720572540649,
+    "coverage_at_risk_5": 0.5289723146462427
+   },
+   "unpenalised_recalibrated": {
+    "auc": 0.8929232459055689,
+    "ece_10": 0.030180054588559768,
+    "cal_slope": 1.021179930905939,
+    "cal_intercept": 0.030053779825369716,
+    "accepted_at_0.8": 0.5232908531609015,
+    "risk_at_0.8": 0.04630795993041809,
+    "risk_at_coverage_50": 0.03973884110741415,
+    "coverage_at_risk_5": 0.5376357586791387
+   },
+   "spread": {
+    "risk_at_coverage_50_points": 0.37667147969112913,
+    "auc": 0.003486113067647456
+   }
+  },
+  "rerun": {
+   "n_lines": 31858,
+   "penalised": {
+    "auc": 0.8969088883633308,
+    "ece_10": 0.0404259036136778,
+    "cal_slope": 1.2249735102547172,
+    "cal_intercept": 0.15603452266150333,
+    "accepted_at_0.8": 0.5094481762822525,
+    "risk_at_0.8": 0.041035120147874304,
+    "risk_at_coverage_50": 0.03854604808839224,
+    "coverage_at_risk_5": 0.5420302592755352
+   },
+   "unpenalised": {
+    "auc": 0.8941545596814144,
+    "ece_10": 0.022249596806118405,
+    "cal_slope": 0.8667235987438173,
+    "cal_intercept": -0.03320708263516125,
+    "accepted_at_0.8": 0.5527026178667839,
+    "risk_at_0.8": 0.057587460245343024,
+    "risk_at_coverage_50": 0.04281499152489171,
+    "coverage_at_risk_5": 0.5280306359470148
+   },
+   "unpenalised_recalibrated": {
+    "auc": 0.8933404504341828,
+    "ece_10": 0.028742250848404986,
+    "cal_slope": 1.0231025549342538,
+    "cal_intercept": 0.030958121425129225,
+    "accepted_at_0.8": 0.5273400715675811,
+    "risk_at_0.8": 0.04779761904761905,
+    "risk_at_coverage_50": 0.04055496264674493,
+    "coverage_at_risk_5": 0.5351560047711721
+   },
+   "spread": {
+    "risk_at_coverage_50_points": 0.42689434364994727,
+    "auc": 0.0035684379291480717
+   }
+  }
+ },
+ "suite": {
+  "n_lines": 31858,
+  "n_extrapolations": 108,
+  "n_families": 6,
+  "auc": 0.8964093589732164,
+  "risk": 0.04004704134686804,
+  "coverage": 0.5071253688241572,
+  "risk_ci_extrapolation": [
+   0.031193337362181682,
+   0.04988967988093526
+  ],
+  "risk_ci_family": [
+   0.016353288667963404,
+   0.06807152828558133
+  ],
+  "coverage_ci_extrapolation": [
+   0.47550518106682693,
+   0.5381471141885008
+  ],
+  "coverage_ci_family": [
+   0.3603917506356531,
+   0.6280984005238051
+  ]
+ },
+ "external": {
+  "TD2-relax": {
+   "n_extrapolations": 18,
+   "n_lines": 5399,
+   "risk": 0.02670856245090338,
+   "coverage": 0.23578440451935542,
+   "risk_ci": [
+    0.01666459369817579,
+    0.0371212560641215
+   ],
+   "coverage_ci": [
+    0.22337213624919663,
+    0.247964111152271
+   ]
+  },
+  "LL-IV": {
+   "n_extrapolations": 18,
+   "n_lines": 5400,
+   "risk": 0.043683589138134596,
+   "coverage": 0.47055555555555556,
+   "risk_ci": [
+    0.030190239867659223,
+    0.05662764401658078
+   ],
+   "coverage_ci": [
+    0.4464768518518519,
+    0.49407870370370366
+   ]
+  },
+  "LFFF-delta": {
+   "n_extrapolations": 18,
+   "n_lines": 5400,
+   "risk": 0.20976200080677693,
+   "coverage": 0.4590740740740741,
+   "risk_ci": [
+    0.19244841165253254,
+    0.2287769089228221
+   ],
+   "coverage_ci": [
+    0.43648148148148147,
+    0.48333333333333334
+   ]
+  },
+  "TD3-relax": {
+   "n_extrapolations": 18,
+   "n_lines": 5400,
+   "risk": 0.17647058823529413,
+   "coverage": 0.18259259259259258,
+   "risk_ci": [
+    0.15076908396946564,
+    0.2031757209926224
+   ],
+   "coverage_ci": [
+    0.17055555555555554,
+    0.19462962962962962
+   ]
+  }
+ },
+ "label": {
+  "wrong": 0.29496515788812855,
+  "shape_only_of_wrong": 0.5998722996701075,
+  "topology_only_of_wrong": 0.022134723848036608,
+  "both_of_wrong": 0.3779929764818559,
+  "topology_change_of_all": 0.11802373030322054,
+  "auc_shape_without_topology_change": 0.8673563496894311,
+  "auc_topology_change": 0.8873692834956073,
+  "n_without_topology_change": 28098
+ },
+ "spearman": {
+  "alpha_spread~buffer": 0.6682589573719866,
+  "alpha_spread~length": 0.14172560412748372,
+  "alpha_spread~apex": 0.2833240892337109,
+  "buffer~length": -0.13316637219858635,
+  "buffer~apex": 0.12212797306897798,
+  "length~apex": 0.8760314442037656
+ },
+ "aia": {
+  "11158": {
+   "n_lines": 561,
+   "n_measured_171": 430,
+   "sigma_px": 2.0,
+   "ridge_pct": 90.0,
+   "sigmas": [
+    1.5,
+    2.0,
+    3.0
+   ],
+   "percentiles": [
+    85.0,
+    90.0,
+    95.0
+   ],
+   "n_combinations": 9,
+   "n_accepted_better": 9
+  },
+  "11429": {
+   "n_lines": 452,
+   "n_measured_171": 405,
+   "sigma_px": 2.0,
+   "ridge_pct": 90.0,
+   "sigmas": [
+    1.5,
+    2.0,
+    3.0
+   ],
+   "percentiles": [
+    85.0,
+    90.0,
+    95.0
+   ],
+   "n_combinations": 9,
+   "n_accepted_better": 9
+  },
+  "12673": {
+   "n_lines": 1035,
+   "n_measured_171": 848,
+   "sigma_px": 2.0,
+   "ridge_pct": 90.0,
+   "sigmas": [
+    1.5,
+    2.0,
+    3.0
+   ],
+   "percentiles": [
+    85.0,
+    90.0,
+    95.0
+   ],
+   "n_combinations": 9,
+   "n_accepted_better": 9
+  }
+ }
+}

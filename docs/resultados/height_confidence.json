@@ -1,0 +1,47 @@
+{
+ "regions": {
+  "11158": {
+   "n_lines": 561,
+   "frac_reliable": 0.5187165775401069,
+   "spearman_conf_apex": -0.4541999797859409,
+   "spearman_p": 6.640268747610038e-30,
+   "apex_median_mm": 25.15532449766949,
+   "frac_reliable_below_median": 0.7508896797153025,
+   "frac_reliable_above_median": 0.2857142857142857,
+   "frac_closed": 0.679144385026738,
+   "frac_reliable_closed": 0.6141732283464567,
+   "frac_reliable_open": 0.31666666666666665,
+   "spearman_conf_apex_closed": -0.44857349913101585,
+   "noise_bt": 100.0
+  },
+  "11429": {
+   "n_lines": 452,
+   "frac_reliable": 0.6305309734513275,
+   "spearman_conf_apex": -0.4593750774077793,
+   "spearman_p": 5.605006711331703e-25,
+   "apex_median_mm": 40.19120950557952,
+   "frac_reliable_below_median": 0.8362831858407079,
+   "frac_reliable_above_median": 0.4247787610619469,
+   "frac_closed": 0.7765486725663717,
+   "frac_reliable_closed": 0.6524216524216524,
+   "frac_reliable_open": 0.5544554455445545,
+   "spearman_conf_apex_closed": -0.554873637117997,
+   "noise_bt": 100.0
+  },
+  "12673": {
+   "n_lines": 1033,
+   "frac_reliable": 0.37850919651500486,
+   "spearman_conf_apex": -0.5846874141695326,
+   "spearman_p": 9.349027242204065e-96,
+   "apex_median_mm": 32.49922946031901,
+   "frac_reliable_below_median": 0.6711798839458414,
+   "frac_reliable_above_median": 0.08527131782945736,
+   "frac_closed": 0.7270087124878993,
+   "frac_reliable_closed": 0.422103861517976,
+   "frac_reliable_open": 0.2624113475177305,
+   "spearman_conf_apex_closed": -0.6347511418554886,
+   "noise_bt": 100.0
+  }
+ },
+ "note": "líneas nominales del Monte Carlo (ex['lines_nominal']), confianza con assess_lines; abierta = llega a un contorno"
+}

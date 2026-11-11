@@ -1,0 +1,97 @@
+site_name: solarff
+site_description: NLFFF extrapolation of the solar coronal magnetic field with a calibrated per-line confidence
+site_url: https://gabgarar.github.io/solarff/
+repo_url: https://github.com/gabgarar/solarff
+repo_name: gabgarar/solarff
+docs_dir: docs/web
+site_dir: site
+copyright: Copyright &copy; 2026 Gabriel García. BSD 3-Clause license.
+
+theme:
+  name: material
+  language: en
+  logo: img/sun.svg
+  favicon: img/sun.svg
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: amber
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: amber
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+nav:
+  - Home: index.md
+  - Getting started: getting-started.md
+  - Method and equations: method.md
+  - Per-line confidence: confidence.md
+  - Diagnostics: diagnostics.md
+  - Reproducing the paper: reproduce.md
+  - API reference:
+      - Data and fields: api/core.md
+      - Extrapolation: api/extrapolation.md
+      - Lines and confidence: api/confidence.md
+      - Energy, helicity and topology: api/diagnostics.md
+      - Analytic fields, studies and reports: api/other.md
+  - References: references.md
+  - Cite: cite.md
+
+hooks:
+  - tools/mkdocs_hooks.py
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [.]
+          options:
+            show_source: true
+            show_root_heading: true
+            show_root_toc_entry: true
+            heading_level: 2
+            members_order: source
+            filters: ["!^_"]
+            docstring_style: google
+            show_signature_annotations: true
+            separate_signature: true
+
+extra_css:
+  - css/refs.css
+
+markdown_extensions:
+  - admonition
+  - md_in_html
+  - attr_list
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.details
+  - pymdownx.arithmatex:
+      generic: true
+
+extra_javascript:
+  - js/mathjax-config.js
+  - js/tex-svg.js
