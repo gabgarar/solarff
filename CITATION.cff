@@ -5,7 +5,7 @@ message: >-
 type: software
 title: "solarff: NLFFF extrapolations with a calibrated per-line confidence"
 version: 1.0.0
-date-released: 2026-11-10
+date-released: 2026-11-11
 authors:
   - family-names: "García"
     given-names: "Gabriel"

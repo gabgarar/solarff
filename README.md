@@ -1,5 +1,10 @@
 # solarff
 
+[![tests](https://github.com/gabgarar/solarff/actions/workflows/tests.yml/badge.svg)](https://github.com/gabgarar/solarff/actions/workflows/tests.yml)
+[![docs](https://github.com/gabgarar/solarff/actions/workflows/docs.yml/badge.svg)](https://gabgarar.github.io/solarff/)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
+[![License: BSD-3-Clause](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)](LICENSE)
+
 *Extrapolation of the solar coronal magnetic field from SDO/HMI vector magnetograms, with a
 calibrated confidence for every field line.*
 
