@@ -731,7 +731,7 @@ def fig_aia_steps(S, plot, lang, path):
     a.imshow(np.ma.masked_where(st < thr, np.ones_like(st)), origin="lower", cmap="autumn", alpha=0.55, extent=ext)
     a.add_patch(plt.Rectangle((zx0, zy0), zx1 - zx0, zy1 - zy0, fill=False, color="cyan", lw=1.2))
     a.set_title(_L(lang, f"4. Crestas claras (el {100 - pct:.0f} % más intenso)",
-                   f"4. Clear ridges (brightest {100 - pct:.0f} %)"), fontsize=10)
+                   f"4. Clear ridges (strongest {100 - pct:.0f}%)"), fontsize=10)
     a = axs[1, 1]
     a.imshow(logimg, origin="lower", cmap="gray", extent=ext)
     yy, xx = np.mgrid[zy0:zy1:4, zx0:zx1:4]
