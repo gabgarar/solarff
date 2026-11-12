@@ -15,8 +15,8 @@ license: BSD-3-Clause
 doi: 10.5281/zenodo.24133574
 identifiers:
   - type: doi
-    value: 10.5281/zenodo.24133575
-    description: "Version 1.0.0"
+    value: 10.5281/zenodo.24175330
+    description: "Version 1.1.0"
 abstract: >-
   Extrapolation of solar magnetic fields (potential, LFFF, NLFFF) from SDO/HMI vector
   magnetograms, field-line tracing and a calibrated per-line confidence.

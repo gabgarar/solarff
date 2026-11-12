@@ -105,7 +105,7 @@ maintenance remain the responsibility of the author.
 please cite the software (`CITATION.cff`; GitHub shows it under "Cite this repository") and, once
 published, the associated paper.
 
-> García, G. (2026). *solarff: NLFFF extrapolations with a calibrated per-line confidence* (v1.0.0).
-> Zenodo. <https://doi.org/10.5281/zenodo.24133575>
+> García, G. (2026). *solarff: NLFFF extrapolations with a calibrated per-line confidence* (v1.1.0).
+> Zenodo. <https://doi.org/10.5281/zenodo.24175330>
 
 The DOI [10.5281/zenodo.24133574](https://doi.org/10.5281/zenodo.24133574) always resolves to the latest version.
