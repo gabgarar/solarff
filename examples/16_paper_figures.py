@@ -326,7 +326,7 @@ def fig_threshold_global(lang, path):
     ax[2].scatter([], [], s=46, facecolors="none", edgecolors=INK, lw=1.3, label=T(lang, "optimista (≥ 10 % de malas aceptadas)", "optimistic (≥ 10% wrong accepted)"))
     ax[2].set_xlabel(T(lang, "líneas malas del caso [%]", "wrong lines of the case [%]"))
     ax[2].set_ylabel(r"$E_{\rm div}/E$")
-    ax[2].set_title(T(lang, "(c) Una magnitud global no avisa del fallo", "(c) A global quantity does not warn of the failure"), fontsize=10)
+    ax[2].set_title(T(lang, "(c) Magnitud global frente a líneas malas", "(c) Global quantity against wrong lines"), fontsize=10)
     ax[2].legend(fontsize=7, frameon=False, ncol=2)
     for a in ax:
         style(a)
