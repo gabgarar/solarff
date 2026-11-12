@@ -90,7 +90,7 @@ against the analytical solution of Low & Lou (1990).
 | `examples/` | numbered scripts that produce every result |
 | `tests/` | unit and integration tests (`pytest`) |
 | `tools/` | reproduction script and documentation helpers |
-| `docs/resultados/`, `docs/revision/resultados/` | result files behind the numbers of the paper |
+| `docs/resultados/`, `docs/revision/resultados/` | result files behind the numbers of the paper, including the per-line table of the calibration (`docs/resultados/line_table.md`) |
 | `docs/web/` | source of the documentation site |
 
 ## Development note

@@ -34,6 +34,7 @@ The email is only passed to JSOC for the downloads and can be empty if the data 
 | `17_external_families.py` | three further external families |
 | `18_applicability.py` | search for a global applicability indicator |
 | `20_systematic_base.py` | systematic errors in the base: scale, height and azimuth |
+| `21_line_table.py` | per-line table of the calibration (`docs/resultados/line_table.csv.gz`) |
 
 The additional checks are in `examples/revision/`:
 

@@ -84,6 +84,7 @@ revision() {   # revisión de 9-nov-2026 (docs/revision/): estadística, física
   $PY examples/revision/r15_extra_checks.py     # ajuste sin penalizar, umbral de igual riesgo, dejar fuera ruido o resolución
   $PY examples/revision/r16_decision_checks.py  # variantes de calibración, intervalos del riesgo, etiqueta, correlaciones (necesita 17 y los pkl de AIA)
   $PY examples/16_paper_figures.py   # figuras del artículo: necesitan r1 (fase analisis) y r7 (esta fase)
+  $PY examples/21_line_table.py      # tabla por línea de la calibración: necesita 04, 17 y r0
 }
 
 case $FASE in
