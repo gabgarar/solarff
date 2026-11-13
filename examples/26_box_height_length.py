@@ -34,7 +34,7 @@ import pickle
 import numpy as np
 
 from solarff.calibration import _nz, ece
-from solarff.confidence import DEFAULT_CALIBRATION, auc, confidence
+from solarff.confidence import CALIBRATION_V1 as DEFAULT_CALIBRATION, auc, confidence  # the default model when this test was made (version 1.1)
 from solarff.utils import code_version
 
 T = DEFAULT_CALIBRATION["threshold"]
@@ -115,6 +115,8 @@ for f, parts in pooled.items():
 
 # --- suite: per-line table of the ten families
 rows = list(csv.DictReader(gzip.open(os.path.join("docs", "resultados", "line_table.csv.gz"), "rt", encoding="utf-8")))
+# as in the table of version 1.1, with which this test was made: three sets, all in boxes of standard proportion
+rows = [r for r in rows if r["set"] in ("calibration", "rerun", "external") and int(r.get("nz") or _nz(int(r["size"]))) == _nz(int(r["size"]))]
 
 
 def num(r, k):
@@ -131,7 +133,7 @@ def block(rs):
     rr = np.array([ratio(n, n, _nz(n)) for n in size])
     ms = np.array([min_scale(n, n, _nz(n)) for n in size])
     res = three(ind, y, rr, ms)
-    stored = np.array([num(r, "confidence") for r in rs])
+    stored = np.array([num(r, "confidence_v1" if "confidence_v1" in r else "confidence") for r in rs])   # the model of version 1.1
     both = np.isfinite(stored) & np.isfinite(conf(ind, 1.0))
     res["max_diff_with_table"] = float(np.abs(stored[both] - conf(ind, 1.0)[both]).max())
     return res

@@ -35,7 +35,7 @@ import numpy as np
 
 from solarff.analytic import CALIBRATION_FIELDS, EXTERNAL_TEST_FIELDS, field_magnetogram
 from solarff.calibration import NOISE_MODELS, _nz, ece
-from solarff.confidence import DEFAULT_CALIBRATION, auc, calibration_case, confidence
+from solarff.confidence import CALIBRATION_V1 as DEFAULT_CALIBRATION, auc, calibration_case, confidence  # the default model when this test was made (version 1.1)
 from solarff.utils import code_version, keep_awake
 
 warnings.filterwarnings("ignore")
@@ -150,7 +150,7 @@ for box, (n, nz) in BOXES.items():
 
 # reference: the boxes of the suite with the same horizontal size, from the published per-line table
 rows = [r for r in csv.DictReader(gzip.open(os.path.join("docs", "resultados", "line_table.csv.gz"), "rt", encoding="utf-8"))
-        if r["set"] == "calibration"]
+        if r["set"] == "calibration" and int(r.get("nz") or _nz(int(r["size"]))) == _nz(int(r["size"]))]   # boxes of standard proportion only
 for n in (64, 48):
     rs = [r for r in rows if int(r["size"]) == n]
     ind = {k: np.array([float(r[k]) if r[k] not in ("", "nan") else np.nan for r in rs]) for k in ("alpha_spread", "buffer", "length")}

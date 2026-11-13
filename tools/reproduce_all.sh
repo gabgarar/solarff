@@ -3,7 +3,7 @@
 # Uso: sh tools/reproduce_all.sh EMAIL [fase]
 #   EMAIL: email registrado en JSOC (sólo se pasa a las descargas; no se guarda). Puede ir
 #          vacío ("") si los datos de SHARP y AIA ya están en data/.
-#   fase:  calib | regiones | analisis | revision | todo (por defecto: todo)
+#   fase:  calib | regiones | analisis | revision | pruebas | todo (por defecto: todo)
 # Tiempos orientativos en un portátil de 8 núcleos. Se escriben: data/ (no versionado),
 # solarff/*.json (lo que lee la librería), docs/resultados/, docs/revision/resultados/,
 # docs/informes/ y docs/paper/figuras/.
@@ -14,14 +14,18 @@ export PYTHONIOENCODING=utf-8
 EMAIL=$1
 FASE=${2:-todo}
 
-calib() {   # ~4-6 h; campos exactos: calibración, sesgo, robustez, cuerdas
-  $PY examples/04_calibration_suite.py --extra-fields TD-relax --write-package
+calib() {   # ~5-7 h; campos exactos: calibración, sesgo, robustez, cuerdas
+  # las 108 cajas de proporción estándar (la batería de la versión 1.1) y, con --boxes, las 54 de otras proporciones:
+  # el modelo publicado (cinco términos) se ajusta con las 162
+  $PY examples/04_calibration_suite.py --extra-fields TD-relax
+  $PY examples/04_calibration_suite.py --extra-fields TD-relax --boxes --write-package
   $PY examples/04_calibration_suite.py --extra-fields TD-relax --sizes 32 48 --mc 4
   $PY examples/05_bias_validation.py
   $PY examples/06_robustness.py
   $PY examples/07_flux_rope_test.py --field TD
   $PY examples/07_flux_rope_test.py --field TD-relax
   $PY examples/17_external_families.py   # tres familias externas nuevas (LL-IV, LFFF-delta, TD3-relax), ~1 h
+  $PY examples/23_mhs_test.py            # dos familias magnetohidrostáticas exactas
   $PY examples/11_divergence_weight_exact.py --weights 1 4 --package
 }
 
@@ -69,9 +73,10 @@ analisis() {   # ~1-2 h; AIA, fulguraciones, tabla de regiones y figuras del art
 revision() {   # revisión de 9-nov-2026 (docs/revision/): estadística, física e indicadores
   $PY examples/revision/r0_suite.py
   $PY examples/18_applicability.py       # indicador global de aplicabilidad: necesita 04, 17, r0 y los pkl de las regiones, ~1.5 h
-  $PY examples/revision/r2_stats.py --tag original
-  $PY examples/revision/r2_stats.py --tag nuevo --features alpha_spread buffer length length_sq
-  $PY examples/revision/r2_stats.py --tag nuevo_l2_0 --features alpha_spread buffer length length_sq --l2 0
+  $PY examples/revision/r2_stats.py --tag original --suite data/calibration_suite_s32-48-64_r2_mc0_plus_TD-relax.pkl \
+      --features sin_jb alpha_spread buffer apex length length_sq      # el modelo de cinco indicadores de los primeros borradores
+  $PY examples/revision/r2_stats.py --tag nuevo
+  $PY examples/revision/r2_stats.py --tag nuevo_l2_0 --no-ablation --l2 0
   $PY examples/revision/r4_physics.py
   $PY examples/revision/r7_models.py
   $PY examples/revision/r8_indicators.py
@@ -83,11 +88,37 @@ revision() {   # revisión de 9-nov-2026 (docs/revision/): estadística, física
   $PY examples/revision/r14_baselines.py        # líneas base, particiones y equilibrio del diseño
   $PY examples/revision/r15_extra_checks.py     # ajuste sin penalizar, umbral de igual riesgo, dejar fuera ruido o resolución
   $PY examples/revision/r16_decision_checks.py  # variantes de calibración, intervalos del riesgo, etiqueta, correlaciones (necesita 17 y los pkl de AIA)
+  $PY examples/revision/r17_external_coverage.py  # familias externas: riesgo según el umbral y tamaño de los errores aceptados
   $PY examples/16_paper_figures.py   # figuras del artículo: necesitan r1 (fase analisis) y r7 (esta fase)
   $PY examples/21_line_table.py      # tabla por línea de la calibración: necesita 04, 17 y r0
 }
 
+pruebas() {   # pruebas del 12 y 13 de noviembre de 2026; las extrapolaciones nuevas suman ~8 h
+  # sensibilidad a la resolución: cada región al doble y a la mitad de la resolución publicada
+  for r in 11158 11429 12673; do
+    $PY examples/22_resolution_check.py --part region --region $r
+    $PY examples/22_resolution_check.py --part region --region $r --coarser
+  done
+  $PY examples/22_resolution_check.py --part region --region 11158 --physical-smoothing   # alisado del preprocesado fijado en Mm
+  $PY examples/revision/r18_equal_height_robustness.py
+  $PY examples/revision/r18_equal_height_robustness.py --v1
+  $PY examples/revision/r19_stability_vs_aia.py
+  $PY examples/revision/r19_stability_vs_aia.py --v1
+  $PY examples/25_observed_flux_fields.py                                      # campos exactos sobre el flujo observado
+  $PY examples/25_observed_flux_fields.py --alpha-frac 0.5 --fields LFFF-obs   # los mismos con cizalla moderada
+  for s in pre post first; do $PY examples/28_model_as_truth.py --set $s; done # modelos de las regiones tomados como verdad
+  $PY examples/29_boundary_sensitivity.py                                      # caras no observadas: potencial frente a LFFF
+  # históricos: cómo se llegó al quinto término. Usan el modelo de la versión 1.1 (CALIBRATION_V1)
+  $PY examples/24_ensemble_indicator.py
+  $PY examples/27_box_proportion.py
+  $PY examples/27_box_proportion.py --families TD-relax LFFF-delta
+  $PY examples/26_box_height_length.py
+  $PY examples/30_recalibration_boxes.py
+  $PY examples/revision/r20_height_rule_regions.py
+  $PY examples/revision/r21_m3_regions.py
+}
+
 case $FASE in
-  calib) calib ;; regiones) regiones ;; analisis) analisis ;; revision) revision ;;
-  todo) calib; regiones; analisis; revision ;;
+  calib) calib ;; regiones) regiones ;; analisis) analisis ;; revision) revision ;; pruebas) pruebas ;;
+  todo) calib; regiones; analisis; revision; pruebas ;;
 esac

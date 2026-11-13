@@ -23,7 +23,7 @@ import numpy as np
 from scipy.stats import spearmanr
 
 from solarff.calibration import _nz
-from solarff.confidence import DEFAULT_CALIBRATION, confidence
+from solarff.confidence import CALIBRATION_V1 as DEFAULT_CALIBRATION, confidence  # the default model when this test was made (version 1.1)
 
 REGIONS = {"11158": "aia_validation_harp377.pkl", "11429": "harp1449_20120306_2336_aia.pkl", "12673": "harp7115_20170906_1136_aia.pkl"}
 T = DEFAULT_CALIBRATION["threshold"]

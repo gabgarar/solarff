@@ -14,7 +14,9 @@ import sys
 import warnings
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
-from solarff.calibration import USED_FEATURES, cross_validate  # noqa: E402
+# its suite has boxes of one proportion only, where the fifth term of the published model (the length in box heights)
+# is redundant with the third: the test keeps the four terms
+from solarff.calibration import V1_FEATURES as USED_FEATURES, cross_validate  # noqa: E402
 
 warnings.filterwarnings("ignore")
 SUITE = "data/calibration_suite_s32-48_r2_mc4_plus_TD-relax.pkl"

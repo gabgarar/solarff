@@ -33,7 +33,7 @@ import pickle
 import numpy as np
 
 from solarff.calibration import _nz, ece
-from solarff.confidence import DEFAULT_CALIBRATION, _design, _fit_logistic, auc, confidence
+from solarff.confidence import CALIBRATION_V1 as DEFAULT_CALIBRATION, _design, _fit_logistic, auc, confidence  # the default model when this test was made (version 1.1)
 from solarff.utils import code_version
 
 T = DEFAULT_CALIBRATION["threshold"]

@@ -24,7 +24,7 @@ import numpy as np
 from scipy.stats import spearmanr
 
 from solarff.calibration import _nz
-from solarff.confidence import DEFAULT_CALIBRATION, _design, auc, confidence, line_errors
+from solarff.confidence import CALIBRATION_V1 as DEFAULT_CALIBRATION, _design, auc, confidence, line_errors  # the default model when this test was made (version 1.1)
 from solarff.montecarlo import base_seeds
 from solarff.tracing import trace_field_lines
 

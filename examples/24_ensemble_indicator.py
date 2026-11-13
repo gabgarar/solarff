@@ -37,7 +37,7 @@ from scipy.stats import spearmanr
 
 from solarff.analytic import CALIBRATION_FIELDS
 from solarff.calibration import calibration_suite, ece
-from solarff.confidence import DEFAULT_CALIBRATION, _design, _fit_logistic, auc, confidence
+from solarff.confidence import CALIBRATION_V1 as DEFAULT_CALIBRATION, _design, _fit_logistic, auc, confidence  # the default model when this test was made (version 1.1)
 from solarff.utils import code_version, keep_awake
 
 warnings.filterwarnings("ignore")
