@@ -20,8 +20,9 @@ The indicators are combined into a **confidence** ∈ [0, 1] (1 − probability
 that the line is wrong) by a logistic regression calibrated with exact
 force-free fields with noise, where the true error of each line is
 known. The default calibration (``DEFAULT_CALIBRATION``) was fitted
-with the diverse suite of ``solarff.calibration`` (5 field families,
-3 noise models, 3 resolutions) and validated leaving out each family.
+with the diverse suite of ``solarff.calibration`` (6 field families,
+3 noise models, 3 resolutions and boxes of four proportions) and validated
+leaving out each family.
 
 Limitation: these are *necessary* conditions, not sufficient ones. A line can be
 perfectly force-free and still be wrong if the data at its footpoint are
@@ -243,6 +244,9 @@ def auc(score, bad):
 def confidence(ind: dict, calibration: dict | None = None) -> np.ndarray:
     """Confidence ∈ [0, 1] of each line (1 − estimated probability of being wrong)."""
     cal = calibration or DEFAULT_CALIBRATION
+    if "length_h" in cal["features"] and "length_h" not in ind:
+        raise KeyError("this calibration needs the indicator 'length_h' (length of the line in box heights); for indicators "
+                       "saved without it, add ind['length_h'] = length_in_heights(ind['length'], shape of the model)")
     X = _design(ind, cal["features"])
     Z = (X - np.array(cal["mu"])) / np.array(cal["sd"])
     z = Z @ np.array(cal["coef"]) + cal["intercept"]
@@ -499,18 +503,28 @@ LINEAR5_CALIBRATION_MC: dict = {
 LINEAR5_METRICS_MC: dict = {'auc_combined': 0.8891, 'threshold': 0.8, 'bad_fraction_all': 0.2516, 'bad_fraction_accepted': 0.0545, 'accepted_fraction': 0.5832, 'error_median_accepted': 0.0275, 'error_median_rejected': 0.1044, 'brier': 0.1103, 'ece': 0.0146, 'bad_accepted_worst_field': 0.1291, 'auc_features': {'sin_jb': 0.646, 'alpha_spread': 0.802, 'div': 0.629, 'buffer': 0.698, 'open': 0.612, 'foot_snr': 0.54, 'base_change': 0.513, 'apex': 0.796, 'length': 0.782, 'mc_instability': 0.678}, 'per_field': {'LFFF-bip': {'accepted': 0.599, 'bad_accepted': 0.096, 'bad_all': 0.309}, 'LFFF-quad': {'accepted': 0.501, 'bad_accepted': 0.003, 'bad_all': 0.13}, 'LL-I': {'accepted': 0.561, 'bad_accepted': 0.129, 'bad_all': 0.391}, 'LL-II': {'accepted': 0.52, 'bad_accepted': 0.031, 'bad_all': 0.258}, 'LL-III': {'accepted': 0.734, 'bad_accepted': 0.022, 'bad_all': 0.187}}, 'auc_gain_mc': 0.0121, 'auc_gain_mc_ci': [0.0077, 0.0166], 'mc_realizations': 4, 'grid': '32², 48²', 'noise_G': '10-60', 'realizations': '60 casos, 5 familias; métricas dejando fuera cada familia'}
 
 
-# Default calibration: logistic regression with the quadratic length term
-# (length_sq), fitted with 6 families of exact force-free fields (the 5
-# earlier ones + the relaxed Titov–Démoulin flux rope) x 3 noises x 3
-# resolutions x 2 realizations = 108 cases, 31 862 lines
-# (examples/04_calibration_suite.py --extra-fields TD-relax --write-package).
-# Leave-one-family-out cross-validation: AUC 0.890 [0.878, 0.904], ECE 0.042
-# (the linear one on the same cases: 0.853). Trained with the 5 families only, it
-# already succeeds on the never-seen rope (3 % wrong among the reliable ones, against 31 %
-# for the linear one; examples/07_flux_rope_test.py). The 0.8 threshold is read literally.
-# Default calibration (revision of 9-Nov-2026): 3 indicators, 6 families, 108 cases.
-DEFAULT_CALIBRATION = {'intercept': -1.3337206920976723, 'coef': [0.7928596961397087, 0.7870382847633223, 1.1210321254417894, 0.779454514249511], 'mu': [-0.7884217644911373, 0.166054561849928, -0.5426093136241851, 0.09803603048440751], 'sd': [0.6062190705654161, 0.2773708374632872, 0.313096186446664, 0.1621739780759091], 'features': ['alpha_spread', 'buffer', 'length', 'length_sq'], 'bad_threshold': 0.1, 'noise': 'varios', 'threshold': 0.8}
-CALIBRATION_METRICS = {'auc_combined': 0.8964, 'auc_features': {'sin_jb': 0.71, 'alpha_spread': 0.8087, 'div': 0.688, 'buffer': 0.7409, 'open': 0.6571, 'foot_snr': 0.5732, 'base_change': 0.616, 'apex': 0.7453, 'length': 0.6878}, 'threshold': 0.8, 'bad_fraction_all': 0.295, 'bad_fraction_accepted': 0.04, 'accepted_fraction': 0.5071, 'error_median_accepted': 0.0248, 'error_median_rejected': 0.1126, 'brier': 0.1193, 'ece': 0.0412, 'per_field': {'LFFF-bip': {'accepted': 0.5162, 'bad_accepted': 0.074, 'bad_all': 0.3187}, 'LFFF-quad': {'accepted': 0.4994, 'bad_accepted': 0.0044, 'bad_all': 0.1311}, 'LL-I': {'accepted': 0.5709, 'bad_accepted': 0.0853, 'bad_all': 0.3443}, 'LL-II': {'accepted': 0.5251, 'bad_accepted': 0.0356, 'bad_all': 0.2304}, 'LL-III': {'accepted': 0.7378, 'bad_accepted': 0.0138, 'bad_all': 0.1693}, 'TD-relax': {'accepted': 0.1986, 'bad_accepted': 0.0326, 'bad_all': 0.5805}}, 'bad_accepted_worst_field': 0.0853, 'n_cases': 108, 'realizations': '108 casos, 6 familias (5 + cuerda de Titov–Démoulin relajada); 3 indicadores; métricas dejando fuera cada familia', 'grid': '32², 48², 64²', 'noise_G': '10-60'}
+# Calibration of version 1.1 (revision of 9-Nov-2026): four terms (three indicators, the length with its
+# square), fitted with 6 families of exact force-free fields (the 5 earlier ones + the relaxed
+# Titov–Démoulin flux rope) x 3 noises x 3 resolutions x 2 realizations = 108 cases, 31 862 lines
+# (examples/04_calibration_suite.py --extra-fields TD-relax). Leave-one-family-out: AUC 0.896, ECE 0.041.
+# All its boxes are n x n x 0.7 n. In flatter boxes, like those of real regions, it accepts 8 to 12 % of
+# wrong lines instead of 4 % (examples/27_box_proportion.py). Kept because it is the model of the per-line
+# table deposited with version 1.1.0.
+CALIBRATION_V1 = {'intercept': -1.3337206920976723, 'coef': [0.7928596961397087, 0.7870382847633223, 1.1210321254417894, 0.779454514249511], 'mu': [-0.7884217644911373, 0.166054561849928, -0.5426093136241851, 0.09803603048440751], 'sd': [0.6062190705654161, 0.2773708374632872, 0.313096186446664, 0.1621739780759091], 'features': ['alpha_spread', 'buffer', 'length', 'length_sq'], 'bad_threshold': 0.1, 'noise': 'varios', 'threshold': 0.8}
+CALIBRATION_METRICS_V1 = {'auc_combined': 0.8964, 'auc_features': {'sin_jb': 0.71, 'alpha_spread': 0.8087, 'div': 0.688, 'buffer': 0.7409, 'open': 0.6571, 'foot_snr': 0.5732, 'base_change': 0.616, 'apex': 0.7453, 'length': 0.6878}, 'threshold': 0.8, 'bad_fraction_all': 0.295, 'bad_fraction_accepted': 0.04, 'accepted_fraction': 0.5071, 'error_median_accepted': 0.0248, 'error_median_rejected': 0.1126, 'brier': 0.1193, 'ece': 0.0412, 'per_field': {'LFFF-bip': {'accepted': 0.5162, 'bad_accepted': 0.074, 'bad_all': 0.3187}, 'LFFF-quad': {'accepted': 0.4994, 'bad_accepted': 0.0044, 'bad_all': 0.1311}, 'LL-I': {'accepted': 0.5709, 'bad_accepted': 0.0853, 'bad_all': 0.3443}, 'LL-II': {'accepted': 0.5251, 'bad_accepted': 0.0356, 'bad_all': 0.2304}, 'LL-III': {'accepted': 0.7378, 'bad_accepted': 0.0138, 'bad_all': 0.1693}, 'TD-relax': {'accepted': 0.1986, 'bad_accepted': 0.0326, 'bad_all': 0.5805}}, 'bad_accepted_worst_field': 0.0853, 'n_cases': 108, 'realizations': '108 casos, 6 familias (5 + cuerda de Titov–Démoulin relajada); 3 indicadores; métricas dejando fuera cada familia', 'grid': '32², 48², 64²', 'noise_G': '10-60'}
+
+# Default calibration (revision of 13-Nov-2026): the four terms of version 1.1 plus the logarithm of the
+# length of the line in box heights (length_h), fitted with the same 6 families in boxes of four
+# proportions: the 108 cases of the suite plus 54 in flat, very flat and tall boxes
+# (solarff.calibration.proportion_suite) = 162 cases, 48 062 lines
+# (examples/04_calibration_suite.py --extra-fields TD-relax --boxes --write-package).
+# Leave-one-family-out: AUC 0.890 [0.881, 0.900], ECE 0.037. Against version 1.1 it leaves the boxes of the
+# suite as they were (4.2 % of wrong lines among the accepted ones, 4.0 % before), corrects the flat ones
+# (4.1 and 5.9 % instead of 8.5 and 12.1 %) and improves every test it has not seen: exact fields on
+# the observed flux and region models taken as the truth (examples/30_recalibration_boxes.py).
+# It needs the indicator length_h; for records saved without it, see length_in_heights.
+DEFAULT_CALIBRATION = {'intercept': -1.4104432685159631, 'coef': [0.7353764882722877, 0.8980991135185304, 0.8239068286442317, 0.7395858055228461, 0.4764990992259401], 'mu': [-0.7784923383337429, 0.16304309561625155, -0.5664134470543077, 0.09382846811896481, -0.18660488449550888], 'sd': [0.5954801278584424, 0.26446108237441224, 0.30517338995116183, 0.164667581592362, 0.33018654150419], 'features': ['alpha_spread', 'buffer', 'length', 'length_sq', 'length_h'], 'bad_threshold': 0.1, 'noise': 'varios', 'threshold': 0.8}
+CALIBRATION_METRICS = {'auc_combined': 0.8905, 'auc_features': {'sin_jb': 0.7129, 'alpha_spread': 0.8021, 'div': 0.6969, 'buffer': 0.7491, 'open': 0.6549, 'foot_snr': 0.5755, 'base_change': 0.6229, 'apex': 0.7123, 'length': 0.6748, 'length_h': 0.6599}, 'threshold': 0.8, 'bad_fraction_all': 0.2873, 'bad_fraction_accepted': 0.0441, 'accepted_fraction': 0.511, 'error_median_accepted': 0.0233, 'error_median_rejected': 0.107, 'brier': 0.1215, 'ece': 0.0367, 'per_field': {'LFFF-bip': {'accepted': 0.5146, 'bad_accepted': 0.0873, 'bad_all': 0.3107}, 'LFFF-quad': {'accepted': 0.4989, 'bad_accepted': 0.004, 'bad_all': 0.1242}, 'LL-I': {'accepted': 0.5797, 'bad_accepted': 0.0753, 'bad_all': 0.308}, 'LL-II': {'accepted': 0.5236, 'bad_accepted': 0.0337, 'bad_all': 0.223}, 'LL-III': {'accepted': 0.7352, 'bad_accepted': 0.0141, 'bad_all': 0.1599}, 'TD-relax': {'accepted': 0.2176, 'bad_accepted': 0.0829, 'bad_all': 0.5992}}, 'bad_accepted_worst_field': 0.0873, 'n_cases': 162, 'realizations': '162 casos: 6 familias (5 + cuerda de Titov–Démoulin relajada) en cajas de cuatro proporciones; 3 indicadores, la longitud en dos escalas; métricas dejando fuera cada familia', 'grid': '32², 48², 64² (n x n x 0.7 n) y 64 x 64 x 22, 64 x 64 x 16, 48 x 48 x 48', 'noise_G': '10-60'}
 # Calibration of paper v5 (5 indicators), kept for comparison.
 FULL5_CALIBRATION = {'intercept': -1.372280991117355, 'coef': [0.1203071169340021, 0.6938562434597622, 0.7539955423114819, 0.43653203474441826, 0.8334484891664526, 0.6602212208475255], 'mu': [-0.9941074038849534, -0.7884217644911373, 0.166054561849928, 0.2669435421299315, -0.5426093136241851, 0.09803603048440751], 'sd': [0.4829876647613927, 0.6062190705654161, 0.2773708374632872, 0.23584851134034693, 0.313096186446664, 0.1621739780759091], 'features': ['sin_jb', 'alpha_spread', 'buffer', 'apex', 'length', 'length_sq'], 'bad_threshold': 0.1, 'noise': 'varios', 'threshold': 0.8}
 FULL5_METRICS = {'n_cases': 108, 'auc_combined': 0.8903, 'auc_features': {'sin_jb': 0.7100200786941462, 'alpha_spread': 0.8086721606159839, 'div': 0.6879711242193953, 'buffer': 0.740885646693186, 'open': 0.6571105072779196, 'foot_snr': 0.5731891713865332, 'base_change': 0.6160040663043684, 'apex': 0.7452627511325046, 'length': 0.6877619432217741}, 'threshold': 0.8, 'bad_fraction_all': 0.295, 'bad_fraction_accepted': 0.0447, 'accepted_fraction': 0.5243, 'error_median_accepted': 0.0258, 'error_median_rejected': 0.1166, 'brier': 0.1224, 'ece': 0.0421, 'per_field': {'LFFF-bip': {'accepted': 0.5431865431865431, 'bad_accepted': 0.08663883089770355, 'bad_all': 0.31865431865431865}, 'LFFF-quad': {'accepted': 0.4925925925925926, 'bad_accepted': 0.005263157894736842, 'bad_all': 0.13111111111111112}, 'LL-I': {'accepted': 0.5884483799557255, 'bad_accepted': 0.09439124487004104, 'bad_all': 0.34433487623264236}, 'LL-II': {'accepted': 0.5449157251342841, 'bad_accepted': 0.03772943575798776, 'bad_all': 0.23041303945175032}, 'LL-III': {'accepted': 0.7462962962962963, 'bad_accepted': 0.014640198511166254, 'bad_all': 0.16925925925925925}, 'TD-relax': {'accepted': 0.23596962400444527, 'bad_accepted': 0.029827315541601257, 'bad_all': 0.5804778662715318}}, 'bad_accepted_worst_field': 0.0944, 'realizations': '108 casos, 6 familias (5 + cuerda de Titov–Démoulin relajada); métricas dejando fuera cada familia', 'grid': '32², 48², 64²', 'noise_G': '10-60'}
@@ -562,7 +576,8 @@ def mc_gain_significant() -> bool:
 def calibration_metrics(cal: dict) -> dict:
     """Metrics of the calibration ``cal`` (for the report)."""
     for c, m in ((DEFAULT_CALIBRATION_MC_GR, CALIBRATION_METRICS_MC_GR), (DEFAULT_CALIBRATION_GR, CALIBRATION_METRICS_GR),
-                 (DEFAULT_CALIBRATION_MC, CALIBRATION_METRICS_MC), (DEFAULT_CALIBRATION, CALIBRATION_METRICS)):
+                 (DEFAULT_CALIBRATION_MC, CALIBRATION_METRICS_MC), (CALIBRATION_V1, CALIBRATION_METRICS_V1),
+                 (DEFAULT_CALIBRATION, CALIBRATION_METRICS)):
         if c and c is cal:
             return m
     return CALIBRATION_METRICS

@@ -37,7 +37,7 @@ def test_length_sq_and_calibration_selection():
                                     confidence, mc_gain_significant, select_calibration)
     L = np.array([10 ** LENGTH_LOG_CENTER, 0.01, 1.0])
     ind = {"sin_jb": np.full(3, 0.1), "alpha_spread": np.full(3, 0.1), "buffer": np.zeros(3),
-           "apex": np.full(3, 0.2), "length": L}
+           "apex": np.full(3, 0.2), "length": L, "length_h": L / 0.49}  # a box of the suite: height = 0.49 diagonals
     X = _design(ind, ["length", "length_sq"])
     assert abs(X[0, 1]) < 1e-12 and X[1, 1] > 0 and X[2, 1] > 0  # U centred on the typical length
     c = confidence(ind, DEFAULT_CALIBRATION)
@@ -48,9 +48,24 @@ def test_length_sq_and_calibration_selection():
 
 
 def test_published_model_has_physical_signs():
-    from solarff.confidence import DEFAULT_CALIBRATION
-    assert DEFAULT_CALIBRATION["features"] == ["alpha_spread", "buffer", "length", "length_sq"]
-    assert all(b > 0 for b in DEFAULT_CALIBRATION["coef"])  # more indicator → more likely to be wrong
+    from solarff.confidence import CALIBRATION_V1, DEFAULT_CALIBRATION
+    assert DEFAULT_CALIBRATION["features"] == ["alpha_spread", "buffer", "length", "length_sq", "length_h"]
+    assert CALIBRATION_V1["features"] == ["alpha_spread", "buffer", "length", "length_sq"]  # the model of version 1.1
+    for cal in (DEFAULT_CALIBRATION, CALIBRATION_V1):
+        assert all(b > 0 for b in cal["coef"])  # more indicator → more likely to be wrong
+
+
+def test_length_in_box_heights_lowers_the_confidence_in_flat_boxes():
+    import pytest
+    from solarff.confidence import CALIBRATION_V1, DEFAULT_CALIBRATION, confidence, length_in_heights
+    ind = {"alpha_spread": np.full(2, 0.1), "buffer": np.zeros(2), "length": np.full(2, 0.3)}
+    with pytest.raises(KeyError):      # the default model needs the length in box heights
+        confidence(ind, DEFAULT_CALIBRATION)
+    # the same line (same length relative to the horizontal diagonal) in a box of the suite and in a flat one
+    ind["length_h"] = np.array([length_in_heights(0.3, (64, 64, 45)), length_in_heights(0.3, (64, 64, 16))])
+    c = confidence(ind, DEFAULT_CALIBRATION)
+    assert c[1] < c[0]                                                   # in the flat box it reaches the top
+    assert np.ptp(confidence(ind, CALIBRATION_V1)) == 0                  # version 1.1 does not see the difference
 
 
 def test_uncertainty_budget():

@@ -19,9 +19,8 @@ With ``--boxes`` the same families are added in boxes of other proportions (flat
 box heights: all the boxes of the suite are ``n x n x 0.7 n`` and with them alone the model cannot know that a
 line that is long compared with the height of the box depends on the unobserved top.
 
-    python examples/04_calibration_suite.py --write-package
-    python examples/04_calibration_suite.py --extra-fields TD-relax
-    python examples/04_calibration_suite.py --extra-fields TD-relax --boxes
+    python examples/04_calibration_suite.py --extra-fields TD-relax --boxes --write-package    # the default model
+    python examples/04_calibration_suite.py --extra-fields TD-relax                            # the model of version 1.1
 """
 import argparse
 import json
@@ -29,7 +28,7 @@ import os
 import pickle
 import warnings
 
-from solarff.calibration import (BOX_FEATURES, LINEAR_FEATURES, RESULTS_FILE, SIX_FAMILIES, USED_FEATURES, add_box,
+from solarff.calibration import (BOX_FEATURES, LINEAR_FEATURES, RESULTS_FILE, SIX_FAMILIES, V1_FEATURES, add_box,
                                  calibration_suite, cross_validate, fit_default, proportion_suite, single_feature_auc,
                                  summarize)
 
@@ -58,7 +57,7 @@ if a.extra_fields:
     data = data + calibration_suite(fields=a.extra_fields, sizes=tuple(a.sizes), realizations=a.realizations,
                                     mc=a.mc, checkpoint=os.path.join(a.out, f"calibration_suite_extra_{xtag}_{tag}.ckpt"))
     tag = f"{tag}_plus_{xtag}"
-base = USED_FEATURES
+base = V1_FEATURES      # without --boxes: the four terms of version 1.1
 if a.boxes:
     fams = sorted({d["field"] for d in data})
     six = fams == sorted(SIX_FAMILIES)

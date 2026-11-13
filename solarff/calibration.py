@@ -40,7 +40,10 @@ NOISE_MODELS = {
 # Revision of 9-Nov-2026: the ablation showed that ``sin_jb`` and ``apex`` add nothing (leave-one-family-out
 # AUC 0.892 and 0.894 without them, against 0.890) and the three-indicator model
 # met the rule registered in advance (docs/revision/): it is the default model.
-USED_FEATURES = ("alpha_spread", "buffer", "length", "length_sq")
+# Revision of 13-Nov-2026: a fifth term, the length in box heights (``length_h``), fitted with the families in
+# boxes of four proportions (``proportion_suite``). The four terms alone are the model of version 1.1.
+V1_FEATURES = ("alpha_spread", "buffer", "length", "length_sq")
+USED_FEATURES = V1_FEATURES + ("length_h",)
 LINEAR_FEATURES = ("alpha_spread", "buffer", "length")  # the same without the quadratic term
 FULL5_FEATURES = ("sin_jb", "alpha_spread", "buffer", "apex", "length", "length_sq")  # paper v5
 LINEAR5_FEATURES = ("sin_jb", "alpha_spread", "buffer", "apex", "length")  # earlier linear calibration
@@ -52,7 +55,7 @@ FEATURE_SIGN = {"sin_jb": 1, "alpha_spread": 1, "div": 1, "buffer": 1, "open": 1
 #: The published terms plus the length in box heights (``length_h``). The suite only has boxes ``n x n x 0.7 n``;
 #: with the proportion cases (``proportion_suite``) the model learns that a line that is long compared with the
 #: height of the box depends on the unobserved top (examples/30_recalibration_boxes.py).
-BOX_FEATURES = ("alpha_spread", "buffer", "length", "length_sq", "length_h")
+BOX_FEATURES = USED_FEATURES
 #: Boxes with other proportions (cells across, levels in height): flat, very flat and tall.
 PROPORTION_BOXES = ((64, 22), (64, 16), (48, 48))
 #: The six families of the calibration (TD-relax is defined with the external ones).
@@ -384,7 +387,7 @@ def cross_validate(data: list, features=USED_FEATURES, models=None, group: str =
     return out
 
 
-def single_feature_auc(data: list, features=ALL_FEATURES) -> dict:
+def single_feature_auc(data: list, features=ALL_FEATURES + ("length_h",)) -> dict:
     """AUC of each indicator separately (over all the cases)."""
     res = {}
     for k in features:

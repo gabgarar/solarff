@@ -19,8 +19,10 @@ import pytest
 import solarff as sff
 
 ROOT = os.path.join(os.path.dirname(__file__), "..")
-#: Suite with which the published calibration was fitted (examples/04_calibration_suite.py).
-CALIBRATION_SUITE = os.path.join(ROOT, "data", "calibration_suite_s32-48-64_r2_mc0_plus_TD-relax.pkl")
+#: Suite with which the default calibration was fitted (examples/04_calibration_suite.py --extra-fields TD-relax --boxes)
+#: and the one of version 1.1 (the same without --boxes).
+CALIBRATION_SUITE = os.path.join(ROOT, "data", "calibration_suite_s32-48-64_r2_mc0_plus_TD-relax_boxes.pkl")
+CALIBRATION_SUITE_V1 = os.path.join(ROOT, "data", "calibration_suite_s32-48-64_r2_mc0_plus_TD-relax.pkl")
 
 
 def make_bipole(n=64, w=160.0, d=10):
@@ -51,9 +53,18 @@ def lowlou_study():
     return sff.run_study(mag, 16, nlfff_method="lbfgs", verbose=False)
 
 
+def _suite(path, how):
+    if not os.path.exists(path):
+        pytest.skip(f"falta la batería de calibración ({how})")
+    data = pickle.load(open(path, "rb"))
+    return data["data"] if isinstance(data, dict) else data
+
+
 @pytest.fixture(scope="session")
 def calibration_suite():
-    if not os.path.exists(CALIBRATION_SUITE):
-        pytest.skip("falta la batería de calibración (examples/04_calibration_suite.py --extra-fields TD-relax)")
-    data = pickle.load(open(CALIBRATION_SUITE, "rb"))
-    return data["data"] if isinstance(data, dict) else data
+    return _suite(CALIBRATION_SUITE, "examples/04_calibration_suite.py --extra-fields TD-relax --boxes")
+
+
+@pytest.fixture(scope="session")
+def calibration_suite_v1():
+    return _suite(CALIBRATION_SUITE_V1, "examples/04_calibration_suite.py --extra-fields TD-relax")
