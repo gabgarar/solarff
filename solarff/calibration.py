@@ -59,7 +59,7 @@ def _nz(n):
 def calibration_suite(fields=None, noises=None, sizes=(32, 48), realizations: int = 2,
                       n_seeds: int = 300, bad_threshold: float = 0.1, method: str = "lbfgs",
                       mc: int = 0, seed: int = 0, checkpoint: str | None = None,
-                      verbose: bool = True) -> list:
+                      verbose: bool = True, ensemble: tuple = ()) -> list:
     """Suite of calibration cases: fields × noises × resolutions × realizations.
 
     Each element is the result of ``solarff.confidence.calibration_case``
@@ -76,6 +76,8 @@ def calibration_suite(fields=None, noises=None, sizes=(32, 48), realizations: in
     cases = [(f, nm, s, r) for f in fields for nm in noises for s in sizes for r in range(realizations)]
     signature = {"cases": cases, "n_seeds": n_seeds, "bad_threshold": bad_threshold,
                  "method": method, "mc": mc, "seed": seed}
+    if ensemble:
+        signature["ensemble"] = list(ensemble)
     state = load_checkpoint(checkpoint, signature)
     data = state["data"] if state is not None else []
     if data:
@@ -92,7 +94,7 @@ def calibration_suite(fields=None, noises=None, sizes=(32, 48), realizations: in
         k = seed * 100003 + i
         mag = field_magnetogram(exact, noise=sz, noise_t=st, rng=k)
         rec = calibration_case(exact, mag, _nz(size), n_seeds=n_seeds, bad_threshold=bad_threshold,
-                               method=method, seed=k + 7, noise_bt=st, mc=mc, mc_seed=k + 13)
+                               method=method, seed=k + 7, noise_bt=st, mc=mc, mc_seed=k + 13, ensemble=tuple(ensemble))
         rec.update(field=fname, noise_model=nm, size=size, realization=r, seconds=time.time() - tc)
         data.append(rec)
         say(f"  caso {i + 1}/{len(cases)}: {fname}, {nm}, {size}², real. {r}: "

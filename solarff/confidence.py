@@ -247,8 +247,17 @@ def calibration_case(exact: VectorField3D, mag: Magnetogram, nz: int, n_seeds: i
                      bad_threshold: float = 0.1, method: str = "lbfgs", seed: int = 0,
                      noise_bt: float | None = None, mc: int = 0, gr: bool = False,
                      mc_seed: int = 1000, nlfff_kw: dict | None = None,
-                     preprocess_kw: dict | None = None, keep_model: bool = False) -> dict:
+                     preprocess_kw: dict | None = None, keep_model: bool = False,
+                     ensemble: tuple = ()) -> dict:
     """One calibration case: NLFFF model of ``mag``, indicators and true error per line.
+
+    ``ensemble``: variants of the extrapolation in which something that is not known is changed; for each
+    one, the displacement of every line with respect to the nominal model is stored as ``ens_<variant>``
+    (mean distance relative to the length of the nominal line, as the shape error) and ``ens_<variant>_topo``
+    (1 if the line changes between open and closed). Variants: ``"coarse"`` (magnetogram rebinned by 2 and
+    half the levels in height), ``"lfff"`` (side and top faces fixed to the LFFF of best-fit alpha instead of
+    the potential field), ``"smooth"`` (three times the smoothing weight of the preprocessing). Unlike the
+    Monte Carlo over the noise, they probe systematic errors.
 
     ``exact``: true field; ``mag``: its base with noise (with ``*_err`` if
     ``mc`` is wanted). Returns ``{"ind", "err", "bad", "noise", "bad_threshold"}``
@@ -295,6 +304,25 @@ def calibration_case(exact: VectorField3D, mag: Magnetogram, nz: int, n_seeds: i
             eg = line_errors(trace_field_lines(g, seeds), lm)
             dis[j] = (eg["shape"] > bad_threshold) | (eg["topology"] > 0)
         ind["method_disagreement"] = dis.mean(axis=0)
+    for v in ensemble:
+        from .nlfff_torch import nlfff_lbfgs
+        kw = nlfff_kw or {}
+        if v == "coarse":
+            pc = preprocess(mag.rebin(2), verbose=False, **(preprocess_kw or {}))
+            mv = nlfff_lbfgs(pc, max(8, int(round(nz / 2))), verbose=False, **kw)
+        elif v == "lfff":
+            from .alpha import alpha_best_fit
+            from .lfff import lfff
+            mv = nlfff_lbfgs(pp, nz, initial=lfff(pp, alpha_best_fit(pp), nz), verbose=False, **kw)
+        elif v == "smooth":
+            kp = dict(preprocess_kw or {})
+            kp["mu4"] = 3 * kp.get("mu4", 1e-2)
+            mv = nlfff_lbfgs(preprocess(mag, verbose=False, **kp), nz, verbose=False, **kw)
+        else:
+            raise ValueError(f"variante desconocida: {v}")
+        ev = line_errors(trace_field_lines(mv, seeds), lm)
+        ind["ens_" + v] = ev["shape"]
+        ind["ens_" + v + "_topo"] = ev["topology"]
     err = line_errors(lm, le)
     bad = (err["shape"] > bad_threshold) | (err["topology"] > 0)
     rec = {"ind": ind, "err": err, "bad": bad, "noise": noise, "bad_threshold": bad_threshold}
