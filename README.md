@@ -93,7 +93,7 @@ against the analytical solution of Low & Lou (1990).
 | `solarff/` | the library |
 | `examples/` | numbered scripts that produce every result |
 | `tests/` | unit and integration tests (`pytest`) |
-| `tools/` | reproduction script and documentation helpers |
+| `tools/` | reproduction script, interactive 3D view of the field lines (`lines3d.py`) and documentation helpers |
 | `docs/resultados/`, `docs/revision/resultados/` | result files behind the numbers of the paper, including the per-line table of the calibration (`docs/resultados/line_table.md`) |
 | `docs/web/` | source of the documentation site |
 

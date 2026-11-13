@@ -95,6 +95,22 @@ On the Low & Lou benchmark (n = m = 1, 48×48×32 grid) the three models compare
 | `plot_alpha_histogram(models, seeds)` | mean α of each line and its variation along it |
 | `plot_error_maps(models, reference, heights)` | angle between each model and a reference at several heights |
 
+### Interactive 3D view
+
+`tools/lines3d.py` writes a single HTML page with every line traced from the base of one or more regions. The page
+draws the lines in 3D over the magnetogram. They can be coloured by apex height, by confidence or by the confidence
+model that accepts them, and hovering over a line shows its confidence. The horizontal field can be added as arrows:
+that of the magnetogram, the preprocessed one, or the extrapolated one at any height. The page works offline and its
+interface is in English or Spanish.
+
+```bash
+python tools/lines3d.py my_study.pkl -o my_region.html    # a pickled Study with an NLFFF extrapolation
+python tools/lines3d.py --lang es                         # the three regions of the paper
+```
+
+The lines are traced as in the paper: seeds every two pixels in x and in y where $|B_z|$ exceeds 5 % of its maximum
+(`--every 1` seeds every pixel). The first run downloads three.js r147 into `data/` and checks its SHA-256.
+
 ## Noise bias
 
 Noise shifts some quantities systematically, so the Monte Carlo median does not match the nominal
