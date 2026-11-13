@@ -44,6 +44,8 @@ REFS = {
     "Lemen2012": ("Lemen", 2012, "2012SoPh..275...17L"),
     "Liu1989": ("Liu", 1989, "1989MatPr..45..503L"),
     "Low1990": ("Low", 1990, "1990ApJ...352..343L"),
+    "Low1991": ("Low", 1991, "1991ApJ...370..427L"),
+    "Low1992": ("Low", 1992, "1992ApJ...399..300L"),
     "MacTaggart2025": ("MacTaggart", 2025, "2025SoPh..300...48M"),
     "Malanushenko2012": ("Malanushenko", 2012, "2012ApJ...756..153M"),
     "Moraitis2019": ("Moraitis", 2019, "2019A&A...624A..51M"),
