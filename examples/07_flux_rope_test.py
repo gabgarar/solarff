@@ -31,7 +31,7 @@ import numpy as np
 
 import solarff as sff
 from solarff.analytic import EXTERNAL_TEST_FIELDS
-from solarff.calibration import (NOISE_MODELS, USED_FEATURES, bootstrap_ci, calibration_suite,
+from solarff.calibration import (NOISE_MODELS, V1_FEATURES, bootstrap_ci, calibration_suite,
                                  cross_validate, ece, fit_default, load_results)
 from solarff.confidence import LINEAR5_CALIBRATION, LINEAR5_METRICS, auc, confidence
 from solarff.metrics import force_free_metrics
@@ -50,11 +50,12 @@ with keep_awake():
 
 
 # Two calibrations, neither has seen the rope: the earlier linear one (5 families) and the
-# same regression with the quadratic length term (length_sq), also with 5 families.
+# same regression with the quadratic length term (length_sq), also with 5 families. Both in boxes of one
+# proportion, where the fifth term of the published model (the length in box heights) is redundant.
 SUITE5 = os.path.join(OUT, "calibration_suite_s32-48-64_r2_mc0.pkl")
 D5 = pickle.load(open(SUITE5, "rb"))["data"]
-cv5 = cross_validate(D5, features=list(USED_FEATURES), models=["logistic"], group="field", verbose=False)
-QUAD5 = fit_default(D5, cv5, features=list(USED_FEATURES))
+cv5 = cross_validate(D5, features=list(V1_FEATURES), models=["logistic"], group="field", verbose=False)
+QUAD5 = fit_default(D5, cv5, features=list(V1_FEATURES))
 CAL = {"linear5": LINEAR5_CALIBRATION, "quadratic5": QUAD5["calibration"]}
 DEFAULT_CALIBRATION = LINEAR5_CALIBRATION  # the one of the short-line diagnostic
 

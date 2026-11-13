@@ -1,5 +1,5 @@
 {
- "code_version": "0.1.0 (commit 531a760 + cambios sin commit)",
+ "code_version": "1.1.0 (commit f36638b + cambios sin commit)",
  "field": "TD",
  "sizes": [
   32,
@@ -155,12 +155,12 @@
   "accepted": 0.5772,
   "bad_rate": 0.2367,
   "bad_rate_by_field": {
-   "LFFF-bip": 0.3187,
-   "LFFF-quad": 0.1311,
-   "LL-I": 0.3446,
-   "LL-II": 0.2306,
-   "LL-III": 0.1693,
-   "TD-relax": 0.5806
+   "LFFF-bip": 0.3107,
+   "LFFF-quad": 0.1242,
+   "LL-I": 0.3082,
+   "LL-II": 0.2231,
+   "LL-III": 0.1599,
+   "TD-relax": 0.5993
   }
  },
  "quadratic": {

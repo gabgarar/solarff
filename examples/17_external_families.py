@@ -22,8 +22,8 @@ import warnings
 import numpy as np
 
 from solarff.analytic import EXTERNAL_TEST_FIELDS
-from solarff.calibration import NOISE_MODELS, _nz, bootstrap_ci, calibration_suite, ece
-from solarff.confidence import DEFAULT_CALIBRATION, auc, confidence
+from solarff.calibration import NOISE_MODELS, _nz, add_box, bootstrap_ci, calibration_suite, ece
+from solarff.confidence import CALIBRATION_V1, DEFAULT_CALIBRATION, auc, confidence
 from solarff.metrics import force_free_metrics
 from solarff.utils import code_version, keep_awake
 
@@ -53,7 +53,8 @@ def evaluate(d, cal=DEFAULT_CALIBRATION):
 
 
 def summarize(name, d):
-    s = {"all": evaluate(d), "by_noise": {}, "by_size": {}, "exact_cwsin": {}}
+    # ``all_v1``: the model of version 1.1 (four terms, boxes of one proportion), for comparison
+    s = {"all": evaluate(d), "all_v1": evaluate(d, CALIBRATION_V1), "by_noise": {}, "by_size": {}, "exact_cwsin": {}}
     for nm in NOISE_MODELS:
         s["by_noise"][nm] = evaluate([x for x in d if x["noise_model"] == nm])
     for n in sorted({x["size"] for x in d}):
@@ -65,7 +66,7 @@ def summarize(name, d):
     return s
 
 
-out = {"code_version": code_version()["label"], "calibration": "DEFAULT_CALIBRATION (3 indicadores, 6 familias)",
+out = {"code_version": code_version()["label"], "calibration": "DEFAULT_CALIBRATION (three indicators in five terms, six families in boxes of four proportions), not refitted",
        "sizes": list(a.sizes), "noise_models": list(NOISE_MODELS), "realizations": 2, "families": {}}
 data = {}
 with keep_awake():
@@ -83,18 +84,19 @@ with keep_awake():
         r = out["families"][name]["all"]
         print(f"{name:11s} malas {r['bad_rate']:.0%} | AUC {r['auc']:.3f} [{r['auc_ci'][0]:.3f}, {r['auc_ci'][1]:.3f}] "
               f"ECE {r['ece']:.3f} | ≥ 0.8: {r['accepted']:.0%} aceptadas, {r['bad_accepted']:.1%} malas "
-              f"({out['families'][name]['seconds'] / 60:.0f} min)")
+              f"(versión 1.1: AUC {out['families'][name]['all_v1']['auc']:.3f}, {out['families'][name]['all_v1']['bad_accepted']:.1%} malas)")
         pickle.dump(data, open(os.path.join(a.out, "external_families.pkl"), "wb"))
         json.dump(out, open(a.json, "w", encoding="utf-8"), indent=1, ensure_ascii=False)
 
 # Reference: the external rope of the paper, evaluated in the same way
 r0 = os.path.join(a.out, "revision", "suite_r0.pkl")
 if os.path.exists(r0):
-    td2 = [x for x in pickle.load(open(r0, "rb")) if x["field"] == "TD2-relax"]
+    td2 = add_box([x for x in pickle.load(open(r0, "rb")) if x["field"] == "TD2-relax"])
     if td2:
         out["families"]["TD2-relax"] = {**summarize("TD2-relax", td2), "source": r0}
         r = out["families"]["TD2-relax"]["all"]
         print(f"{'TD2-relax':11s} malas {r['bad_rate']:.0%} | AUC {r['auc']:.3f} ECE {r['ece']:.3f} | "
-              f"≥ 0.8: {r['accepted']:.0%} aceptadas, {r['bad_accepted']:.1%} malas (referencia, suite_r0)")
+              f"≥ 0.8: {r['accepted']:.0%} aceptadas, {r['bad_accepted']:.1%} malas (referencia, suite_r0; "
+              f"versión 1.1: AUC {out['families']['TD2-relax']['all_v1']['auc']:.3f}, {out['families']['TD2-relax']['all_v1']['bad_accepted']:.1%} malas)")
 json.dump(out, open(a.json, "w", encoding="utf-8"), indent=1, ensure_ascii=False)
 print("guardado", a.json)

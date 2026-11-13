@@ -107,7 +107,7 @@ def calibration_suite(fields=None, noises=None, sizes=(32, 48), realizations: in
     """Suite of calibration cases: fields × noises × resolutions × realizations.
 
     Each element is the result of ``solarff.confidence.calibration_case``
-    plus ``field``, ``noise_model``, ``size``, ``realization`` and ``seconds``.
+    plus ``field``, ``noise_model``, ``size``, ``nz``, ``realization`` and ``seconds``.
     The true error of each line (``err``) is stored, so the "wrong line"
     threshold can be changed afterwards without recomputing (see ``relabel``).
     ``checkpoint``: saved after each case and resumed if interrupted.
@@ -146,7 +146,7 @@ def calibration_suite(fields=None, noises=None, sizes=(32, 48), realizations: in
             f"total {time.time() - t0:.0f}s)", flush=True)
         if checkpoint:
             save_checkpoint(checkpoint, {"signature": signature, "data": data})
-    return data
+    return add_box(data)    # the cases read from a checkpoint older than ``length_h`` get it here
 
 
 @keeps_awake

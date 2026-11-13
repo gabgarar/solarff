@@ -35,8 +35,8 @@ import numpy as np
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from solarff.analytic import CALIBRATION_FIELDS, EXTERNAL_TEST_FIELDS, field_magnetogram  # noqa: E402
-from solarff.calibration import NOISE_MODELS, _nz, bootstrap_ci, ece  # noqa: E402
-from solarff.confidence import DEFAULT_CALIBRATION, auc, calibration_case, confidence  # noqa: E402
+from solarff.calibration import add_box, NOISE_MODELS, _nz, bootstrap_ci, ece  # noqa: E402
+from solarff.confidence import CALIBRATION_V1, DEFAULT_CALIBRATION, auc, calibration_case, confidence  # noqa: E402
 from solarff.magnetogram import aly_criteria  # noqa: E402
 from solarff.preprocess import preprocess  # noqa: E402
 from solarff.utils import code_version, keep_awake  # noqa: E402
@@ -94,7 +94,7 @@ def evaluate(d, cal=DEFAULT_CALIBRATION):
 
 
 cases = [(f, n, k) for k in PERTURBATIONS for f in FAMILIES for n in SIZES]
-data = pickle.load(open(OUT_PKL, "rb")) if os.path.exists(OUT_PKL) else []
+data = add_box(pickle.load(open(OUT_PKL, "rb"))) if os.path.exists(OUT_PKL) else []   # with length_h, also the cases saved without it
 done = {(d["field"], d["size"], d["perturbation"]) for d in data}
 sz, st = NOISE_MODELS[NOISE]
 cache = {}
@@ -123,7 +123,7 @@ with keep_awake():
         print(f"caso {i + 1}/{len(cases)}: {fname}, {n}², {kind}: {rec['bad'].mean():.0%} malas "
               f"({rec['seconds']:.0f}s; total {(time.time() - t0) / 60:.0f} min)", flush=True)
 
-out = {"code_version": code_version()["label"], "calibration": "DEFAULT_CALIBRATION", "noise_model": NOISE,
+out = {"code_version": code_version()["label"], "calibration": "DEFAULT_CALIBRATION (three indicators in five terms, six families in boxes of four proportions), not refitted", "noise_model": NOISE,
        "sizes": list(SIZES), "families": FAMILIES, "perturbations": {}}
 for kind in PERTURBATIONS:
     d = [x for x in data if x["perturbation"] == kind]
@@ -137,9 +137,11 @@ for kind in PERTURBATIONS:
         acc = np.isfinite(c) & (c >= DEFAULT_CALIBRATION["threshold"])
         return float(np.asarray(x["bad"])[acc].mean()) if acc.any() else 0.0
     r["cases_optimistic"] = int(sum(_bad_acc(x) >= 0.10 for x in d))
+    r["v1"] = {k: v for k, v in evaluate(d, CALIBRATION_V1).items() if k in ("auc", "ece", "accepted", "bad_accepted")}   # the model of version 1.1
     out["perturbations"][kind] = r
     print(f"{kind:11s} malas {r['bad_rate']:.0%} | AUC {r['auc']:.3f} ECE {r['ece']:.3f} | ≥ 0.8: {r['accepted']:.0%} aceptadas, "
-          f"{r['bad_accepted']:.1%} malas | casos optimistas {r['cases_optimistic']}/18 | eps_force {r['eps_force']['median']:.3f}")
+          f"{r['bad_accepted']:.1%} malas | casos optimistas {r['cases_optimistic']}/18 | eps_force {r['eps_force']['median']:.3f} "
+          f"| versión 1.1: AUC {r['v1']['auc']:.3f}, {r['v1']['bad_accepted']:.1%} malas")
 
 # How much of a scale error of the transverse field survives the preprocessing: relative difference of the
 # transverse field between the scaled base and the control, before (30 % by construction) and after preprocessing.
@@ -168,7 +170,7 @@ for k, v in out["scale_after_preprocess"].items():
 # Reference for the control: the same noise model in the calibration suite (other noise realizations)
 SUITE = os.path.join("data", "calibration_suite_s32-48-64_r2_mc0_plus_TD-relax.pkl")
 if os.path.exists(SUITE):
-    hmi = [x for x in pickle.load(open(SUITE, "rb"))["data"] if x["noise_model"] == NOISE]
+    hmi = add_box([x for x in pickle.load(open(SUITE, "rb"))["data"] if x["noise_model"] == NOISE])   # the boxes of standard proportion
     out["suite_same_noise"] = {k: v for k, v in evaluate(hmi).items() if k != "auc_ci"}
     print(f"suite, {NOISE}: {out['suite_same_noise']['bad_accepted']:.1%} wrong among accepted ({len(hmi)} cases)")
 json.dump(out, open(OUT_JSON, "w", encoding="utf-8"), indent=1, ensure_ascii=False)

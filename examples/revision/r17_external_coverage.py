@@ -24,6 +24,7 @@ import warnings
 import numpy as np
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
+from solarff.calibration import add_box  # noqa: E402
 from solarff.confidence import DEFAULT_CALIBRATION, auc, confidence  # noqa: E402
 
 warnings.filterwarnings("ignore")
@@ -35,8 +36,9 @@ N_BOOT = 2000
 
 ext = pickle.load(open(os.path.join("data", "external_families.pkl"), "rb"))
 r0 = pickle.load(open(os.path.join("data", "revision", "suite_r0.pkl"), "rb"))
-families = {"TD2-relax": [x for x in r0 if x["field"] == "TD2-relax"],
-            **{name: ext[name] for name in ("LL-IV", "LFFF-delta", "TD3-relax")}}
+# the cases were saved before the length in box heights existed: add_box reconstructs it
+families = {"TD2-relax": add_box([x for x in r0 if x["field"] == "TD2-relax"]),
+            **{name: add_box(ext[name]) for name in ("LL-IV", "LFFF-delta", "TD3-relax")}}
 
 
 def per_case(d):
@@ -90,7 +92,7 @@ def interval(cases, fn, rng):
     return [float(np.percentile(v, 2.5)), float(np.percentile(v, 97.5))] if v.size else None
 
 
-out = {"model": "DEFAULT_CALIBRATION (3 indicators, 6 families), not refitted", "thresholds": list(THRESHOLDS),
+out = {"model": "DEFAULT_CALIBRATION (three indicators in five terms, six families in boxes of four proportions), not refitted", "thresholds": list(THRESHOLDS),
        "fractions": list(FRACTIONS), "n_boot": N_BOOT, "families": {}}
 for name, d in families.items():
     cases = per_case(d)

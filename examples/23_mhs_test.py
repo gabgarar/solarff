@@ -23,7 +23,7 @@ import numpy as np
 
 from solarff.analytic import EXTERNAL_TEST_FIELDS
 from solarff.calibration import NOISE_MODELS, _nz, bootstrap_ci, calibration_suite, ece
-from solarff.confidence import DEFAULT_CALIBRATION, auc, confidence
+from solarff.confidence import CALIBRATION_V1, DEFAULT_CALIBRATION, auc, confidence
 from solarff.magnetogram import Magnetogram, aly_criteria
 from solarff.metrics import force_free_metrics
 from solarff.utils import code_version, keep_awake
@@ -37,11 +37,11 @@ ap.add_argument("--json", default=os.path.join("docs", "resultados", "mhs_famili
 a = ap.parse_args()
 
 
-def top_fraction(d, q):
+def top_fraction(d, q, cal=DEFAULT_CALIBRATION):
     """Wrong lines among the fraction ``q`` with the highest confidence of each extrapolation."""
     wrong = n = 0
     for x in d:
-        c = confidence(x["ind"], DEFAULT_CALIBRATION)
+        c = confidence(x["ind"], cal)
         ok = np.isfinite(c)
         order = np.argsort(-c[ok])
         k = max(1, int(round(q * ok.sum())))
@@ -50,9 +50,9 @@ def top_fraction(d, q):
     return wrong / n
 
 
-def evaluate(d):
+def evaluate(d, cal=DEFAULT_CALIBRATION):
     """Metrics of the published model on the cases ``d`` (intervals by bootstrap grouped by extrapolation)."""
-    c = np.concatenate([confidence(x["ind"], DEFAULT_CALIBRATION) for x in d])
+    c = np.concatenate([confidence(x["ind"], cal) for x in d])
     y = np.concatenate([x["bad"] for x in d]).astype(int)
     g = np.concatenate([np.full(len(x["bad"]), i) for i, x in enumerate(d)])
     ok = np.isfinite(c)
@@ -60,7 +60,7 @@ def evaluate(d):
     p = 1 - c
     out = {"n_cases": int(len(d)), "n_lines": int(y.size), "bad_rate": float(y.mean()), "auc": auc(p, y),
            "auc_ci": list(bootstrap_ci(p, y, auc, groups=g, n_boot=500)), "ece": ece(p, y), "mean_predicted_bad": float(p.mean()),
-           "top20_bad": top_fraction(d, 0.2)}
+           "top20_bad": top_fraction(d, 0.2, cal)}
     for t in (0.8, 0.9, 0.95):
         acc = c >= t
         out[f"accepted_{t}"] = float(acc.mean())
@@ -82,7 +82,7 @@ def describe(name, sizes):
     return {"params": meta, "exact": rows}
 
 
-out = {"code_version": code_version()["label"], "calibration": "DEFAULT_CALIBRATION (3 indicators, 6 families), not refitted",
+out = {"code_version": code_version()["label"], "calibration": "DEFAULT_CALIBRATION (three indicators in five terms, six families in boxes of four proportions), not refitted",
        "sizes": list(a.sizes), "noise_models": list(NOISE_MODELS), "realizations": 2, "families": {}}
 data = {}
 with keep_awake():
@@ -91,12 +91,13 @@ with keep_awake():
         d = calibration_suite(fields=[name], sizes=tuple(a.sizes), realizations=2,
                               checkpoint=os.path.join(a.out, f"mhs_{name}.ckpt"))
         data[name] = d
-        s = {**describe(name, a.sizes), "all": evaluate(d), "by_size": {str(n): evaluate([x for x in d if x["size"] == n]) for n in a.sizes},
+        s = {**describe(name, a.sizes), "all": evaluate(d), "all_v1": evaluate(d, CALIBRATION_V1), "by_size": {str(n): evaluate([x for x in d if x["size"] == n]) for n in a.sizes},
              "by_noise": {nm: evaluate([x for x in d if x["noise_model"] == nm]) for nm in NOISE_MODELS}, "seconds": time.time() - t0}
         out["families"][name] = s
         r = s["all"]
         print(f"{name:9s} wrong {r['bad_rate']:.0%} | AUC {r['auc']:.3f} ECE {r['ece']:.3f} | accepted {r['accepted_0.8']:.0%}, wrong among them "
-              f"{r['bad_accepted_0.8']:.3f} (0.9: {r['bad_accepted_0.9']}, top 20%: {r['top20_bad']:.3f})", flush=True)
+              f"{r['bad_accepted_0.8']:.3f} (0.9: {r['bad_accepted_0.9']}, top 20%: {r['top20_bad']:.3f}) | version 1.1: AUC "
+              f"{s['all_v1']['auc']:.3f}, wrong among the accepted {s['all_v1']['bad_accepted_0.8']:.3f}", flush=True)
         pickle.dump(data, open(os.path.join(a.out, "mhs_families.pkl"), "wb"))
         json.dump(out, open(a.json, "w", encoding="utf-8"), indent=1, ensure_ascii=False)
 print("written", a.json)
