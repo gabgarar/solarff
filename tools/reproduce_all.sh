@@ -108,6 +108,7 @@ pruebas() {   # pruebas del 12 y 13 de noviembre de 2026; las extrapolaciones nu
   $PY examples/25_observed_flux_fields.py --alpha-frac 0.5 --fields LFFF-obs   # los mismos con cizalla moderada
   for s in pre post first; do $PY examples/28_model_as_truth.py --set $s; done # modelos de las regiones tomados como verdad
   $PY examples/29_boundary_sensitivity.py                                      # caras no observadas: potencial frente a LFFF
+  $PY examples/31_external_boxes.py                                            # familias externas en cajas de otras proporciones
   # históricos: cómo se llegó al quinto término. Usan el modelo de la versión 1.1 (CALIBRATION_V1)
   $PY examples/24_ensemble_indicator.py
   $PY examples/27_box_proportion.py

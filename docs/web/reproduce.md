@@ -41,6 +41,7 @@ The email is only passed to JSOC for the downloads and can be empty if the data 
 | `25_observed_flux_fields.py` | exact fields built on the observed flux of the three regions |
 | `28_model_as_truth.py` | the published model of each region, cropped, taken as the truth |
 | `29_boundary_sensitivity.py` | unobserved faces taken from the linear force-free field instead of the potential one |
+| `31_external_boxes.py` | the four external families in boxes of other proportions: does the fifth term transfer to unseen geometries? |
 | `24`, `26`, `27`, `30` | how the fifth term of the model was reached: ensemble indicator, length in box heights, boxes of other proportions, recalibration. They use the model of version 1.1 |
 
 The additional checks are in `examples/revision/`:

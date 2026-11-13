@@ -42,8 +42,11 @@ vol = sff.reliable_volume(nl, lines, a["reliable"])     # 3D mask of cells threa
   box. No more complex classifier does better.
 - **Why the height of the box:** a model fitted in boxes of one proportion accepts 8 to 11 % of wrong
   lines in boxes as flat as those of real regions. With the last term the figure is 4 to 6 % in
-  every box, also in boxes left out of the fit. The model of version 1.1, without that term, is kept
-  as `solarff.confidence.CALIBRATION_V1`.
+  every box, also in boxes left out of the fit. In four external families the term halves the wrong
+  lines accepted in flat boxes, but it does not even them out: an external flux rope stays at 10 %
+  there, against 3 % in the standard box, and in a tall box the term accepts 2 to 5 points more than
+  the four terms. The model of version 1.1, without that term, is kept as
+  `solarff.confidence.CALIBRATION_V1`.
 - **Validation:** leaving out one whole family at a time, so the model is always tested on a
   geometry it has not seen.
 
