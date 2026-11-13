@@ -3,9 +3,9 @@ knowing the truth, warn that the per-line probability is optimistic?
 
 Motivation (examples/17): in LFFF-δ and TD3 the NLFFF fails on 61-74 % of the lines and the published
 model accepts 18-21 % of wrong lines (in the suite, 4 %). No per-line indicator sees it.
-Here the NLFFF of every case of the suite (5 families + TD-relax), of the TD2 rope
-(``data/revision/suite_r0.pkl``) and of the three external families (``data/external_families.pkl``) is
-recomputed with the same noise seeds, and five global quantities are measured:
+Here the NLFFF of every case of the suite (5 families + TD-relax, and the six in boxes of other proportions),
+of the TD2 rope (``data/revision/suite_r0.pkl``) and of the three external families
+(``data/external_families.pkl``) is recomputed with the same noise seeds, and five global quantities are measured:
 
 * ``cwsin`` (without the buffer layer, as in the reports) and ``e_div_frac`` of the NLFFF solution
   (Wheatland et al. 2000; Valori et al. 2013);
@@ -20,9 +20,12 @@ quantity the AUC with which it separates the optimistic cases and the Spearman c
 (observed − predicted) are given. The same quantities are computed for the three regions of the paper. The
 reproduction is verified by recomputing the labels of the first case of each source.
 
+The global quantities are kept in the checkpoint; the figures that depend on the confidence model (predicted
+fraction, wrong lines among the accepted) are recomputed from the stored records each time, with the default model.
+
 Saves ``docs/resultados/applicability.json`` and ``data/applicability.pkl`` (checkpoint).
 
-    python -u examples/18_applicability.py         # ~1.5 h
+    python -u examples/18_applicability.py         # ~1.5 h, plus ~20 min for the boxes of other proportions
 """
 import json
 import os
@@ -34,7 +37,7 @@ import numpy as np
 from scipy.stats import spearmanr
 
 from solarff.analytic import CALIBRATION_FIELDS, EXTERNAL_TEST_FIELDS, field_magnetogram
-from solarff.calibration import NOISE_MODELS, _nz
+from solarff.calibration import NOISE_MODELS, PROPORTION_BOXES, SIX_FAMILIES, _nz, add_box, proportion_suite
 from solarff.confidence import DEFAULT_CALIBRATION, auc, confidence, line_errors
 from solarff.helicity import energy_decomposition
 from solarff.metrics import force_free_metrics
@@ -57,6 +60,7 @@ def load(p):
 
 
 # Sources: (name, list of families with which the suite was enumerated, records, families to process)
+TRAIN_SOURCES = ("bateria", "TD-relax", "proporciones")
 SOURCES = []
 S5 = load("data/calibration_suite_s32-48-64_r2_mc0.pkl")
 SOURCES.append(("bateria", list(CALIBRATION_FIELDS), S5, list(CALIBRATION_FIELDS)))
@@ -67,6 +71,25 @@ SOURCES.append(("suite_r0", list(CALIBRATION_FIELDS) + ["TD-relax", "TD2-relax"]
 EXT = pickle.load(open("data/external_families.pkl", "rb"))
 for name, recs in EXT.items():
     SOURCES.append((name, [name], recs, [name]))
+
+# Flat list of the cases to process: (source, family, noise, size, nz, realization, seed of the noise, record)
+CASES = []
+for src, fields, recs, wanted in SOURCES:
+    cases = [(f, nm, s, r) for f in fields for nm in NOISE_MODELS for s in SIZES for r in range(2)]
+    assert len(cases) == len(recs), (src, len(cases), len(recs))
+    for i, ((fname, nm, size, r), rec) in enumerate(zip(cases, add_box(recs))):
+        assert (rec["field"], rec["noise_model"], rec["size"], rec["realization"]) == (fname, nm, size, r), (src, i)
+        if fname in wanted:
+            CASES.append((src, fname, nm, size, _nz(size), r, i, rec))   # seed = 0 in every suite: the noise seed is the position
+# the six families in boxes of other proportions, with the seeds of ``proportion_suite``
+ORDER = list(CALIBRATION_FIELDS) + ["TD-relax", "LFFF-delta"]
+PROP = proportion_suite(checkpoint=os.path.join("data", "proportion_suite.ckpt"), verbose=False)
+prop_cases = [(bi, f, nm) for bi in range(len(PROPORTION_BOXES)) for f in SIX_FAMILIES for nm in NOISE_MODELS]
+assert len(prop_cases) == len(PROP)
+for (bi, fname, nm), rec in zip(prop_cases, add_box(PROP)):
+    n, nz = PROPORTION_BOXES[bi]
+    assert (rec["field"], rec["noise_model"], rec["size"], rec["nz"]) == (fname, nm, n, nz)
+    CASES.append(("proporciones", fname, nm, n, nz, 0, 600011 + 1000 * bi + 10 * ORDER.index(fname) + list(NOISE_MODELS).index(nm), rec))
 
 
 def global_metrics(mag, pp, model, nz):
@@ -94,44 +117,47 @@ def record_metrics(rec):
             "open_frac": float(np.nanmean(np.asarray(rec["ind"]["open"], float)))}
 
 
+def key(src, fname, nm, size, nz, r):
+    return (src, fname, nm, size, nz, r)
+
+
 done = pickle.load(open(CKPT, "rb")) if os.path.exists(CKPT) else {}
 rows = done.get("rows", [])
 verified = done.get("verified", {})
-have = {(r["source"], r["field"], r["noise_model"], r["size"], r["realization"]) for r in rows}
+for r in rows:
+    r.setdefault("nz", _nz(r["size"]))      # rows saved before the boxes of other proportions
+have = {key(r["source"], r["field"], r["noise_model"], r["size"], r["nz"], r["realization"]) for r in rows}
 t_start = time.time()
 with keep_awake():
-    for src, fields, recs, wanted in SOURCES:
-        cases = [(f, nm, s, r) for f in fields for nm in NOISE_MODELS for s in SIZES for r in range(2)]
-        assert len(cases) == len(recs), (src, len(cases), len(recs))
-        first_checked = src in verified
-        for i, (fname, nm, size, r) in enumerate(cases):
-            rec = recs[i]
-            assert (rec["field"], rec["noise_model"], rec["size"], rec["realization"]) == (fname, nm, size, r), (src, i)
-            if fname not in wanted or (src, fname, nm, size, r) in have:
-                continue
-            t0 = time.time()
-            exact = KNOWN[fname](size, size, _nz(size))
-            sz, st = NOISE_MODELS[nm]
-            k = i  # seed = 0 in every suite
-            mag = field_magnetogram(exact, noise=sz, noise_t=st, rng=k)
-            pp = preprocess(mag, verbose=False)
-            model = nlfff_lbfgs(pp, _nz(size), verbose=False)
-            if not first_checked:  # the labels of the first case must be reproduced exactly
-                seeds = seeds_from_magnetogram(mag, n=300, method="random", polarity="both", threshold=0.05, rng=k + 7)
-                err = line_errors(trace_field_lines(model, seeds), trace_field_lines(exact, seeds))
-                bad = (err["shape"] > rec["bad_threshold"]) | (err["topology"] > 0)
-                same = bool(len(bad) == len(rec["bad"]) and np.array_equal(bad, np.asarray(rec["bad"], bool)))
-                verified[src] = {"case": [fname, nm, size, r], "labels_identical": same,
-                                 "n_diff": int(np.sum(bad != np.asarray(rec["bad"], bool))) if len(bad) == len(rec["bad"]) else None}
-                print(f"  verificación {src}: etiquetas {'idénticas' if same else 'DISTINTAS'} ({verified[src]['n_diff']} diferencias)")
-                first_checked = True
-            row = {"source": src, "field": fname, "noise_model": nm, "size": size, "realization": r,
-                   **global_metrics(mag, pp, model, _nz(size)), **record_metrics(rec), "seconds": time.time() - t0}
-            rows.append(row)
-            pickle.dump({"rows": rows, "verified": verified}, open(CKPT, "wb"))
-            print(f"  {src:10s} {fname:10s} {nm:13s} {size:2d}² r{r}: CWsin {row['cwsin']:.3f} E_div/E {row['e_div_frac']:.3f} "
-                  f"contornos {row['boundary_weight']:.3f} pp {row['pp_change']:.3f} | malas {row['bad_rate']:.0%} "
-                  f"pred {row['predicted_bad']:.0%} malas acept {row['bad_accepted']:.1%} ({row['seconds']:.0f}s, total {(time.time() - t_start) / 60:.0f} min)")
+    for src, fname, nm, size, nz, r, k, rec in CASES:
+        if key(src, fname, nm, size, nz, r) in have:
+            continue
+        t0 = time.time()
+        exact = KNOWN[fname](size, size, nz)
+        sz, st = NOISE_MODELS[nm]
+        mag = field_magnetogram(exact, noise=sz, noise_t=st, rng=k)
+        pp = preprocess(mag, verbose=False)
+        model = nlfff_lbfgs(pp, nz, verbose=False)
+        if src not in verified:  # the labels of the first case of each source must be reproduced exactly
+            seeds = seeds_from_magnetogram(mag, n=300, method="random", polarity="both", threshold=0.05, rng=k + 7)
+            err = line_errors(trace_field_lines(model, seeds), trace_field_lines(exact, seeds))
+            bad = (err["shape"] > rec["bad_threshold"]) | (err["topology"] > 0)
+            same = bool(len(bad) == len(rec["bad"]) and np.array_equal(bad, np.asarray(rec["bad"], bool)))
+            verified[src] = {"case": [fname, nm, size, r], "labels_identical": same,
+                             "n_diff": int(np.sum(bad != np.asarray(rec["bad"], bool))) if len(bad) == len(rec["bad"]) else None}
+            print(f"  verificación {src}: etiquetas {'idénticas' if same else 'DISTINTAS'} ({verified[src]['n_diff']} diferencias)", flush=True)
+        row = {"source": src, "field": fname, "noise_model": nm, "size": size, "nz": nz, "realization": r,
+               **global_metrics(mag, pp, model, nz), "seconds": time.time() - t0}
+        rows.append(row)
+        pickle.dump({"rows": rows, "verified": verified}, open(CKPT, "wb"))
+        print(f"  {src:12s} {fname:10s} {nm:13s} {size:2d} x {size:2d} x {nz:2d} r{r}: CWsin {row['cwsin']:.3f} E_div/E {row['e_div_frac']:.3f} "
+              f"contornos {row['boundary_weight']:.3f} pp {row['pp_change']:.3f} ({row['seconds']:.0f}s, total {(time.time() - t_start) / 60:.0f} min)",
+              flush=True)
+
+# the figures that depend on the confidence model, recomputed from the records with the default model
+RECS = {key(src, fname, nm, size, nz, r): rec for src, fname, nm, size, nz, r, k, rec in CASES}
+for r in rows:
+    r.update(record_metrics(RECS[key(r["source"], r["field"], r["noise_model"], r["size"], r["nz"], r["realization"])]))
 
 # ---------------------------------------------------------------- regions of the paper
 REGIONS = {"11158": "data/harp377_study_mc10.pkl", "11429": "data/harp1449_20120306_2336_r7_nz32_mc10.pkl",
@@ -149,23 +175,25 @@ for noaa, p in REGIONS.items():
 METRICS = ["cwsin", "e_div_frac", "boundary_weight", "side_weight", "top_weight", "pp_change", "open_frac"]
 opt = np.array([r["bad_accepted"] is not None and r["bad_accepted"] >= 0.10 for r in rows])
 excess = np.array([r["bad_rate"] - r["predicted_bad"] for r in rows])
-analysis = {"n_cases": len(rows), "n_optimistic": int(opt.sum()), "optimistic_definition": "bad_accepted >= 0.10",
+analysis = {"n_cases": len(rows), "n_train_cases": int(sum(r["source"] in TRAIN_SOURCES for r in rows)), "n_optimistic": int(opt.sum()), "optimistic_definition": "bad_accepted >= 0.10",
             "optimistic_by_family": {}, "metrics": {}}
 for f in sorted({r["field"] for r in rows}):
     m = np.array([r["field"] == f for r in rows])
     analysis["optimistic_by_family"][f] = {"n": int(m.sum()), "optimistic": int((opt & m).sum()),
                                            "median_excess": float(np.median(excess[m]))}
-for key in METRICS:
-    x = np.array([r[key] for r in rows], float)
+for name in METRICS:
+    x = np.array([r[name] for r in rows], float)
     rho, pval = spearmanr(x, excess)
     a_opt = auc(x, opt.astype(int)) if 0 < opt.sum() < len(opt) else None
     fam_med = {f: float(np.median(x[[r["field"] == f for r in rows]])) for f in analysis["optimistic_by_family"]}
-    train = np.array([r["source"] in ("bateria", "TD-relax") for r in rows])
-    analysis["metrics"][key] = {"auc_optimistic": a_opt, "spearman_excess": float(rho), "spearman_p": float(pval),
+    train = np.array([r["source"] in TRAIN_SOURCES for r in rows])
+    std = train & np.array([r["source"] != "proporciones" for r in rows])
+    analysis["metrics"][name] = {"train_range_standard_boxes": [float(x[std].min()), float(x[std].max())],
+                                 "auc_optimistic": a_opt, "spearman_excess": float(rho), "spearman_p": float(pval),
                                 "train_range": [float(x[train].min()), float(x[train].max())],
                                 "train_p95": float(np.percentile(x[train], 95)),
-                                "median_by_family": fam_med, "regions": {k: v[key] for k, v in regions.items()} if key != "open_frac" else None}
-    print(f"{key:16s} AUC optimistas {a_opt if a_opt is None else round(a_opt, 3)}  Spearman(exceso) {rho:+.2f} (p {pval:.1e})  "
+                                "median_by_family": fam_med, "regions": {k: v[name] for k, v in regions.items()} if name != "open_frac" else None}
+    print(f"{name:16s} AUC optimistas {a_opt if a_opt is None else round(a_opt, 3)}  Spearman(exceso) {rho:+.2f} (p {pval:.1e})  "
           f"batería [{x[train].min():.3f}, {x[train].max():.3f}]  medianas: " +
           ", ".join(f"{f} {v:.3f}" for f, v in fam_med.items()))
 out = {"code_version": code_version()["label"], "verified": verified, "rows": rows, "regions": regions, "analysis": analysis}
