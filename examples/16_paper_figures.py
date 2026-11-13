@@ -4,13 +4,15 @@
 2. Calibration leaving out each family: reliability and risk versus coverage.
 3. External flux rope (TD2): exact and NLFFF lines coloured by confidence, and
    fraction of wrong lines by length.
-4. Confidence in HARP 377 (from the region report).
+4. Field lines of NOAA 11158, accepted and rejected, in perspective and from above (every traced line).
 5. Comparison with AIA step by step (from the region report).
 6. Energy drop by zone in the three flares and its sensitivity.
 7. Sensitivity to the definition of a wrong line (r11) and E_div/E versus the fraction of wrong
    lines per case (examples/18): a global quantity does not warn of the optimistic probability.
 8. Confidence versus apex height in the three regions, closed and open lines
    (writes docs/resultados/height_confidence.json).
+9. Lines of the three regions from above, by the model that accepts them: the published one (five terms) and the
+   one without the height term of the length (four terms).
 
     python examples/16_paper_figures.py
 """
@@ -402,18 +404,136 @@ def fig_height(lang, path):
     plt.close(fig)
 
 
+# ------------------------------------------------------------------ 4 and 9. field lines of the regions
+_LINES = {}
+
+
+def region_lines(noaa):
+    """Lines of the paper in a region (seeds at every second pixel of the base with strong field), and which of the two
+    models accepts each: the published one and that of version 1.1, without the height term of the length."""
+    if noaa not in _LINES:
+        from solarff.confidence import CALIBRATION_V1, assess_lines
+        from solarff.montecarlo import base_seeds
+        st, _ = pickle.load(open(REGION_PKLS[noaa], "rb"))
+        f = st.nlfff
+        src = st.mag_pp if st.mag_pp is not None else st.mag
+        lines = trace_field_lines(f, base_seeds(f, 2))
+        a = assess_lines(f, lines, mag=src if src.has_vector else None, noise_bt=float(st.mag.meta.get("noise") or 100.0))
+        t = DEFAULT_CALIBRATION["threshold"]
+        acc = np.nan_to_num(np.asarray(a["confidence"], float), nan=0.0) >= t
+        acc4 = np.nan_to_num(confidence(a["indicators"], CALIBRATION_V1), nan=0.0) >= t
+        _LINES[noaa] = (f, lines, acc, acc4)
+    return _LINES[noaa]
+
+
+def _top_view(ax, f, P):
+    """B_z at the base in grey, with the polarity inversion line above the field lines."""
+    bz0 = f.bz[:, :, 0]
+    P._draw_bz_2d(ax, f.x, f.y, bz0, P._bz_vlim(bz0), contours=False, pil=False)
+    pil = P._pil_field(bz0)
+    if np.nanmin(pil) < 0 < np.nanmax(pil):
+        X, Y = np.meshgrid(f.x, f.y, indexing="ij")
+        ax.contour(X, Y, pil, levels=[0.0], colors=P.INK, linewidths=1.2, zorder=9)
+    ax.set_xlim(*P._edges(f.x))
+    ax.set_ylim(*P._edges(f.y))
+    ax.set_aspect("equal")
+
+
+def fig_lines_region(lang, path, noaa="11158"):
+    """Every traced line of a region, in perspective and from above: accepted ones coloured by apex height, rejected in grey."""
+    import solarff.plotting as P
+    from matplotlib.cm import ScalarMappable
+    from matplotlib.colors import Normalize
+    from matplotlib.lines import Line2D
+    f, lines, acc, _ = region_lines(noaa)
+    norm = Normalize(0, max(l.apex for l, a in zip(lines, acc) if a))
+    with plt.rc_context({**P._STYLE, "font.size": 13, "axes.labelsize": 13}):
+        fig = plt.figure(figsize=(12.5, 4.9), layout="constrained")
+        for k, view in enumerate(("3d", "top")):
+            ax = fig.add_subplot(1, 2, k + 1, projection="3d" if view == "3d" else None)
+            if view == "3d":
+                P.plot_field_lines(f, lines=lines, ax=ax, view="3d", color_by="seed", highlight=[], norm=norm, title="", elev=32, azim=-62)
+                ax.set_box_aspect((f.x[-1] - f.x[0], f.y[-1] - f.y[0], f.z[-1] - f.z[0]), zoom=1.1)
+                ax.zaxis.set_major_locator(matplotlib.ticker.MaxNLocator(4))      # the box is low: few ticks in height
+                ax.tick_params(labelsize=11)
+                ax.xaxis.labelpad, ax.yaxis.labelpad = 14, 9
+            else:
+                _top_view(ax, f, P)
+                ax.set_xlabel("x [Mm]")
+                ax.set_ylabel("y [Mm]")
+                for l in lines:
+                    ax.plot(l.points[:, 0], l.points[:, 1], color=P.MUTED, lw=0.4, zorder=4)
+            for j in np.argsort([l.apex for l in lines])[::-1]:        # the lowest accepted lines on top
+                if acc[j]:
+                    l, col = lines[j], P.APEX_CMAP(norm(lines[j].apex))
+                    if view == "3d":
+                        ax.plot(l.points[:, 0], l.points[:, 1], l.points[:, 2], color=col, lw=0.8, zorder=6)
+                    else:
+                        ax.plot(l.points[:, 0], l.points[:, 1], color=col, lw=0.8, zorder=6)
+        fig.colorbar(ScalarMappable(norm, P.APEX_CMAP), ax=fig.axes, shrink=0.62, pad=0.015,
+                     label=T(lang, "altura máxima de las líneas aceptadas [Mm]", "apex height of the accepted lines [Mm]"))
+        fig.legend(handles=[Line2D([], [], color=P.APEX_CMAP(0.6), lw=2, label=T(lang, "aceptada (confianza ≥ 0.8)", "accepted (confidence ≥ 0.8)")),
+                            Line2D([], [], color=P.MUTED, lw=2, label=T(lang, "rechazada", "rejected")),
+                            Line2D([], [], color=P.INK, lw=1.4, label=T(lang, "línea de inversión de polaridad", "polarity inversion line"))],
+                   loc="lower center", ncols=3, frameon=False, fontsize=12.5)
+        fig.get_layout_engine().set(wspace=0.11, rect=(0, 0.07, 1, 1))
+        fig.savefig(path, dpi=300)
+        plt.close(fig)
+
+
+def fig_lines_models(lang, path):
+    """The lines of the three regions from above, by the model that accepts them (five terms and four terms)."""
+    import solarff.plotting as P
+    from matplotlib.lines import Line2D
+    blue, orange, green = P.CATEGORICAL[:3]
+    d = {n: region_lines(n) for n in REGION_PKLS}
+    r1, r2, r3 = ((v[0].y[-1] - v[0].y[0]) / (v[0].x[-1] - v[0].x[0]) for v in d.values())
+    wr = (r1 + r2) / r3                 # the third region, in the right column, as high as the other two together
+    with plt.rc_context({**P._STYLE, "font.size": 12.5, "axes.labelsize": 12.5}):
+        fig = plt.figure(figsize=(12.5, 12.5 / (1 + wr) * (r1 + r2) + 1.3), layout="constrained")
+        gs = fig.add_gridspec(2, 2, width_ratios=[1, wr], height_ratios=[r1, r2])
+        axes = dict(zip(REGION_PKLS, (fig.add_subplot(gs[0, 0]), fig.add_subplot(gs[1, 0]), fig.add_subplot(gs[:, 1]))))
+        for noaa, ax in axes.items():
+            f, lines, acc, acc4 = d[noaa]
+            _top_view(ax, f, P)
+            for sel, col, lw, zo in ((~acc & ~acc4, P.MUTED, 0.35, 4), (acc & acc4, blue, 0.7, 5), (~acc & acc4, orange, 0.95, 6),
+                                     (acc & ~acc4, green, 1.5, 7)):
+                for j in np.flatnonzero(sel):
+                    ax.plot(lines[j].points[:, 0], lines[j].points[:, 1], color=col, lw=lw, zorder=zo)
+            ax.text(0.012, 0.972, f"NOAA {noaa}", transform=ax.transAxes, va="top", ha="left", color=P.INK, zorder=12,
+                    bbox=dict(boxstyle="round,pad=0.25", fc=P.SURFACE, ec="none", alpha=0.88))
+            ax.set_ylabel("y [Mm]")
+        axes["11429"].set_xlabel("x [Mm]")
+        axes["12673"].set_xlabel("x [Mm]")
+        fig.legend(handles=[Line2D([], [], color=blue, lw=2.2, label=T(lang, "aceptada con cinco y con cuatro términos", "accepted with five and with four terms")),
+                            Line2D([], [], color=orange, lw=2.2, label=T(lang, "aceptada sólo con cuatro términos", "accepted only with four terms")),
+                            Line2D([], [], color=green, lw=2.2, label=T(lang, "aceptada sólo con cinco términos", "accepted only with five terms")),
+                            Line2D([], [], color=P.MUTED, lw=2.2, label=T(lang, "rechazada con los dos", "rejected with both")),
+                            Line2D([], [], color=P.INK, lw=1.4, label=T(lang, "línea de inversión de polaridad", "polarity inversion line"))],
+                   loc="upper center", ncols=3, frameon=False, fontsize=12)
+        fig.get_layout_engine().set(rect=(0, 0, 1, 0.89), hspace=0.02)
+        fig.savefig(path, dpi=300)
+        plt.close(fig)
+    return {n: {"both": int((v[2] & v[3]).sum()), "only_four_terms": int((~v[2] & v[3]).sum()), "only_five_terms": int((v[2] & ~v[3]).sum()),
+                "neither": int((~v[2] & ~v[3]).sum())} for n, v in d.items()}
+
+
 for lang in ("es", "en"):
     out = os.path.join(ROOT, lang)
     os.makedirs(out, exist_ok=True)
-    rep = os.path.join("docs", "informes", "harp377", "figures", lang)
     fig_scheme(lang, os.path.join(out, "fig1_esquema.png" if lang == "es" else "fig1_pipeline.png"))
     fig_calibration(lang, os.path.join(out, "fig2_calibracion.png" if lang == "es" else "fig2_calibration.png"))
     fig_rope(lang, os.path.join(out, "fig3_cuerda.png" if lang == "es" else "fig3_flux_rope.png"))
-    shutil.copy(os.path.join(rep, "reliable_lines.png"), os.path.join(out, "fig4_harp377.png"))
+    fig_lines_region(lang, os.path.join(out, "fig4_harp377.png"))
     from solarff.report.figures import fig_aia_steps
     aia = pickle.load(open("data/aia_validation_harp377.pkl", "rb"))
     fig_aia_steps(aia["summary"], aia["plot"], lang, os.path.join(out, "fig5_aia.png"))
     fig_flares(lang, os.path.join(out, "fig6_fulguraciones.png" if lang == "es" else "fig6_flares.png"))
     fig_threshold_global(lang, os.path.join(out, "fig7_umbral_global.png" if lang == "es" else "fig7_threshold_global.png"))
     fig_height(lang, os.path.join(out, "fig8_altura.png" if lang == "es" else "fig8_height.png"))
+    counts = fig_lines_models(lang, os.path.join(out, "fig9_lineas_modelos.png" if lang == "es" else "fig9_lines_models.png"))
+    # the counts of the caption of figure 9, next to the results they come from
+    json.dump({"note": "lines of the paper in each region by the model that accepts them (confidence >= 0.8): five terms (published) and "
+                       "four terms (version 1.1)", "regions": counts},
+              open(os.path.join("docs", "resultados", "lines_by_model.json"), "w", encoding="utf-8"), indent=1)
     print(lang, sorted(os.listdir(out)))

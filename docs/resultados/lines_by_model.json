@@ -1,0 +1,23 @@
+{
+ "note": "lines of the paper in each region by the model that accepts them (confidence >= 0.8): five terms (published) and four terms (version 1.1)",
+ "regions": {
+  "11158": {
+   "both": 246,
+   "only_four_terms": 45,
+   "only_five_terms": 7,
+   "neither": 263
+  },
+  "11429": {
+   "both": 218,
+   "only_four_terms": 67,
+   "only_five_terms": 2,
+   "neither": 165
+  },
+  "12673": {
+   "both": 360,
+   "only_four_terms": 31,
+   "only_five_terms": 15,
+   "neither": 629
+  }
+ }
+}
