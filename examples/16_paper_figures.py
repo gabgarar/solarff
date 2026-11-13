@@ -110,7 +110,7 @@ def fig_scheme(lang, path):
 
 # -------------------------------------------------------------- 2. calibration
 def fig_calibration(lang, path):
-    S = pickle.load(open("data/calibration_suite_s32-48-64_r2_mc0_plus_TD-relax.pkl", "rb"))["field"]
+    S = pickle.load(open("data/calibration_suite_s32-48-64_r2_mc0_plus_TD-relax_boxes.pkl", "rb"))["field"]
     p = np.asarray(S["models"]["logistic"]["p"], float)
     y = np.asarray(S["y"], float)
     fam = np.asarray(S["groups"])
