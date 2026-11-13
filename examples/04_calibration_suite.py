@@ -14,8 +14,14 @@ With ``--extra-fields TD-relax`` the relaxed Titov–Démoulin flux rope
 (``solarff.analytic.EXTERNAL_TEST_FIELDS``) is added as a sixth family; its cases
 are saved with their own checkpoint and the results under another name.
 
+With ``--boxes`` the same families are added in boxes of other proportions (flat, very flat and tall;
+``solarff.calibration.proportion_suite``, ~20 min) and the model gets a fifth term, the length of the line in
+box heights: all the boxes of the suite are ``n x n x 0.7 n`` and with them alone the model cannot know that a
+line that is long compared with the height of the box depends on the unobserved top.
+
     python examples/04_calibration_suite.py --write-package
     python examples/04_calibration_suite.py --extra-fields TD-relax
+    python examples/04_calibration_suite.py --extra-fields TD-relax --boxes
 """
 import argparse
 import json
@@ -23,8 +29,9 @@ import os
 import pickle
 import warnings
 
-from solarff.calibration import (LINEAR_FEATURES, RESULTS_FILE, USED_FEATURES, calibration_suite,
-                                 cross_validate, fit_default, single_feature_auc, summarize)
+from solarff.calibration import (BOX_FEATURES, LINEAR_FEATURES, RESULTS_FILE, SIX_FAMILIES, USED_FEATURES, add_box,
+                                 calibration_suite, cross_validate, fit_default, proportion_suite, single_feature_auc,
+                                 summarize)
 
 warnings.filterwarnings("ignore")
 ap = argparse.ArgumentParser()
@@ -33,6 +40,7 @@ ap.add_argument("--realizations", type=int, default=2)
 ap.add_argument("--mc", type=int, default=0, help="realizaciones Monte Carlo por caso (indicador mc_instability)")
 ap.add_argument("--extra-fields", nargs="*", default=[], help="familias adicionales (p. ej. TD-relax)")
 ap.add_argument("--drop", nargs="*", default=[], help="indicadores que no se usan (p. ej. sin_jb con --mc)")
+ap.add_argument("--boxes", action="store_true", help="añadir las cajas de otras proporciones y la longitud en alturas de caja")
 ap.add_argument("--out", default="data")
 ap.add_argument("--write-package", action="store_true", help="guardar el resumen en solarff/calibration_cv.json")
 a = ap.parse_args()
@@ -50,7 +58,15 @@ if a.extra_fields:
     data = data + calibration_suite(fields=a.extra_fields, sizes=tuple(a.sizes), realizations=a.realizations,
                                     mc=a.mc, checkpoint=os.path.join(a.out, f"calibration_suite_extra_{xtag}_{tag}.ckpt"))
     tag = f"{tag}_plus_{xtag}"
-features = [f for f in list(USED_FEATURES) + (["mc_instability"] if a.mc else []) if f not in a.drop]
+base = USED_FEATURES
+if a.boxes:
+    fams = sorted({d["field"] for d in data})
+    six = fams == sorted(SIX_FAMILIES)
+    data = add_box(data) + add_box(proportion_suite(fields=None if six else fams,
+                                                    checkpoint=os.path.join(a.out, "proportion_suite.ckpt")))
+    tag = f"{tag}_boxes"
+    base = BOX_FEATURES
+features = [f for f in list(base) + (["mc_instability"] if a.mc else []) if f not in a.drop]
 res = {"data": data, "single": single_feature_auc(data), "features": features}
 for group in ("field", "noise_model", "size"):
     print(f"\nValidación cruzada dejando fuera: {group}")

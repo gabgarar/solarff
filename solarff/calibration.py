@@ -47,11 +47,37 @@ LINEAR5_FEATURES = ("sin_jb", "alpha_spread", "buffer", "apex", "length")  # ear
 #: +1: a larger value indicates a worse line (for monotone models).
 FEATURE_SIGN = {"sin_jb": 1, "alpha_spread": 1, "div": 1, "buffer": 1, "open": 1, "foot_snr": -1,
                 "base_change": 1, "apex": 1, "length": 1, "mc_instability": 1, "method_disagreement": 1,
-                "length_sq": 0}  # 0 = no monotonicity constraint (quadratic term)
+                "length_sq": 0,  # 0 = no monotonicity constraint (quadratic term)
+                "length_h": 1}
+#: The published terms plus the length in box heights (``length_h``). The suite only has boxes ``n x n x 0.7 n``;
+#: with the proportion cases (``proportion_suite``) the model learns that a line that is long compared with the
+#: height of the box depends on the unobserved top (examples/30_recalibration_boxes.py).
+BOX_FEATURES = ("alpha_spread", "buffer", "length", "length_sq", "length_h")
+#: Boxes with other proportions (cells across, levels in height): flat, very flat and tall.
+PROPORTION_BOXES = ((64, 22), (64, 16), (48, 48))
+#: The six families of the calibration (TD-relax is defined with the external ones).
+SIX_FAMILIES = ("LL-I", "LL-II", "LL-III", "LFFF-bip", "LFFF-quad", "TD-relax")
 
 
 def _nz(n):
     return int(round(0.7 * n))
+
+
+def add_box(data: list) -> list:
+    """Copy of the cases with ``nz`` and the indicator ``length_h`` (length of the line in box heights).
+
+    The cases of the suite saved before that indicator existed have boxes ``size x size x 0.7 size``.
+    """
+    from .confidence import length_in_heights
+    out = []
+    for d in data:
+        e = dict(d)
+        e["nz"] = int(d.get("nz") or _nz(d["size"]))
+        if "length_h" not in d["ind"]:
+            e["ind"] = dict(d["ind"])
+            e["ind"]["length_h"] = length_in_heights(d["ind"]["length"], (d["size"], d["size"], e["nz"]))
+        out.append(e)
+    return out
 
 
 # ------------------------------------------------------------------ data
@@ -100,6 +126,55 @@ def calibration_suite(fields=None, noises=None, sizes=(32, 48), realizations: in
         say(f"  caso {i + 1}/{len(cases)}: {fname}, {nm}, {size}², real. {r}: "
             f"{rec['bad'].mean():.0%} líneas malas ({rec['seconds']:.0f}s; "
             f"total {time.time() - t0:.0f}s)", flush=True)
+        if checkpoint:
+            save_checkpoint(checkpoint, {"signature": signature, "data": data})
+    return data
+
+
+@keeps_awake
+def proportion_suite(fields=None, boxes=PROPORTION_BOXES, noises=None, n_seeds: int = 300,
+                     bad_threshold: float = 0.1, seed: int = 600011, checkpoint: str | None = None,
+                     verbose: bool = True) -> list:
+    """The calibration families in boxes of other proportions: fields × noises × boxes, one realization.
+
+    All the boxes of ``calibration_suite`` are ``n x n x 0.7 n``, so a model fitted with them alone cannot tell
+    a line that is long compared with the horizontal size of the box from one that is long compared with its
+    height. These cases, with the same settings, break that degeneracy. Each element is the result of
+    ``solarff.confidence.calibration_case`` plus ``field``, ``noise_model``, ``size``, ``nz``,
+    ``realization`` (0) and ``seconds``; ``checkpoint`` as in ``calibration_suite``.
+    """
+    from .analytic import CALIBRATION_FIELDS, EXTERNAL_TEST_FIELDS, field_magnetogram
+    known = {**CALIBRATION_FIELDS, **EXTERNAL_TEST_FIELDS}
+    fields = list(fields or SIX_FAMILIES)
+    noises = list(noises or NOISE_MODELS)
+    # position of each family in the random seeds (that of examples/27_box_proportion.py, where these cases were first run)
+    order = list(CALIBRATION_FIELDS) + ["TD-relax", "LFFF-delta"]
+    order += sorted(f for f in known if f not in order)
+    say = print if verbose else (lambda *a, **k: None)
+    cases = [(bi, f, nm) for bi in range(len(boxes)) for f in fields for nm in noises]
+    signature = {"cases": cases, "boxes": [list(b) for b in boxes], "n_seeds": n_seeds,
+                 "bad_threshold": bad_threshold, "seed": seed}
+    state = load_checkpoint(checkpoint, signature)
+    data = state["data"] if state is not None else []
+    if data:
+        say(f"  proporciones: reanudando desde {checkpoint} ({len(data)}/{len(cases)} casos hechos)")
+    exact_cache = {}
+    t0 = time.time()
+    for i in range(len(data), len(cases)):
+        bi, fname, nm = cases[i]
+        n, nz = boxes[bi]
+        tc = time.time()
+        if (fname, bi) not in exact_cache:
+            exact_cache = {(fname, bi): known[fname](n, n, nz)}
+        exact = exact_cache[(fname, bi)]
+        sz, st = NOISE_MODELS[nm]
+        k = seed + 1000 * bi + 10 * order.index(fname) + list(NOISE_MODELS).index(nm)
+        mag = field_magnetogram(exact, noise=sz, noise_t=st, rng=k)
+        rec = calibration_case(exact, mag, nz, n_seeds=n_seeds, bad_threshold=bad_threshold, seed=k + 7, noise_bt=st)
+        rec.update(field=fname, noise_model=nm, size=n, nz=nz, realization=0, seconds=time.time() - tc)
+        data.append(rec)
+        say(f"  caso {i + 1}/{len(cases)}: {fname}, {nm}, {n} x {n} x {nz}: {rec['bad'].mean():.0%} líneas malas "
+            f"({rec['seconds']:.0f}s; total {time.time() - t0:.0f}s)", flush=True)
         if checkpoint:
             save_checkpoint(checkpoint, {"signature": signature, "data": data})
     return data
