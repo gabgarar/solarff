@@ -1,0 +1,1306 @@
+{
+ "Alissandrakis1981": {
+  "authors": [
+   "Alissandrakis, C. E."
+  ],
+  "bibcode": "1981A&A...100..197A",
+  "doi": "",
+  "page": "197",
+  "pub": "Astronomy and Astrophysics",
+  "title": "On the computation of constant alpha force-free magnetic field",
+  "volume": "100",
+  "year": 1981
+ },
+ "Aly1989": {
+  "authors": [
+   "Aly, J. J."
+  ],
+  "bibcode": "1989SoPh..120...19A",
+  "doi": "10.1007/BF00148533",
+  "page": "19",
+  "pub": "Solar Physics",
+  "title": "On the Reconstruction of the Nonlinear Force-Free Coronal Magnetic Field from Boundary Data",
+  "volume": "120",
+  "year": 1989
+ },
+ "Amari2006": {
+  "authors": [
+   "Amari, T.",
+   "Boulmezaoud, T. Z.",
+   "Aly, J. J."
+  ],
+  "bibcode": "2006A&A...446..691A",
+  "doi": "10.1051/0004-6361:20054076",
+  "page": "691",
+  "pub": "Astronomy and Astrophysics",
+  "title": "Well posed reconstruction of the solar coronal magnetic field",
+  "volume": "446",
+  "year": 2006
+ },
+ "Aschwanden2013": {
+  "authors": [
+   "Aschwanden, M. J."
+  ],
+  "bibcode": "2013ApJ...763..115A",
+  "doi": "10.1088/0004-637X/763/2/115",
+  "page": "115",
+  "pub": "The Astrophysical Journal",
+  "title": "Nonlinear Force-free Magnetic Field Fitting to Coronal Loops with and without Stereoscopy",
+  "volume": "763",
+  "year": 2013
+ },
+ "Aschwanden2014": {
+  "authors": [
+   "Aschwanden, M. J.",
+   "Sun, X.",
+   "Liu, Y."
+  ],
+  "bibcode": "2014ApJ...785...34A",
+  "doi": "10.1088/0004-637X/785/1/34",
+  "page": "34",
+  "pub": "The Astrophysical Journal",
+  "title": "The Magnetic Field of Active Region 11158 during the 2011 February 12-17 Flares: Differences between Photospheric Extrapolation and Coronal Forward-Fitting Methods",
+  "volume": "785",
+  "year": 2014
+ },
+ "Astropy2022": {
+  "authors": [
+   "Astropy Collaboration",
+   "Price-Whelan, A. M.",
+   "Lim, P. L.",
+   "Earl, N.",
+   "Starkman, N.",
+   "Bradley, L.",
+   "Shupe, D. L.",
+   "Patil, A. A.",
+   "Corrales, L.",
+   "Brasseur, C. E.",
+   "Nöthe, M.",
+   "Donath, A.",
+   "Tollerud, E.",
+   "Morris, B. M.",
+   "Ginsburg, A.",
+   "Vaher, E.",
+   "Weaver, B. A.",
+   "Tocknell, J.",
+   "Jamieson, W.",
+   "van Kerkwijk, M. H.",
+   "Robitaille, T. P.",
+   "Merry, B.",
+   "Bachetti, M.",
+   "Günther, H. M.",
+   "Aldcroft, T. L.",
+   "Alvarado-Montes, J. A.",
+   "Archibald, A. M.",
+   "Bódi, A.",
+   "Bapat, S.",
+   "Barentsen, G.",
+   "Bazán, J.",
+   "Biswas, M.",
+   "Boquien, M.",
+   "Burke, D. J.",
+   "Cara, D.",
+   "Cara, M.",
+   "Conroy, K. E.",
+   "Conseil, S.",
+   "Craig, M. W.",
+   "Cross, R. M.",
+   "Cruz, K. L.",
+   "D'Eugenio, F.",
+   "Dencheva, N.",
+   "Devillepoix, H. A. R.",
+   "Dietrich, J. P.",
+   "Eigenbrot, A. D.",
+   "Erben, T.",
+   "Ferreira, L.",
+   "Foreman-Mackey, D.",
+   "Fox, R.",
+   "Freij, N.",
+   "Garg, S.",
+   "Geda, R.",
+   "Glattly, L.",
+   "Gondhalekar, Y.",
+   "Gordon, K. D.",
+   "Grant, D.",
+   "Greenfield, P.",
+   "Groener, A. M.",
+   "Guest, S.",
+   "Gurovich, S.",
+   "Handberg, R.",
+   "Hart, A.",
+   "Hatfield-Dodds, Z.",
+   "Homeier, D.",
+   "Hosseinzadeh, G.",
+   "Jenness, T.",
+   "Jones, C. K.",
+   "Joseph, P.",
+   "Kalmbach, J. B.",
+   "Karamehmetoglu, E.",
+   "Kałuszyński, M.",
+   "Kelley, M. S. P.",
+   "Kern, N.",
+   "Kerzendorf, W. E.",
+   "Koch, E. W.",
+   "Kulumani, S.",
+   "Lee, A.",
+   "Ly, C.",
+   "Ma, Z.",
+   "MacBride, C.",
+   "Maljaars, J. M.",
+   "Muna, D.",
+   "Murphy, N. A.",
+   "Norman, H.",
+   "O'Steen, R.",
+   "Oman, K. A.",
+   "Pacifici, C.",
+   "Pascual, S.",
+   "Pascual-Granado, J.",
+   "Patil, R. R.",
+   "Perren, G. I.",
+   "Pickering, T. E.",
+   "Rastogi, T.",
+   "Roulston, B. R.",
+   "Ryan, D. F.",
+   "Rykoff, E. S.",
+   "Sabater, J.",
+   "Sakurikar, P.",
+   "Salgado, J.",
+   "Sanghi, A.",
+   "Saunders, N.",
+   "Savchenko, V.",
+   "Schwardt, L.",
+   "Seifert-Eckert, M.",
+   "Shih, A. Y.",
+   "Jain, A. S.",
+   "Shukla, G.",
+   "Sick, J.",
+   "Simpson, C.",
+   "Singanamalla, S.",
+   "Singer, L. P.",
+   "Singhal, J.",
+   "Sinha, M.",
+   "Sipőcz, B. M.",
+   "Spitler, L. R.",
+   "Stansby, D.",
+   "Streicher, O.",
+   "Šumak, J.",
+   "Swinbank, J. D.",
+   "Taranu, D. S.",
+   "Tewary, N.",
+   "Tremblay, G. R.",
+   "de Val-Borro, M.",
+   "Van Kooten, S. J.",
+   "Vasović, Z.",
+   "Verma, S.",
+   "de Miranda Cardoso, J. V.",
+   "Williams, P. K. G.",
+   "Wilson, T. J.",
+   "Winkel, B.",
+   "Wood-Vasey, W. M.",
+   "Xue, R.",
+   "Yoachim, P.",
+   "Zhang, C.",
+   "Zonca, A.",
+   "Astropy Project Contributors"
+  ],
+  "bibcode": "2022ApJ...935..167A",
+  "doi": "10.3847/1538-4357/ac7c74",
+  "page": "167",
+  "pub": "The Astrophysical Journal",
+  "title": "The Astropy Project: Sustaining and Growing a Community-oriented Open-source Project and the Latest Major Release (v5.0) of the Core Package",
+  "volume": "935",
+  "year": 2022
+ },
+ "Berger1984": {
+  "authors": [
+   "Berger, M. A.",
+   "Field, G. B."
+  ],
+  "bibcode": "1984JFM...147..133B",
+  "doi": "10.1017/S0022112084002019",
+  "page": "133",
+  "pub": "Journal of Fluid Mechanics",
+  "title": "The topological properties of magnetic helicity",
+  "volume": "147",
+  "year": 1984
+ },
+ "Berger2006": {
+  "authors": [
+   "Berger, M. A.",
+   "Prior, C."
+  ],
+  "bibcode": "2006JPhA...39.8321B",
+  "doi": "10.1088/0305-4470/39/26/005",
+  "page": "8321",
+  "pub": "Journal of Physics A Mathematical General",
+  "title": "The writhe of open and closed curves",
+  "volume": "39",
+  "year": 2006
+ },
+ "Bobra2014": {
+  "authors": [
+   "Bobra, M. G.",
+   "Sun, X.",
+   "Hoeksema, J. T.",
+   "Turmon, M.",
+   "Liu, Y.",
+   "Hayashi, K.",
+   "Barnes, G.",
+   "Leka, K. D."
+  ],
+  "bibcode": "2014SoPh..289.3549B",
+  "doi": "10.1007/s11207-014-0529-3",
+  "page": "3549",
+  "pub": "Solar Physics",
+  "title": "The Helioseismic and Magnetic Imager (HMI) Vector Magnetic Field Pipeline: SHARPs - Space-Weather HMI Active Region Patches",
+  "volume": "289",
+  "year": 2014
+ },
+ "Chifu2017": {
+  "authors": [
+   "Chifu, I.",
+   "Wiegelmann, T.",
+   "Inhester, B."
+  ],
+  "bibcode": "2017ApJ...837...10C",
+  "doi": "10.3847/1538-4357/aa5b9a",
+  "page": "10",
+  "pub": "The Astrophysical Journal",
+  "title": "Nonlinear Force-free Coronal Magnetic Stereoscopy",
+  "volume": "837",
+  "year": 2017
+ },
+ "DeRosa2009": {
+  "authors": [
+   "DeRosa, M. L.",
+   "Schrijver, C. J.",
+   "Barnes, G.",
+   "Leka, K. D.",
+   "Lites, B. W.",
+   "Aschwanden, M. J.",
+   "Amari, T.",
+   "Canou, A.",
+   "McTiernan, J. M.",
+   "Régnier, S.",
+   "Thalmann, J. K.",
+   "Valori, G.",
+   "Wheatland, M. S.",
+   "Wiegelmann, T.",
+   "Cheung, M. C. M.",
+   "Conlon, P. A.",
+   "Fuhrmann, M.",
+   "Inhester, B.",
+   "Tadesse, T."
+  ],
+  "bibcode": "2009ApJ...696.1780D",
+  "doi": "10.1088/0004-637X/696/2/1780",
+  "page": "1780",
+  "pub": "The Astrophysical Journal",
+  "title": "A Critical Assessment of Nonlinear Force-Free Field Modeling of the Solar Corona for Active Region 10953",
+  "volume": "696",
+  "year": 2009
+ },
+ "DeRosa2015": {
+  "authors": [
+   "DeRosa, M. L.",
+   "Wheatland, M. S.",
+   "Leka, K. D.",
+   "Barnes, G.",
+   "Amari, T.",
+   "Canou, A.",
+   "Gilchrist, S. A.",
+   "Thalmann, J. K.",
+   "Valori, G.",
+   "Wiegelmann, T.",
+   "Schrijver, C. J.",
+   "Malanushenko, A.",
+   "Sun, X.",
+   "Régnier, S."
+  ],
+  "bibcode": "2015ApJ...811..107D",
+  "doi": "10.1088/0004-637X/811/2/107",
+  "page": "107",
+  "pub": "The Astrophysical Journal",
+  "title": "The Influence of Spatial resolution on Nonlinear Force-free Modeling",
+  "volume": "811",
+  "year": 2015
+ },
+ "DeVore2000": {
+  "authors": [
+   "DeVore, C. R."
+  ],
+  "bibcode": "2000ApJ...539..944D",
+  "doi": "10.1086/309274",
+  "page": "944",
+  "pub": "The Astrophysical Journal",
+  "title": "Magnetic Helicity Generation by Solar Differential Rotation",
+  "volume": "539",
+  "year": 2000
+ },
+ "ElYaniv2010": {
+  "authors": [
+   "El-Yaniv, R.",
+   "Wiener, Y."
+  ],
+  "page": "1605",
+  "pub": "Journal of Machine Learning Research",
+  "title": "On the Foundations of Noise-free Selective Classification",
+  "volume": "11",
+  "year": 2010
+ },
+ "Finn1985": {
+  "authors": [
+   "Finn, J. M.",
+   "Antonsen, T. M. J."
+  ],
+  "bibcode": "1985CoPPC...9..111F",
+  "doi": "",
+  "page": "111",
+  "pub": "Comments on Plasma Physics and Controlled Fusion",
+  "title": "Magnetic helicity: What is it and what is it good for?",
+  "volume": "9",
+  "year": 1985
+ },
+ "Fleishman2017": {
+  "authors": [
+   "Fleishman, G. D.",
+   "Anfinogentov, S.",
+   "Loukitcheva, M.",
+   "Mysh'yakov, I.",
+   "Stupishin, A."
+  ],
+  "bibcode": "2017ApJ...839...30F",
+  "doi": "10.3847/1538-4357/aa6840",
+  "page": "30",
+  "pub": "The Astrophysical Journal",
+  "title": "Casting the Coronal Magnetic Field Reconstruction Tools in 3D Using the MHD Bifrost Model",
+  "volume": "839",
+  "year": 2017
+ },
+ "Geifman2017": {
+  "authors": [
+   "Geifman, Y.",
+   "El-Yaniv, R."
+  ],
+  "page": "",
+  "pub": "Advances in Neural Information Processing Systems",
+  "title": "Selective Classification for Deep Neural Networks",
+  "volume": "30",
+  "year": 2017
+ },
+ "Gilchrist2020": {
+  "authors": [
+   "Gilchrist, S. A.",
+   "Leka, K. D.",
+   "Barnes, G.",
+   "Wheatland, M. S.",
+   "DeRosa, M. L."
+  ],
+  "bibcode": "2020ApJ...900..136G",
+  "doi": "10.3847/1538-4357/aba752",
+  "page": "136",
+  "pub": "The Astrophysical Journal",
+  "title": "On Measuring Divergence for Magnetic Field Modeling",
+  "volume": "900",
+  "year": 2020
+ },
+ "Gold1960": {
+  "authors": [
+   "Gold, T.",
+   "Hoyle, F."
+  ],
+  "bibcode": "1960MNRAS.120...89G",
+  "doi": "10.1093/mnras/120.2.89",
+  "page": "89",
+  "pub": "Monthly Notices of the Royal Astronomical Society",
+  "title": "On the origin of solar flares",
+  "volume": "120",
+  "year": 1960
+ },
+ "Grad1958": {
+  "authors": [
+   "Grad, H.",
+   "Rubin, H."
+  ],
+  "page": "190",
+  "pub": "Proc. 2nd UN International Conference on the Peaceful Uses of Atomic Energy",
+  "title": "Hydromagnetic Equilibria and Force-Free Fields",
+  "volume": "31",
+  "year": 1958
+ },
+ "Guo2017": {
+  "authors": [
+   "Guo, C.",
+   "Pleiss, G.",
+   "Sun, Y.",
+   "Weinberger, K. Q."
+  ],
+  "bibcode": "2017arXiv170604599G",
+  "doi": "10.48550/arXiv.1706.04599",
+  "page": "arXiv:1706.04599",
+  "pub": "arXiv e-prints",
+  "title": "On Calibration of Modern Neural Networks",
+  "volume": "",
+  "year": 2017
+ },
+ "Hagino2004": {
+  "authors": [
+   "Hagino, M.",
+   "Sakurai, T."
+  ],
+  "bibcode": "2004PASJ...56..831H",
+  "doi": "10.1093/pasj/56.5.831",
+  "page": "831",
+  "pub": "Publications of the Astronomical Society of Japan",
+  "title": "Latitude Variation of Helicity in Solar Active Regions",
+  "volume": "56",
+  "year": 2004
+ },
+ "Harris2020": {
+  "authors": [
+   "Harris, C. R.",
+   "Millman, K. J.",
+   "van der Walt, S. J.",
+   "Gommers, R.",
+   "Virtanen, P.",
+   "Cournapeau, D.",
+   "Wieser, E.",
+   "Taylor, J.",
+   "Berg, S.",
+   "Smith, N. J.",
+   "Kern, R.",
+   "Picus, M.",
+   "Hoyer, S.",
+   "van Kerkwijk, M. H.",
+   "Brett, M.",
+   "Haldane, A.",
+   "del Río, J. F.",
+   "Wiebe, M.",
+   "Peterson, P.",
+   "Gérard-Marchant, P.",
+   "Sheppard, K.",
+   "Reddy, T.",
+   "Weckesser, W.",
+   "Abbasi, H.",
+   "Gohlke, C.",
+   "Oliphant, T. E."
+  ],
+  "bibcode": "2020Natur.585..357H",
+  "doi": "10.1038/s41586-020-2649-2",
+  "page": "357",
+  "pub": "Nature",
+  "title": "Array programming with NumPy",
+  "volume": "585",
+  "year": 2020
+ },
+ "Hoeksema2014": {
+  "authors": [
+   "Hoeksema, J. T.",
+   "Liu, Y.",
+   "Hayashi, K.",
+   "Sun, X.",
+   "Schou, J.",
+   "Couvidat, S.",
+   "Norton, A.",
+   "Bobra, M.",
+   "Centeno, R.",
+   "Leka, K. D.",
+   "Barnes, G.",
+   "Turmon, M."
+  ],
+  "bibcode": "2014SoPh..289.3483H",
+  "doi": "10.1007/s11207-014-0516-8",
+  "page": "3483",
+  "pub": "Solar Physics",
+  "title": "The Helioseismic and Magnetic Imager (HMI) Vector Magnetic Field Pipeline: Overview and Performance",
+  "volume": "289",
+  "year": 2014
+ },
+ "Hunter2007": {
+  "authors": [
+   "Hunter, J. D."
+  ],
+  "bibcode": "2007CSE.....9...90H",
+  "doi": "10.1109/MCSE.2007.55",
+  "page": "90",
+  "pub": "Computing in Science and Engineering",
+  "title": "Matplotlib: A 2D Graphics Environment",
+  "volume": "9",
+  "year": 2007
+ },
+ "Hurlburt2012": {
+  "authors": [
+   "Hurlburt, N.",
+   "Cheung, M.",
+   "Schrijver, C.",
+   "Chang, L.",
+   "Freeland, S.",
+   "Green, S.",
+   "Heck, C.",
+   "Jaffey, A.",
+   "Kobashi, A.",
+   "Schiff, D.",
+   "Serafin, J.",
+   "Seguin, R.",
+   "Slater, G.",
+   "Somani, A.",
+   "Timmons, R."
+  ],
+  "bibcode": "2012SoPh..275...67H",
+  "doi": "10.1007/s11207-010-9624-2",
+  "page": "67",
+  "pub": "Solar Physics",
+  "title": "Heliophysics Event Knowledgebase for the Solar Dynamics Observatory (SDO) and Beyond",
+  "volume": "275",
+  "year": 2012
+ },
+ "Iyer2026": {
+  "authors": [
+   "Iyer, A. G.",
+   "Wheatland, M. S.",
+   "Welsch, B. T.",
+   "Liu, Y.",
+   "Gilchrist, S. A."
+  ],
+  "bibcode": "2026ApJ..1004..112I",
+  "doi": "10.3847/1538-4357/ae6a8b",
+  "page": "112",
+  "pub": "The Astrophysical Journal",
+  "title": "Validating Coronal Magnetic Field Models Using Gaussian Separation",
+  "volume": "1004",
+  "year": 2026
+ },
+ "Kliem2006": {
+  "authors": [
+   "Kliem, B.",
+   "Török, T."
+  ],
+  "bibcode": "2006PhRvL..96y5002K",
+  "doi": "10.1103/PhysRevLett.96.255002",
+  "page": "255002",
+  "pub": "Physical Review Letters",
+  "title": "Torus Instability",
+  "volume": "96",
+  "year": 2006
+ },
+ "Lemen2012": {
+  "authors": [
+   "Lemen, J. R.",
+   "Title, A. M.",
+   "Akin, D. J.",
+   "Boerner, P. F.",
+   "Chou, C.",
+   "Drake, J. F.",
+   "Duncan, D. W.",
+   "Edwards, C. G.",
+   "Friedlaender, F. M.",
+   "Heyman, G. F.",
+   "Hurlburt, N. E.",
+   "Katz, N. L.",
+   "Kushner, G. D.",
+   "Levay, M.",
+   "Lindgren, R. W.",
+   "Mathur, D. P.",
+   "McFeaters, E. L.",
+   "Mitchell, S.",
+   "Rehse, R. A.",
+   "Schrijver, C. J.",
+   "Springer, L. A.",
+   "Stern, R. A.",
+   "Tarbell, T. D.",
+   "Wuelser, J. P.",
+   "Wolfson, C. J.",
+   "Yanari, C.",
+   "Bookbinder, J. A.",
+   "Cheimets, P. N.",
+   "Caldwell, D.",
+   "Deluca, E. E.",
+   "Gates, R.",
+   "Golub, L.",
+   "Park, S.",
+   "Podgorski, W. A.",
+   "Bush, R. I.",
+   "Scherrer, P. H.",
+   "Gummin, M. A.",
+   "Smith, P.",
+   "Auker, G.",
+   "Jerram, P.",
+   "Pool, P.",
+   "Soufli, R.",
+   "Windt, D. L.",
+   "Beardsley, S.",
+   "Clapp, M.",
+   "Lang, J.",
+   "Waltham, N."
+  ],
+  "bibcode": "2012SoPh..275...17L",
+  "doi": "10.1007/s11207-011-9776-8",
+  "page": "17",
+  "pub": "Solar Physics",
+  "title": "The Atmospheric Imaging Assembly (AIA) on the Solar Dynamics Observatory (SDO)",
+  "volume": "275",
+  "year": 2012
+ },
+ "Liu1989": {
+  "authors": [
+   "Liu, D. C.",
+   "Nocedal, J."
+  ],
+  "bibcode": "1989MatPr..45..503L",
+  "doi": "10.1007/BF01589116",
+  "page": "503",
+  "pub": "Mathematical Programming",
+  "title": "On the limited memory BFGS method for large scale optimization",
+  "volume": "45",
+  "year": 1989
+ },
+ "Liu2016": {
+  "authors": [
+   "Liu, R.",
+   "Kliem, B.",
+   "Titov, V. S.",
+   "Chen, J.",
+   "Wang, Y.",
+   "Wang, H.",
+   "Liu, C.",
+   "Xu, Y.",
+   "Wiegelmann, T."
+  ],
+  "bibcode": "2016ApJ...818..148L",
+  "doi": "10.3847/0004-637X/818/2/148",
+  "page": "148",
+  "pub": "The Astrophysical Journal",
+  "title": "Structure, Stability, and Evolution of Magnetic Flux Ropes from the Perspective of Magnetic Twist",
+  "volume": "818",
+  "year": 2016
+ },
+ "Low1990": {
+  "authors": [
+   "Low, B. C.",
+   "Lou, Y. Q."
+  ],
+  "bibcode": "1990ApJ...352..343L",
+  "doi": "10.1086/168541",
+  "page": "343",
+  "pub": "The Astrophysical Journal",
+  "title": "Modeling Solar Force-free Magnetic Fields",
+  "volume": "352",
+  "year": 1990
+ },
+ "Low1991": {
+  "authors": [
+   "Low, B. C."
+  ],
+  "bibcode": "1991ApJ...370..427L",
+  "doi": "10.1086/169829",
+  "page": "427",
+  "pub": "The Astrophysical Journal",
+  "title": "Three-dimensional Structures of Magnetostatic Atmospheres. III. A General Formulation",
+  "volume": "370",
+  "year": 1991
+ },
+ "Low1992": {
+  "authors": [
+   "Low, B. C."
+  ],
+  "bibcode": "1992ApJ...399..300L",
+  "doi": "10.1086/171925",
+  "page": "300",
+  "pub": "The Astrophysical Journal",
+  "title": "Three-dimensional Structures of Magnetostatic Atmospheres. IV. Magnetic Structures over a Solar Active Region",
+  "volume": "399",
+  "year": 1992
+ },
+ "MacTaggart2025": {
+  "authors": [
+   "MacTaggart, D."
+  ],
+  "bibcode": "2025SoPh..300...48M",
+  "doi": "10.1007/s11207-025-02462-8",
+  "page": "48",
+  "pub": "Solar Physics",
+  "title": "On Field Line Slippage Rates in the Solar Corona",
+  "volume": "300",
+  "year": 2025
+ },
+ "Malanushenko2012": {
+  "authors": [
+   "Malanushenko, A.",
+   "Schrijver, C. J.",
+   "DeRosa, M. L.",
+   "Wheatland, M. S.",
+   "Gilchrist, S. A."
+  ],
+  "bibcode": "2012ApJ...756..153M",
+  "doi": "10.1088/0004-637X/756/2/153",
+  "page": "153",
+  "pub": "The Astrophysical Journal",
+  "title": "Guiding Nonlinear Force-free Modeling Using Coronal Observations: First Results Using a Quasi-Grad-Rubin Scheme",
+  "volume": "756",
+  "year": 2012
+ },
+ "Moraitis2019": {
+  "authors": [
+   "Moraitis, K.",
+   "Pariat, E.",
+   "Valori, G.",
+   "Dalmasse, K."
+  ],
+  "bibcode": "2019A&A...624A..51M",
+  "doi": "10.1051/0004-6361/201834668",
+  "page": "A51",
+  "pub": "Astronomy and Astrophysics",
+  "title": "Relative magnetic field line helicity",
+  "volume": "624",
+  "year": 2019
+ },
+ "Moraitis2021": {
+  "authors": [
+   "Moraitis, K.",
+   "Patsourakos, S.",
+   "Nindos, A."
+  ],
+  "bibcode": "2021A&A...649A.107M",
+  "doi": "10.1051/0004-6361/202140384",
+  "page": "A107",
+  "pub": "Astronomy and Astrophysics",
+  "title": "Relative field line helicity of a large eruptive solar active region",
+  "volume": "649",
+  "year": 2021
+ },
+ "Nakagawa1972": {
+  "authors": [
+   "Nakagawa, Y.",
+   "Raadu, M. A."
+  ],
+  "bibcode": "1972SoPh...25..127N",
+  "doi": "10.1007/BF00155751",
+  "page": "127",
+  "pub": "Solar Physics",
+  "title": "On Practical Representation of Magnetic Field",
+  "volume": "25",
+  "year": 1972
+ },
+ "NiculescuMizil2005": {
+  "authors": [
+   "Niculescu-Mizil, A.",
+   "Caruana, R."
+  ],
+  "page": "625",
+  "pub": "Proceedings of the 22nd International Conference on Machine Learning",
+  "title": "Predicting Good Probabilities with Supervised Learning",
+  "volume": "",
+  "year": 2005
+ },
+ "Pariat2012": {
+  "authors": [
+   "Pariat, E.",
+   "Démoulin, P."
+  ],
+  "bibcode": "2012A&A...541A..78P",
+  "doi": "10.1051/0004-6361/201118515",
+  "page": "A78",
+  "pub": "Astronomy and Astrophysics",
+  "title": "Estimation of the squashing degree within a three-dimensional domain",
+  "volume": "541",
+  "year": 2012
+ },
+ "Pariat2017": {
+  "authors": [
+   "Pariat, E.",
+   "Leake, J. E.",
+   "Valori, G.",
+   "Linton, M. G.",
+   "Zuccarello, F. P.",
+   "Dalmasse, K."
+  ],
+  "bibcode": "2017A&A...601A.125P",
+  "doi": "10.1051/0004-6361/201630043",
+  "page": "A125",
+  "pub": "Astronomy and Astrophysics",
+  "title": "Relative magnetic helicity as a diagnostic of solar eruptivity",
+  "volume": "601",
+  "year": 2017
+ },
+ "Paszke2019": {
+  "authors": [
+   "Paszke, A.",
+   "Gross, S.",
+   "Massa, F.",
+   "Lerer, A.",
+   "Bradbury, J.",
+   "Chanan, G.",
+   "Killeen, T.",
+   "Lin, Z.",
+   "Gimelshein, N.",
+   "Antiga, L.",
+   "Desmaison, A.",
+   "Köpf, A.",
+   "Yang, E.",
+   "DeVito, Z.",
+   "Raison, M.",
+   "Tejani, A.",
+   "Chilamkurthy, S.",
+   "Steiner, B.",
+   "Fang, L.",
+   "Bai, J.",
+   "Chintala, S."
+  ],
+  "bibcode": "2019arXiv191201703P",
+  "doi": "10.48550/arXiv.1912.01703",
+  "page": "arXiv:1912.01703",
+  "pub": "arXiv e-prints",
+  "title": "PyTorch: An Imperative Style, High-Performance Deep Learning Library",
+  "volume": "",
+  "year": 2019
+ },
+ "Pedregosa2011": {
+  "authors": [
+   "Pedregosa, F.",
+   "Varoquaux, G.",
+   "Gramfort, A.",
+   "Michel, V.",
+   "Thirion, B.",
+   "Grisel, O.",
+   "Blondel, M.",
+   "Müller, A.",
+   "Nothman, J.",
+   "Louppe, G.",
+   "Prettenhofer, P.",
+   "Weiss, R.",
+   "Dubourg, V.",
+   "Vanderplas, J.",
+   "Passos, A.",
+   "Cournapeau, D.",
+   "Brucher, M.",
+   "Perrot, M.",
+   "Duchesnay, É."
+  ],
+  "bibcode": "2011JMLR...12.2825P",
+  "doi": "10.48550/arXiv.1201.0490",
+  "page": "2825",
+  "pub": "Journal of Machine Learning Research",
+  "title": "Scikit-learn: Machine Learning in Python",
+  "volume": "12",
+  "year": 2011
+ },
+ "Pesnell2012": {
+  "authors": [
+   "Pesnell, W. D.",
+   "Thompson, B. J.",
+   "Chamberlin, P. C."
+  ],
+  "bibcode": "2012SoPh..275....3P",
+  "doi": "10.1007/s11207-011-9841-3",
+  "page": "3",
+  "pub": "Solar Physics",
+  "title": "The Solar Dynamics Observatory (SDO)",
+  "volume": "275",
+  "year": 2012
+ },
+ "Sandman2009": {
+  "authors": [
+   "Sandman, A. W.",
+   "Aschwanden, M. J.",
+   "DeRosa, M. L.",
+   "Wülser, J. P.",
+   "Alexander, D."
+  ],
+  "bibcode": "2009SoPh..259....1S",
+  "doi": "10.1007/s11207-009-9383-0",
+  "page": "1",
+  "pub": "Solar Physics",
+  "title": "Comparison of STEREO/EUVI Loops with Potential Magnetic Field Models",
+  "volume": "259",
+  "year": 2009
+ },
+ "Scherrer2012": {
+  "authors": [
+   "Scherrer, P. H.",
+   "Schou, J.",
+   "Bush, R. I.",
+   "Kosovichev, A. G.",
+   "Bogart, R. S.",
+   "Hoeksema, J. T.",
+   "Liu, Y.",
+   "Duvall, T. L.",
+   "Zhao, J.",
+   "Title, A. M.",
+   "Schrijver, C. J.",
+   "Tarbell, T. D.",
+   "Tomczyk, S."
+  ],
+  "bibcode": "2012SoPh..275..207S",
+  "doi": "10.1007/s11207-011-9834-2",
+  "page": "207",
+  "pub": "Solar Physics",
+  "title": "The Helioseismic and Magnetic Imager (HMI) Investigation for the Solar Dynamics Observatory (SDO)",
+  "volume": "275",
+  "year": 2012
+ },
+ "Schrijver2006": {
+  "authors": [
+   "Schrijver, C. J.",
+   "DeRosa, M. L.",
+   "Metcalf, T. R.",
+   "Liu, Y.",
+   "McTiernan, J.",
+   "Régnier, S.",
+   "Valori, G.",
+   "Wheatland, M. S.",
+   "Wiegelmann, T."
+  ],
+  "bibcode": "2006SoPh..235..161S",
+  "doi": "10.1007/s11207-006-0068-7",
+  "page": "161",
+  "pub": "Solar Physics",
+  "title": "Nonlinear Force-Free Modeling of Coronal Magnetic Fields Part I: A Quantitative Comparison of Methods",
+  "volume": "235",
+  "year": 2006
+ },
+ "Schrijver2008": {
+  "authors": [
+   "Schrijver, C. J.",
+   "DeRosa, M. L.",
+   "Metcalf, T.",
+   "Barnes, G.",
+   "Lites, B.",
+   "Tarbell, T.",
+   "McTiernan, J.",
+   "Valori, G.",
+   "Wiegelmann, T.",
+   "Wheatland, M. S.",
+   "Amari, T.",
+   "Aulanier, G.",
+   "Démoulin, P.",
+   "Fuhrmann, M.",
+   "Kusano, K.",
+   "Régnier, S.",
+   "Thalmann, J. K."
+  ],
+  "bibcode": "2008ApJ...675.1637S",
+  "doi": "10.1086/527413",
+  "page": "1637",
+  "pub": "The Astrophysical Journal",
+  "title": "Nonlinear Force-free Field Modeling of a Solar Active Region around the Time of a Major Flare and Coronal Mass Ejection",
+  "volume": "675",
+  "year": 2008
+ },
+ "Sun2012": {
+  "authors": [
+   "Sun, X.",
+   "Hoeksema, J. T.",
+   "Liu, Y.",
+   "Wiegelmann, T.",
+   "Hayashi, K.",
+   "Chen, Q.",
+   "Thalmann, J."
+  ],
+  "bibcode": "2012ApJ...748...77S",
+  "doi": "10.1088/0004-637X/748/2/77",
+  "page": "77",
+  "pub": "The Astrophysical Journal",
+  "title": "Evolution of Magnetic Field and Energy in a Major Eruptive Active Region Based on SDO/HMI Observation",
+  "volume": "748",
+  "year": 2012
+ },
+ "SunPy2020": {
+  "authors": [
+   "SunPy Community",
+   "Barnes, W. T.",
+   "Bobra, M. G.",
+   "Christe, S. D.",
+   "Freij, N.",
+   "Hayes, L. A.",
+   "Ireland, J.",
+   "Mumford, S.",
+   "Perez-Suarez, D.",
+   "Ryan, D. F.",
+   "Shih, A. Y.",
+   "Chanda, P.",
+   "Glogowski, K.",
+   "Hewett, R.",
+   "Hughitt, V. K.",
+   "Hill, A.",
+   "Hiware, K.",
+   "Inglis, A.",
+   "Kirk, M. S. F.",
+   "Konge, S.",
+   "Mason, J. P.",
+   "Maloney, S. A.",
+   "Murray, S. A.",
+   "Panda, A.",
+   "Park, J.",
+   "Pereira, T. M. D.",
+   "Reardon, K.",
+   "Savage, S.",
+   "Sipőcz, B. M.",
+   "Stansby, D.",
+   "Jain, Y.",
+   "Taylor, G.",
+   "Yadav, T.",
+   "Rajul",
+   "Dang, T. K."
+  ],
+  "bibcode": "2020ApJ...890...68S",
+  "doi": "10.3847/1538-4357/ab4f7a",
+  "page": "68",
+  "pub": "The Astrophysical Journal",
+  "title": "The SunPy Project: Open Source Development and Status of the Version 1.0 Core Package",
+  "volume": "890",
+  "year": 2020
+ },
+ "Thalmann2019": {
+  "authors": [
+   "Thalmann, J. K.",
+   "Linan, L.",
+   "Pariat, E.",
+   "Valori, G."
+  ],
+  "bibcode": "2019ApJ...880L...6T",
+  "doi": "10.3847/2041-8213/ab2e73",
+  "page": "L6",
+  "pub": "The Astrophysical Journal Letters",
+  "title": "On the Reliability of Magnetic Energy and Helicity Computations Based on Nonlinear Force-free Coronal Magnetic Field Models",
+  "volume": "880",
+  "year": 2019
+ },
+ "Titov1999": {
+  "authors": [
+   "Titov, V. S.",
+   "Démoulin, P."
+  ],
+  "bibcode": "1999A&A...351..707T",
+  "doi": "",
+  "page": "707",
+  "pub": "Astronomy and Astrophysics",
+  "title": "Basic topology of twisted magnetic configurations in solar flares",
+  "volume": "351",
+  "year": 1999
+ },
+ "Titov2002": {
+  "authors": [
+   "Titov, V. S.",
+   "Hornig, G.",
+   "Démoulin, P."
+  ],
+  "bibcode": "2002JGRA..107.1164T",
+  "doi": "10.1029/2001JA000278",
+  "page": "1164",
+  "pub": "Journal of Geophysical Research (Space Physics)",
+  "title": "Theory of magnetic connectivity in the solar corona",
+  "volume": "107",
+  "year": 2002
+ },
+ "Valori2010": {
+  "authors": [
+   "Valori, G.",
+   "Kliem, B.",
+   "Török, T.",
+   "Titov, V. S."
+  ],
+  "bibcode": "2010A&A...519A..44V",
+  "doi": "10.1051/0004-6361/201014416",
+  "page": "A44",
+  "pub": "Astronomy and Astrophysics",
+  "title": "Testing magnetofrictional extrapolation with the Titov-Démoulin model of solar active regions",
+  "volume": "519",
+  "year": 2010
+ },
+ "Valori2012": {
+  "authors": [
+   "Valori, G.",
+   "Démoulin, P.",
+   "Pariat, E."
+  ],
+  "bibcode": "2012SoPh..278..347V",
+  "doi": "10.1007/s11207-012-9951-6",
+  "page": "347",
+  "pub": "Solar Physics",
+  "title": "Comparing Values of the Relative Magnetic Helicity in Finite Volumes",
+  "volume": "278",
+  "year": 2012
+ },
+ "Valori2013": {
+  "authors": [
+   "Valori, G.",
+   "Démoulin, P.",
+   "Pariat, E.",
+   "Masson, S."
+  ],
+  "bibcode": "2013A&A...553A..38V",
+  "doi": "10.1051/0004-6361/201220982",
+  "page": "A38",
+  "pub": "Astronomy and Astrophysics",
+  "title": "Accuracy of magnetic energy computations",
+  "volume": "553",
+  "year": 2013
+ },
+ "Virtanen2020": {
+  "authors": [
+   "Virtanen, P.",
+   "Gommers, R.",
+   "Oliphant, T. E.",
+   "Haberland, M.",
+   "Reddy, T.",
+   "Cournapeau, D.",
+   "Burovski, E.",
+   "Peterson, P.",
+   "Weckesser, W.",
+   "Bright, J.",
+   "van der Walt, S. J.",
+   "Brett, M.",
+   "Wilson, J.",
+   "Millman, K. J.",
+   "Mayorov, N.",
+   "Nelson, A. R. J.",
+   "Jones, E.",
+   "Kern, R.",
+   "Larson, E.",
+   "Carey, C. J.",
+   "Polat, İ.",
+   "Feng, Y.",
+   "Moore, E. W.",
+   "VanderPlas, J.",
+   "Laxalde, D.",
+   "Perktold, J.",
+   "Cimrman, R.",
+   "Henriksen, I.",
+   "Quintero, E. A.",
+   "Harris, C. R.",
+   "Archibald, A. M.",
+   "Ribeiro, A. H.",
+   "Pedregosa, F.",
+   "van Mulbregt, P.",
+   "SciPy 1.  0 Contributors"
+  ],
+  "bibcode": "2020NaMet..17..261V",
+  "doi": "10.1038/s41592-019-0686-2",
+  "page": "261",
+  "pub": "Nature Methods",
+  "title": "SciPy 1.0: fundamental algorithms for scientific computing in Python",
+  "volume": "17",
+  "year": 2020
+ },
+ "Warren2018": {
+  "authors": [
+   "Warren, H. P.",
+   "Crump, N. A.",
+   "Ugarte-Urra, I.",
+   "Sun, X.",
+   "Aschwanden, M. J.",
+   "Wiegelmann, T."
+  ],
+  "bibcode": "2018ApJ...860...46W",
+  "doi": "10.3847/1538-4357/aac20b",
+  "page": "46",
+  "pub": "The Astrophysical Journal",
+  "title": "Toward a Quantitative Comparison of Magnetic Field Extrapolations and Observed Coronal Loops",
+  "volume": "860",
+  "year": 2018
+ },
+ "Wheatland2000": {
+  "authors": [
+   "Wheatland, M. S.",
+   "Sturrock, P. A.",
+   "Roumeliotis, G."
+  ],
+  "bibcode": "2000ApJ...540.1150W",
+  "doi": "10.1086/309355",
+  "page": "1150",
+  "pub": "The Astrophysical Journal",
+  "title": "An Optimization Approach to Reconstructing Force-free Fields",
+  "volume": "540",
+  "year": 2000
+ },
+ "Wheatland2007": {
+  "authors": [
+   "Wheatland, M. S."
+  ],
+  "bibcode": "2007SoPh..245..251W",
+  "doi": "10.1007/s11207-007-9054-y",
+  "page": "251",
+  "pub": "Solar Physics",
+  "title": "Calculating and Testing Nonlinear Force-Free Fields",
+  "volume": "245",
+  "year": 2007
+ },
+ "Wheatland2009": {
+  "authors": [
+   "Wheatland, M. S.",
+   "Régnier, S."
+  ],
+  "bibcode": "2009ApJ...700L..88W",
+  "doi": "10.1088/0004-637X/700/2/L88",
+  "page": "L88",
+  "pub": "The Astrophysical Journal Letters",
+  "title": "A Self-Consistent Nonlinear Force-Free Solution for a Solar Active Region Magnetic Field",
+  "volume": "700",
+  "year": 2009
+ },
+ "Wiegelmann2004": {
+  "authors": [
+   "Wiegelmann, T."
+  ],
+  "bibcode": "2004SoPh..219...87W",
+  "doi": "10.1023/B:SOLA.0000021799.39465.36",
+  "page": "87",
+  "pub": "Solar Physics",
+  "title": "Optimization code with weighting function for the reconstruction of coronal magnetic fields",
+  "volume": "219",
+  "year": 2004
+ },
+ "Wiegelmann2006": {
+  "authors": [
+   "Wiegelmann, T.",
+   "Inhester, B.",
+   "Sakurai, T."
+  ],
+  "bibcode": "2006SoPh..233..215W",
+  "doi": "10.1007/s11207-006-2092-z",
+  "page": "215",
+  "pub": "Solar Physics",
+  "title": "Preprocessing of Vector Magnetograph Data for a Nonlinear Force-Free Magnetic Field Reconstruction",
+  "volume": "233",
+  "year": 2006
+ },
+ "Wiegelmann2010": {
+  "authors": [
+   "Wiegelmann, T.",
+   "Inhester, B."
+  ],
+  "bibcode": "2010A&A...516A.107W",
+  "doi": "10.1051/0004-6361/201014391",
+  "page": "A107",
+  "pub": "Astronomy and Astrophysics",
+  "title": "How to deal with measurement errors and lacking data in nonlinear force-free coronal magnetic field modelling?",
+  "volume": "516",
+  "year": 2010
+ },
+ "Wiegelmann2012": {
+  "authors": [
+   "Wiegelmann, T.",
+   "Sakurai, T."
+  ],
+  "bibcode": "2012LRSP....9....5W",
+  "doi": "10.12942/lrsp-2012-5",
+  "page": "5",
+  "pub": "Living Reviews in Solar Physics",
+  "title": "Solar Force-free Magnetic Fields",
+  "volume": "9",
+  "year": 2012
+ },
+ "Zhu2018": {
+  "authors": [
+   "Zhu, X.",
+   "Wiegelmann, T."
+  ],
+  "bibcode": "2018ApJ...866..130Z",
+  "doi": "10.3847/1538-4357/aadf7f",
+  "page": "130",
+  "pub": "The Astrophysical Journal",
+  "title": "On the Extrapolation of Magnetohydrostatic Equilibria on the Sun",
+  "volume": "866",
+  "year": 2018
+ }
+}
