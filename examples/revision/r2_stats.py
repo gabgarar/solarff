@@ -90,7 +90,7 @@ def cal_slope_intercept(p, y):
 
 def metrics(p, y):
     s, i = cal_slope_intercept(p, y)
-    return {"auc": float(auc(p, y)), "ece": float(ece(p, y)), "brier": brier(p, y),
+    return {"auc": float(auc(p, y)), "ece": float(ece(p, y)), "ece_15": float(ece(p, y, 15)), "brier": brier(p, y),
             "cal_slope": s, "cal_intercept": i, "bad_rate": float(y.mean()), "n": int(len(y))}
 
 
