@@ -47,6 +47,8 @@ ap = argparse.ArgumentParser()
 ap.add_argument("--part", choices=("region", "suite", "all"), default="all")
 ap.add_argument("--region", choices=("11158", "11429", "12673"), default="11158")
 ap.add_argument("--coarser", action="store_true", help="compare the published model with half its resolution instead of twice")
+ap.add_argument("--physical-smoothing", action="store_true",
+                help="scale the smoothing weight of the preprocessing so that it acts at the same physical scale as in the published model")
 ap.add_argument("--sizes", type=int, nargs="+", default=[96, 128])
 ap.add_argument("--data", default="data")
 ap.add_argument("--json", default=os.path.join("docs", "resultados", "resolution_check.json"))
@@ -114,10 +116,12 @@ def region(out):
     if a.coarser:
         rebin, nz = COARSER[a.region]
     key, tag = ("regions_coarser", "_coarser") if a.coarser else ("regions", "")
+    if a.physical_smoothing:
+        key, tag = key + "_physical", tag + "_physical"
     lo_study, _ = pickle.load(open(os.path.join(a.data, published), "rb"))
     if a.dry:
         rebin, nz = None, lo_study.nlfff.shape[2]
-    cache = os.path.join(a.data, f"resolution_check_harp{harp}_r{rebin}_nz{nz}.pkl")
+    cache = os.path.join(a.data, f"resolution_check_harp{harp}_r{rebin}_nz{nz}{'_physical' if a.physical_smoothing else ''}.pkl")
     if a.dry:
         hi_study = lo_study
     elif os.path.exists(cache):
@@ -127,7 +131,13 @@ def region(out):
         mag = sff.load_sharp_cea(os.path.join(a.data, folder)).rebin(rebin).balance_flux()
         print(mag, f"| rebin {rebin}, nz {nz}", flush=True)
         t0 = time.time()
-        hi_study = sff.run_study(mag, nz=nz, nlfff_kw={"max_iter": 4000}, n_seeds=100, name=f"HARP {harp}, rebin {rebin}")
+        kw = {}
+        if a.physical_smoothing:
+            # The preprocessing balances data against the Laplacian in pixel units: its cut-off is about 6 pixels whatever
+            # the pixel. With the weight multiplied by (published pixel / pixel)^4 the cut-off stays at the same length in Mm.
+            kw = {"preprocess_kw": {"mu4": 1e-2 * float(lo_study.mag.dx / mag.dx) ** 4, "max_iter": 2000}}
+            print("preprocessing:", kw, flush=True)
+        hi_study = sff.run_study(mag, nz=nz, nlfff_kw={"max_iter": 4000}, n_seeds=100, name=f"HARP {harp}, rebin {rebin}", **kw)
         print(f"extrapolation: {time.time() - t0:.0f} s", flush=True)
         pickle.dump(hi_study, open(cache, "wb"))
     seeds = base_seeds(lo_study.nlfff, 2)     # the seeds of the paper (every second pixel of the base where |Bz| > 5 % of its maximum)
