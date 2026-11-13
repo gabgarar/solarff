@@ -132,6 +132,14 @@ for noaa in AIA:
     r["accepted_by_published_kept_by_M3"] = float(np.mean((cm >= T)[okc & (cp >= T)]))
     r["accepted_by_M3_not_by_published"] = int(((cm >= T) & ~(cp >= T))[okc].sum())
     r["spearman_published_M3"] = float(spearmanr(cp[okc], cm[okc])[0])
+    # added after seeing the result: do the lines that M3 drops depend on the unobserved faces?
+    drop, keep = bval & okc & (cp >= T) & ~(cm >= T), bval & okc & (cp >= T) & (cm >= T)
+    r["faces_moved_dropped_by_M3"] = {"n": int(drop.sum()), "moved": float(np.mean(bmoved[drop])) if drop.any() else None}
+    r["faces_moved_kept_by_M3"] = {"n": int(keep.sum()), "moved": float(np.mean(bmoved[keep])) if keep.any() else None}
+    sh, tp = fine["err_shape"], fine["err_topology"] > 0
+    vr = np.isfinite(sh)
+    r["resolution_moved_20_dropped_by_M3"] = float(np.mean(((sh > 0.2) | tp)[vr & okc & (cp >= T) & ~(cm >= T)]))
+    r["resolution_moved_20_kept_by_M3"] = float(np.mean(((sh > 0.2) | tp)[vr & okc & (cp >= T) & (cm >= T)]))
     out["regions"][noaa] = r
 for rule in RULES:
     out["pooled"][rule] = {"equal_height_moved_20": pooled([out["regions"][n][rule]["equal_height_moved_20"] for n in AIA]),
@@ -148,7 +156,9 @@ def ci(e):
 for n in AIA:
     r = out["regions"][n]
     print(f"NOAA {n}: accepted by the published model that M3 keeps {r['accepted_by_published_kept_by_M3']:.2f}; new {r['accepted_by_M3_not_by_published']}; "
-          f"Spearman published-M3 {r['spearman_published_M3']:.3f}")
+          f"Spearman published-M3 {r['spearman_published_M3']:.3f} | lines of the published model that M3 drops: {r['faces_moved_dropped_by_M3']['n']}, "
+          f"of which {r['faces_moved_dropped_by_M3']['moved']:.2f} move when the faces change (kept: {r['faces_moved_kept_by_M3']['moved']:.2f}) and "
+          f"{r['resolution_moved_20_dropped_by_M3']:.2f} move by more than 20 % when the resolution doubles (kept: {r['resolution_moved_20_kept_by_M3']:.2f})")
     for rule in RULES:
         q = r[rule]
         print(f"  {rule:9s} reliable {100 * q['frac_reliable']:.1f} % (double {100 * q['frac_reliable_double']:.1f}, half {100 * q['frac_reliable_half']:.1f}; at 0.9: {100 * q['frac_0.9']:.1f}) | "

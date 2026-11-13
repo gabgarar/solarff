@@ -29,7 +29,42 @@
    0.30517338995116294,
    0.16466758159236192,
    0.3301865415041901
-  ]
+  ],
+  "bootstrap": {
+   "n": 300,
+   "sd": [
+    0.10127360972144564,
+    0.029819321982017036,
+    0.05449695184943588,
+    0.054476871564290444,
+    0.0457106772135596,
+    0.05772433856862519
+   ],
+   "lo": [
+    -1.6095858289650689,
+    0.6827694664015957,
+    0.7968231348204918,
+    0.720712316402565,
+    0.6598666120657487,
+    0.35824326979572807
+   ],
+   "hi": [
+    -1.2117435702241455,
+    0.7913102545230287,
+    1.0084325669536545,
+    0.9392484086632649,
+    0.824149584901374,
+    0.602377302255205
+   ],
+   "order": [
+    "intercept",
+    "alpha_spread",
+    "buffer",
+    "length",
+    "length_sq",
+    "loglh"
+   ]
+  }
  },
  "regions": {
   "11158": {
@@ -193,7 +228,17 @@
    },
    "accepted_by_published_kept_by_M3": 0.845360824742268,
    "accepted_by_M3_not_by_published": 7,
-   "spearman_published_M3": 0.9771250363620051
+   "spearman_published_M3": 0.9771250363620051,
+   "faces_moved_dropped_by_M3": {
+    "n": 45,
+    "moved": 0.6222222222222222
+   },
+   "faces_moved_kept_by_M3": {
+    "n": 246,
+    "moved": 0.07317073170731707
+   },
+   "resolution_moved_20_dropped_by_M3": 0.35555555555555557,
+   "resolution_moved_20_kept_by_M3": 0.27235772357723576
   },
   "11429": {
    "grids": {
@@ -356,7 +401,17 @@
    },
    "accepted_by_published_kept_by_M3": 0.7649122807017544,
    "accepted_by_M3_not_by_published": 2,
-   "spearman_published_M3": 0.9847834027881286
+   "spearman_published_M3": 0.9847834027881286,
+   "faces_moved_dropped_by_M3": {
+    "n": 67,
+    "moved": 0.4925373134328358
+   },
+   "faces_moved_kept_by_M3": {
+    "n": 218,
+    "moved": 0.05504587155963303
+   },
+   "resolution_moved_20_dropped_by_M3": 0.31343283582089554,
+   "resolution_moved_20_kept_by_M3": 0.28440366972477066
   },
   "12673": {
    "grids": {
@@ -519,7 +574,17 @@
    },
    "accepted_by_published_kept_by_M3": 0.9207161125319693,
    "accepted_by_M3_not_by_published": 15,
-   "spearman_published_M3": 0.9823807797759189
+   "spearman_published_M3": 0.9823807797759189,
+   "faces_moved_dropped_by_M3": {
+    "n": 31,
+    "moved": 0.5806451612903226
+   },
+   "faces_moved_kept_by_M3": {
+    "n": 360,
+    "moved": 0.20277777777777778
+   },
+   "resolution_moved_20_dropped_by_M3": 0.45161290322580644,
+   "resolution_moved_20_kept_by_M3": 0.2777777777777778
   }
  },
  "pooled": {
