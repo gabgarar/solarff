@@ -1,7 +1,7 @@
 """Robustness of the per-line confidence (and of the energy) against the arbitrary choices.
 
 A. **"Wrong line" threshold** (5, 10, 20 % of the length): with the suite used to fit
-   the published calibration (6 families, ``04_calibration_suite.py``), measures
+   the published calibration (6 families in boxes of four proportions, ``04_calibration_suite.py --boxes``), measures
    (i) whether the default calibration, fitted with 10 %, still ranks well with
    other definitions and (ii) how much it changes when refitted with each one.
 B. **NLFFF and preprocessing parameters** (ν, λ, ε, buffer layer, μ3, μ4) and
@@ -47,7 +47,7 @@ os.makedirs(OUT, exist_ok=True)
 summary = {"code_version": code_version()["label"]}
 
 # ------------------------------------------------------------------ A. threshold
-suite = os.path.join("data", "calibration_suite_s32-48-64_r2_mc0_plus_TD-relax.pkl")  # the published one
+suite = os.path.join("data", "calibration_suite_s32-48-64_r2_mc0_plus_TD-relax_boxes.pkl")  # the published one
 if os.path.exists(suite):
     data = pickle.load(open(suite, "rb"))["data"]
     thr_rows = {}
@@ -90,7 +90,7 @@ if a.quick:
     CASES = CASES[:1]
 ck = os.path.join(OUT, "robustness.ckpt")
 jobs = [(v[0], f, nm) for v in VARIANTS for f, nm in CASES]
-sig = {"jobs": jobs}
+sig = {"jobs": jobs, "features": list(DEFAULT_CALIBRATION["features"])}   # the figures depend on the confidence model
 state = load_checkpoint(ck, sig) or {"signature": sig, "rows": []}
 t0 = time.time()
 exacts = {}
