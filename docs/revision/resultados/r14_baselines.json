@@ -339,24 +339,28 @@
     "buffer",
     "base_change",
     "length",
-    "length_sq"
+    "length_sq",
+    "length_h"
    ],
    "LFFF-quad": [
     "alpha_spread",
     "buffer",
     "length",
-    "length_sq"
+    "length_sq",
+    "length_h"
    ],
    "LL-I": [
     "alpha_spread",
     "div",
     "buffer",
     "length",
-    "length_sq"
+    "length_sq",
+    "length_h"
    ],
    "LL-II": [
+    "alpha_spread",
     "div",
-    "buffer",
+    "apex",
     "length",
     "length_sq",
     "length_h"
@@ -371,8 +375,10 @@
    ],
    "TD-relax": [
     "alpha_spread",
-    "buffer",
-    "length"
+    "div",
+    "length",
+    "length_sq",
+    "length_h"
    ]
   },
   "coefficient_range": {
