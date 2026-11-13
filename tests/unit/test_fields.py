@@ -91,3 +91,33 @@ def test_relaxed_titov_demoulin_is_more_force_free():
     td, rl = titov_demoulin_field(32, 32, 22), relaxed_titov_demoulin_field(32, 32, 22)
     assert force_free_metrics(rl)["CWsin"] < 0.5 * force_free_metrics(td)["CWsin"]
     assert np.allclose(rl.bz[:, :, 0], td.bz[:, :, 0])  # fixed base
+
+
+def test_linear_mhs_reduces_to_lfff(bipole):
+    from solarff.lfff import linear_mhs
+    mag = bipole(n=48, w=300.0, d=10)
+    a = 0.5 * sff.alpha_max(mag)
+    f, g = sff.lfff(mag, a, nz=12), linear_mhs(mag, a, 12, a=0.0, kappa=0.25)
+    assert max(np.abs(getattr(f, c) - getattr(g, c)).max() for c in ("bx", "by", "bz")) < 1e-9 * f.babs.max()
+
+
+def test_mhs_multipole_is_an_exact_equilibrium_with_a_forced_base():
+    from solarff.analytic import mhs_multipole_field
+    from solarff.field import curl
+    from solarff.magnetogram import Magnetogram, aly_criteria
+    f = mhs_multipole_field(64, 64, 44, alpha_frac=0.7, a=0.6, scale_mm=2.0)
+    al, a, kappa = f.meta["alpha"], f.meta["a"], f.meta["kappa"]
+    jx, jy, jz = curl(f.bx, f.by, f.bz, f.dx)
+    fz = a * np.exp(-kappa * f.dx * np.arange(f.shape[2]))
+    rx = jx - al * f.bx - fz * np.gradient(f.bz, f.dx, axis=1)
+    ry = jy - al * f.by + fz * np.gradient(f.bz, f.dx, axis=0)
+    rz = jz - al * f.bz
+    s = (slice(4, -4), slice(4, -4), slice(1, -2))
+    j = np.sqrt(jx ** 2 + jy ** 2 + jz ** 2)
+    assert np.sqrt(rx ** 2 + ry ** 2 + rz ** 2)[s].sum() / j[s].sum() < 0.05      # satisfies its equation
+    assert np.abs(f.divergence()[s]).max() * f.dx < 0.01 * f.babs.max()
+    jxb = np.sqrt((jy * f.bz - jz * f.by) ** 2 + (jz * f.bx - jx * f.bz) ** 2 + (jx * f.by - jy * f.bx) ** 2)
+    sin = lambda k: jxb[4:-4, 4:-4, k].sum() / (j * f.babs)[4:-4, 4:-4, k].sum()  # noqa: E731
+    assert sin(1) > 0.3 and sin(24) < 0.02                                          # forced below, force-free above
+    base = Magnetogram(bz=f.bz[:, :, 0], bx=f.bx[:, :, 0], by=f.by[:, :, 0], dx=f.dx)
+    assert 0.05 < aly_criteria(base)["eps_force"] < 0.15                            # net force like that of HMI data

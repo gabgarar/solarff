@@ -262,6 +262,34 @@ def lfff_multipole_field(nx: int = 40, ny: int = 40, nz: int = 28, spots=None,
     return f
 
 
+def mhs_multipole_field(nx: int = 40, ny: int = 40, nz: int = 28, spots=None, alpha_frac: float = 0.7,
+                        a: float = 0.6, scale_mm: float = 2.0, length_mm: float = 50.0,
+                        bmax: float = 1000.0) -> VectorField3D:
+    """*Exact* magnetohydrostatic field over a multipolar region (Low 1991), with a base that is not force-free.
+
+    Same region and same alpha as ``lfff_multipole_field``, plus a horizontal current perpendicular to the
+    field of amplitude ``a`` that decays with the scale height ``scale_mm``: below it the Lorentz force is
+    balanced by pressure and gravity, above it the field is linear force-free. It plays the part of a
+    photosphere that violates the force-free assumption, with a known solution above it.
+    """
+    from .lfff import alpha_max, linear_mhs
+    if spots is None:  # tilted bipole, as in lfff_multipole_field
+        spots = [(-0.35, -0.15, 1.0, 0.18), (0.35, 0.15, -1.0, 0.18)]
+    h = 2.0 / (nx - 1)
+    x = -1 + h * np.arange(nx)
+    y = -(ny - 1) * h / 2 + h * np.arange(ny)
+    X, Y = np.meshgrid(x, y, indexing="ij")
+    bz = np.zeros_like(X)
+    for (x0, y0, amp, w) in spots:
+        bz += amp * np.exp(-((X - x0) ** 2 + (Y - y0) ** 2) / (2 * w * w))
+    bz -= bz.mean()
+    bz *= bmax / np.abs(bz).max()
+    mag = Magnetogram(bz=bz, dx=h * length_mm, origin=(x[0] * length_mm, y[0] * length_mm))
+    f = linear_mhs(mag, alpha_frac * alpha_max(mag), nz, a=a, kappa=1.0 / scale_mm)
+    f.meta.update({"method": "MHS lineal exacto", "alpha_frac": alpha_frac, "spots": spots, "scale_mm": scale_mm})
+    return f
+
+
 def _td_vector_potential(x, rp, R, a, cI):
     """A_I(x, r⊥) of the Titov & Démoulin (1999) current ring, Eqs. (25)–(31)."""
     from scipy.special import ellipe, ellipk
@@ -471,4 +499,12 @@ EXTERNAL_TEST_FIELDS = {
     # Third relaxed rope: thick (a/R = 0.35), shallow, close charges, 1.25 turns
     "TD3-relax": lambda nx, ny, nz: relaxed_titov_demoulin_field(nx, ny, nz, R=2.6, a=0.9, d=0.8,
                                                                  L=1.6, n_turns=1.25, handedness=-1),
+    # Two magnetohydrostatic families (12-Nov-2026; examples/23_mhs_test.py): the regions and alpha of LFFF-bip and
+    # LFFF-quad with a base that is not force-free. MHS-bip: net force of the base like that of an HMI magnetogram
+    # (eps_force ~ 0.1), layer thinner than a pixel; MHS-quad: twice that force, layer of one to three pixels.
+    "MHS-bip": lambda nx, ny, nz: mhs_multipole_field(nx, ny, nz, alpha_frac=0.7, a=0.6, scale_mm=2.0),
+    "MHS-quad": lambda nx, ny, nz: mhs_multipole_field(
+        nx, ny, nz, alpha_frac=0.5, a=0.9, scale_mm=4.0,
+        spots=[(-0.45, -0.3, 1.0, 0.22), (-0.05, -0.35, -0.8, 0.2),
+               (0.1, 0.35, 0.9, 0.22), (0.5, 0.25, -1.0, 0.23)]),
 }
