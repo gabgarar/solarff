@@ -1,14 +1,15 @@
 """External review 7 (11-Nov): checks asked for by a referee-style report, on data already computed.
 
 (a) Probability model, calibration and threshold kept apart. Three variants under leave-one-family-out
-    validation (on the original suite, which the paper quotes, and on its rerun of r14 and r15): the published penalised fit
+    validation (on the suite of 162 extrapolations, which the paper quotes, and on the rerun of r14 and r15, which has
+    other random seeds in the 108 boxes of standard proportion): the published penalised fit
     (L2 = 0.01), the unpenalised fit, and the unpenalised fit recalibrated with a logistic slope and
     intercept that are fitted only inside each training set (inner leave-one-family-out predictions of
     the five training families). For each: AUC, ECE, calibration slope and intercept, coverage and risk
     at confidence 0.8, risk at 50 % coverage and coverage at 5 % risk.
 (b) Grouped-bootstrap intervals of the risk (wrong lines among the accepted) and of the coverage at 0.8:
-    the calibration suite (out-of-sample predictions; by extrapolation and by family) and the four
-    external families (published model; by extrapolation).
+    the calibration suite (out-of-sample predictions; by extrapolation and by family; also by box proportion) and
+    the four external families (published model; by extrapolation).
 (c) What the wrong lines are made of: shape error only, open/closed change only, both; AUC of the
     out-of-sample probability against each label separately.
 (d) Spearman correlations between the indicators and with the apex height.
@@ -30,12 +31,12 @@ from scipy.optimize import minimize
 from scipy.stats import spearmanr
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
-from solarff.calibration import bootstrap_ci, ece  # noqa: E402
+from solarff.calibration import add_box, bootstrap_ci, box_name, ece, with_proportions  # noqa: E402
 from solarff.confidence import DEFAULT_CALIBRATION, _design, auc, confidence  # noqa: E402
 
 warnings.filterwarnings("ignore")
 OUT = os.path.join("docs", "revision", "resultados", "r16_decision_checks.json")
-FEATS = ["alpha_spread", "buffer", "length", "length_sq"]
+FEATS = ["alpha_spread", "buffer", "length", "length_sq", "length_h"]
 T = 0.8
 N_BOOT = 2000
 
@@ -127,8 +128,8 @@ def ci(p, yy, metric, groups):
 res = {"threshold": T, "n_boot": N_BOOT}
 
 # ------------------------------------------------------------------ (a) model, calibration, threshold
-SUITES = {"original": pickle.load(open("data/calibration_suite_s32-48-64_r2_mc0_plus_TD-relax.pkl", "rb"))["data"],
-          "rerun": [d for d in pickle.load(open("data/revision/suite_r0.pkl", "rb")) if d["field"] != "TD2-relax"]}
+SUITES = {"original": pickle.load(open("data/calibration_suite_s32-48-64_r2_mc0_plus_TD-relax_boxes.pkl", "rb"))["data"],
+          "rerun": with_proportions([d for d in pickle.load(open("data/revision/suite_r0.pkl", "rb")) if d["field"] != "TD2-relax"])}
 res["variants"] = {}
 for sname, cases in SUITES.items():   # the paper quotes the original suite; the rerun is the one of r14 and r15
     X, y, fam, case, _ = stack(cases)
@@ -145,13 +146,22 @@ for sname, cases in SUITES.items():   # the paper quotes the original suite; the
               f"{m['accepted_at_0.8']:.1%} aceptadas, {m['risk_at_0.8']:.1%} malas | al 50 %: {m['risk_at_coverage_50']:.1%} | a riesgo 5 %: {m['coverage_at_risk_5']:.0%}")
 
 # ------------------------------------------------------------------ (b) intervals of risk and coverage
-S = pickle.load(open("data/calibration_suite_s32-48-64_r2_mc0_plus_TD-relax.pkl", "rb"))["data"]
+S = pickle.load(open("data/calibration_suite_s32-48-64_r2_mc0_plus_TD-relax_boxes.pkl", "rb"))["data"]
 Xs, ys, fs, cs, oks = stack(S)
 ps = lofo(Xs, ys, fs, 1e-2)
 res["suite"] = {"n_lines": int(len(ys)), "n_extrapolations": int(len(set(cs))), "n_families": int(len(set(fs))),
                 "auc": auc(ps, ys), "risk": risk(ps, ys), "coverage": coverage(ps, ys),
                 "risk_ci_extrapolation": ci(ps, ys, risk, cs), "risk_ci_family": ci(ps, ys, risk, fs),
                 "coverage_ci_extrapolation": ci(ps, ys, coverage, cs), "coverage_ci_family": ci(ps, ys, coverage, fs)}
+bx = np.concatenate([[box_name(d)] * len(d["bad"]) for d in S])[oks]
+res["suite"]["by_box"] = {}
+for g in ("standard", "flat", "very flat", "tall"):
+    k = bx == g
+    res["suite"]["by_box"][g] = {"n_lines": int(k.sum()), "n_extrapolations": int(len(set(cs[k]))), "risk": risk(ps[k], ys[k]), "coverage": coverage(ps[k], ys[k]),
+                                 "risk_ci_extrapolation": ci(ps[k], ys[k], risk, cs[k]), "coverage_ci_extrapolation": ci(ps[k], ys[k], coverage, cs[k])}
+    b = res["suite"]["by_box"][g]
+    print(f"cajas {g:10s}: riesgo {b['risk']:.1%} IC {b['risk_ci_extrapolation'][0]:.1%}-{b['risk_ci_extrapolation'][1]:.1%} | "
+          f"cobertura {b['coverage']:.1%} IC {b['coverage_ci_extrapolation'][0]:.1%}-{b['coverage_ci_extrapolation'][1]:.1%}")
 m = res["suite"]
 print(f"batería: riesgo {m['risk']:.1%} IC extrap {m['risk_ci_extrapolation'][0]:.1%}-{m['risk_ci_extrapolation'][1]:.1%}, "
       f"familia {m['risk_ci_family'][0]:.1%}-{m['risk_ci_family'][1]:.1%} | cobertura {m['coverage']:.1%} "
@@ -160,6 +170,7 @@ EXT = dict(pickle.load(open("data/external_families.pkl", "rb")))
 EXT = {"TD2-relax": [d for d in pickle.load(open("data/revision/suite_r0.pkl", "rb")) if d["field"] == "TD2-relax"], **EXT}
 res["external"] = {}
 for name, cases in EXT.items():
+    cases = add_box(cases)      # the external families were saved without the length in box heights
     c = np.concatenate([confidence(d["ind"], DEFAULT_CALIBRATION) for d in cases])
     yy = np.concatenate([d["bad"] for d in cases]).astype(float)
     g = np.concatenate([[i] * len(d["bad"]) for i, d in enumerate(cases)])
@@ -185,7 +196,7 @@ print(f"etiqueta: sólo forma {m['shape_only_of_wrong']:.1%}, sólo abierta/cerr
       f"de las malas | AUC forma (sin cambio de topología) {m['auc_shape_without_topology_change']:.3f}, AUC cambio de topología {m['auc_topology_change']:.3f}")
 
 # ------------------------------------------------------------------ (d) correlations between indicators
-ind = {k: np.concatenate([np.asarray(d["ind"][k], float) for d in S])[oks] for k in ("alpha_spread", "buffer", "length", "apex")}
+ind = {k: np.concatenate([np.asarray(d["ind"][k], float) for d in S])[oks] for k in ("alpha_spread", "buffer", "length", "apex", "length_h")}
 res["spearman"] = {}
 keys = list(ind)
 for i, a in enumerate(keys):

@@ -1,6 +1,7 @@
 """Revision R9: coefficients of the logistic model with their uncertainty.
 
-Fits the default confidence (3 indicators) with the 108 extrapolations and estimates the error
+Fits the default confidence (three indicators in five terms: the length enters relative to the horizontal
+diagonal of the box, squared, and relative to its height) with the 162 extrapolations and estimates the error
 of each coefficient with a bootstrap grouped by extrapolation (the lines of the same case are
 not independent). Also gives the mean and standard deviation with which each indicator is
 standardised (its typical range) and the odds ratio per standard deviation.
@@ -19,7 +20,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 from solarff.calibration import USED_FEATURES, _fit_logistic, stack  # noqa: E402
 
 warnings.filterwarnings("ignore")
-data = pickle.load(open("data/calibration_suite_s32-48-64_r2_mc0_plus_TD-relax.pkl", "rb"))["data"]
+data = pickle.load(open("data/calibration_suite_s32-48-64_r2_mc0_plus_TD-relax_boxes.pkl", "rb"))["data"]
 feats = list(USED_FEATURES)
 X, y, _ = stack(data, feats)
 # case index of each valid line, in the same order as stack()
@@ -40,7 +41,16 @@ for _ in range(300):
     B.append([f["intercept"]] + list(f["coef"]))
 B = np.array(B)
 se = B.std(axis=0, ddof=1)
-R = {"features": feats, "intercept": base["intercept"], "intercept_se": float(se[0]), "rows": []}
+R = {"features": feats, "n_cases": len(data), "n_lines": int(len(y)), "intercept": base["intercept"], "intercept_se": float(se[0]),
+     "intercept_ci95": [float(np.percentile(B[:, 0], 2.5)), float(np.percentile(B[:, 0], 97.5))], "rows": []}
+# the two length scales are correlated: how much, and what it does to the uncertainty of their coefficients
+Z = (X - np.array(base["mu"])) / np.array(base["sd"])
+C = np.corrcoef(Z.T)
+R["correlation"] = {f"{feats[i]}|{feats[j]}": float(C[i, j]) for i in range(len(feats)) for j in range(i + 1, len(feats))}
+R["vif"] = {f: float(v) for f, v in zip(feats, np.diag(np.linalg.inv(C)))}
+R["coef_correlation_bootstrap"] = {f"{feats[i]}|{feats[j]}": float(np.corrcoef(B[:, i + 1], B[:, j + 1])[0, 1])
+                                   for i in range(len(feats)) for j in range(i + 1, len(feats))}
+print("correlación longitud / longitud en alturas:", round(R["correlation"]["length|length_h"], 3), "| VIF:", {k: round(v, 2) for k, v in R["vif"].items()})
 print(f"intercepto {base['intercept']:+.3f} ± {se[0]:.3f}")
 for k, f in enumerate(feats):
     c = base["coef"][k]

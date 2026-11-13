@@ -1,9 +1,10 @@
 """External review 2 (10-Nov): how much does the physics add over the geometry, and is the fit balanced?
 
-With the six-family suite (``data/revision/suite_r0.pkl`` without TD2) and the same validation scheme as the
-paper (leave out each family, L2 = 0.01):
+With the rerun of the six-family suite (``data/revision/suite_r0.pkl`` without TD2) plus the cases in boxes of other
+proportions (162 extrapolations) and the same validation scheme as the paper (leave out each family, L2 = 0.01):
 
-(1) Baselines: length only (with its square), apex height only, length + buffer, length + buffer +
+(1) Baselines: length only (its three terms: relative to the diagonal, squared, and relative to the height of the
+    box), apex height only, length + buffer, length + buffer +
     α variation (published model), and each indicator alone. For each: AUC, Brier, ECE with 10 and 15
     bins, calibration slope and intercept, risk (wrong among the accepted) at fixed coverage
     of 25, 50 and 75 % and coverage at a fixed risk of 5 %, all with out-of-sample predictions.
@@ -12,7 +13,9 @@ paper (leave out each family, L2 = 0.01):
     same out-of-sample predictions restricted to each cell.
 (3) Folds: AUC of the published model and standardised coefficients in each fold (family out),
     and indicators chosen in the nested selection (from r11).
-(4) Balance of the fit: valid lines per family and per extrapolation (minimum, median, maximum).
+(4) Balance of the fit: valid lines per family, per box proportion and per extrapolation (minimum, median, maximum).
+(5) Weighting: the published model fitted with equal weight per line, per extrapolation, per family or per box
+    proportion.
 
 Writes ``docs/revision/resultados/r14_baselines.json``.
 
@@ -27,19 +30,21 @@ import warnings
 import numpy as np
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
-from solarff.calibration import _Logistic, brier, ece  # noqa: E402
+from solarff.calibration import _Logistic, box_name, brier, ece, with_proportions  # noqa: E402
 from solarff.confidence import _design, auc  # noqa: E402
 
 warnings.filterwarnings("ignore")
 OUT = os.path.join("docs", "revision", "resultados", "r14_baselines.json")
-D = [d for d in pickle.load(open("data/revision/suite_r0.pkl", "rb")) if d["field"] != "TD2-relax"]
-ALL = ["sin_jb", "alpha_spread", "div", "buffer", "open", "foot_snr", "base_change", "apex", "length", "length_sq"]
+D = with_proportions([d for d in pickle.load(open("data/revision/suite_r0.pkl", "rb")) if d["field"] != "TD2-relax"])
+ALL = ["sin_jb", "alpha_spread", "div", "buffer", "open", "foot_snr", "base_change", "apex", "length", "length_sq", "length_h"]
+LEN = ["length", "length_sq", "length_h"]      # the length: relative to the diagonal, squared, and relative to the height of the box
 X = np.vstack([_design(d["ind"], ALL) for d in D])
 y = np.concatenate([d["bad"] for d in D]).astype(float)
 fam = np.concatenate([[d["field"]] * len(d["bad"]) for d in D])
 case = np.concatenate([[i] * len(d["bad"]) for i, d in enumerate(D)])
+box = np.concatenate([[box_name(d)] * len(d["bad"]) for d in D])
 ok = np.all(np.isfinite(X), axis=1)
-X, y, fam, case = X[ok], y[ok], fam[ok], case[ok]
+X, y, fam, case, box = X[ok], y[ok], fam[ok], case[ok], box[ok]
 col = {k: i for i, k in enumerate(ALL)}
 FAMS = sorted(set(fam))
 
@@ -90,11 +95,11 @@ def metrics(p, yy):
             "cal_slope": s, "cal_intercept": i, "auc_worst_family": worst, **risk_coverage(p, yy)}
 
 
-BASELINES = {"length": ["length", "length_sq"], "apex": ["apex"], "alpha_spread": ["alpha_spread"], "buffer": ["buffer"],
-             "length+buffer": ["buffer", "length", "length_sq"], "length+apex": ["apex", "length", "length_sq"],
-             "length+buffer+apex": ["buffer", "apex", "length", "length_sq"],
-             "published (alpha+buffer+length)": ["alpha_spread", "buffer", "length", "length_sq"]}
-res = {"n_lines": int(len(y)), "bad_rate": float(y.mean()), "families": FAMS, "baselines": {}, "strata": {}, "folds": {}, "balance": {}}
+BASELINES = {"length": LEN, "apex": ["apex"], "alpha_spread": ["alpha_spread"], "buffer": ["buffer"],
+             "length+buffer": ["buffer"] + LEN, "length+apex": ["apex"] + LEN,
+             "length+buffer+apex": ["buffer", "apex"] + LEN,
+             "published (alpha+buffer+length)": ["alpha_spread", "buffer"] + LEN}
+res = {"n_lines": int(len(y)), "n_cases": len(D), "bad_rate": float(y.mean()), "families": FAMS, "baselines": {}, "strata": {}, "folds": {}, "balance": {}}
 P = {}
 for name, feats in BASELINES.items():
     p, coefs = lofo(feats)
@@ -167,7 +172,7 @@ def fit_weighted(Xf, yf, w, l2=1e-2):
 
 idx = [col[k] for k in BASELINES["published (alpha+buffer+length)"]]
 res["weighting"] = {}
-for scheme in ("line", "extrapolation", "family"):
+for scheme in ("line", "extrapolation", "family", "box"):
     p = np.full(len(y), np.nan)
     for f in FAMS:
         te = fam == f
@@ -176,26 +181,32 @@ for scheme in ("line", "extrapolation", "family"):
         elif scheme == "extrapolation":
             cnt = {c: int((case[~te] == c).sum()) for c in np.unique(case[~te])}
             w = np.array([1.0 / cnt[c] for c in case[~te]])
-        else:
+        elif scheme == "family":
             cnt = {g: int((fam[~te] == g).sum()) for g in np.unique(fam[~te])}
             w = np.array([1.0 / cnt[g] for g in fam[~te]])
+        else:
+            cnt = {g: int((box[~te] == g).sum()) for g in np.unique(box[~te])}
+            w = np.array([1.0 / cnt[g] for g in box[~te]])
         mu, sd, b = fit_weighted(X[~te][:, idx], y[~te], w)
         p[te] = 1 / (1 + np.exp(-(((X[te][:, idx] - mu) / sd) @ b[1:] + b[0])))
     rc = risk_coverage(p, y)
     res["weighting"][scheme] = {"auc": auc(p, y), "accepted_at_0.8": rc["accepted_at_0.8"], "risk_at_0.8": rc["risk_at_0.8"],
-                               "risk_at_coverage_50": rc["risk_at_coverage_50"]}
+                               "risk_at_coverage_50": rc["risk_at_coverage_50"],
+                               "risk_at_0.8_by_box": {g: float(y[(box == g) & (1 - p >= 0.8)].mean()) for g in np.unique(box)}}
     m = res["weighting"][scheme]
     print(f"ponderación {scheme:13s}: AUC {m['auc']:.4f} aceptadas {m['accepted_at_0.8']:.1%} malas aceptadas {m['risk_at_0.8']:.2%} malas al 50 % {m['risk_at_coverage_50']:.2%}")
 wl = res["weighting"]["line"]
-res["weighting"]["max_change"] = {"auc": max(abs(res["weighting"][s]["auc"] - wl["auc"]) for s in ("extrapolation", "family")),
-                                  "risk_at_0.8_points": max(abs(res["weighting"][s]["risk_at_0.8"] - wl["risk_at_0.8"]) for s in ("extrapolation", "family")) * 100,
-                                  "accepted_at_0.8_points": max(abs(res["weighting"][s]["accepted_at_0.8"] - wl["accepted_at_0.8"]) for s in ("extrapolation", "family")) * 100}
+OTHER = ("extrapolation", "family", "box")
+res["weighting"]["max_change"] = {"auc": max(abs(res["weighting"][s]["auc"] - wl["auc"]) for s in OTHER),
+                                  "risk_at_0.8_points": max(abs(res["weighting"][s]["risk_at_0.8"] - wl["risk_at_0.8"]) for s in OTHER) * 100,
+                                  "accepted_at_0.8_points": max(abs(res["weighting"][s]["accepted_at_0.8"] - wl["accepted_at_0.8"]) for s in OTHER) * 100}
+print("malas aceptadas por caja según la ponderación:", {s: {g: round(100 * v, 1) for g, v in res["weighting"][s]["risk_at_0.8_by_box"].items()} for s in ("line",) + OTHER})
 print("cambio máximo por ponderar:", {k: round(v, 3) for k, v in res["weighting"]["max_change"].items()})
 
 # (4) balance of the design
 per_fam = {f: int((fam == f).sum()) for f in FAMS}
 per_case = np.bincount(case)[np.unique(case)]
-res["balance"] = {"lines_by_family": per_fam, "lines_by_case": {"min": int(per_case.min()), "median": float(np.median(per_case)), "max": int(per_case.max())},
+res["balance"] = {"lines_by_family": per_fam, "lines_by_box": {g: int((box == g).sum()) for g in np.unique(box)}, "lines_by_case": {"min": int(per_case.min()), "median": float(np.median(per_case)), "max": int(per_case.max())},
                   "cases_by_family": {f: int(len({c for c in case[fam == f]})) for f in FAMS}}
 print("líneas por familia", per_fam, "| por extrapolación", res["balance"]["lines_by_case"])
 json.dump(res, open(OUT, "w", encoding="utf-8"), indent=1, ensure_ascii=False)

@@ -83,6 +83,21 @@ def add_box(data: list) -> list:
     return out
 
 
+def box_name(d: dict) -> str:
+    """Proportion of the box of a case: "standard" (``n x n x 0.7 n``), "flat", "very flat" or "tall"."""
+    names = dict(zip(PROPORTION_BOXES, ("flat", "very flat", "tall")))
+    return names.get((d["size"], int(d.get("nz") or _nz(d["size"]))), "standard")
+
+
+def with_proportions(data: list, checkpoint: str = "data/proportion_suite.ckpt") -> list:
+    """``data`` (cases in ``n x n x 0.7 n`` boxes) followed by the cases in boxes of other proportions, all with ``length_h``.
+
+    For analyses made with another realization of the suite: the cases of the other proportions exist in one
+    realization only (``proportion_suite``; read from ``checkpoint``, computed if it is not there).
+    """
+    return add_box(data) + add_box(proportion_suite(checkpoint=checkpoint, verbose=False))
+
+
 # ------------------------------------------------------------------ data
 @keeps_awake
 def calibration_suite(fields=None, noises=None, sizes=(32, 48), realizations: int = 2,
