@@ -1,8 +1,8 @@
 # Per-line confidence
 
 Every traced line gets a confidence between 0 and 1, defined as one minus the estimated probability
-that the line is wrong. A line is *wrong* when its apex height differs from that of the true line by
-more than 10 %.
+that the line is wrong. A line is *wrong* when its mean distance to the true line traced from the same
+seed exceeds 10 % of the length, or when one of the two is open and the other closed.
 
 ## Usage
 
@@ -33,19 +33,25 @@ vol = sff.reliable_volume(nl, lines, a["reliable"])     # 3D mask of cells threa
 ## How it was calibrated
 
 - **Training set:** six families of exact force-free fields (three Low & Lou variants, two exact
-  linear fields and a relaxed Titov–Démoulin flux rope), three noise models and three grid sizes.
-  That is 108 extrapolations and 31 862 lines whose true error is known.
-- **Model:** a logistic regression on the variation of α along the line, the fraction of the line
-  in the boundary layer, and the logarithm of the length with a quadratic term. No more complex
-  classifier does better.
+  linear fields and a relaxed Titov–Démoulin flux rope), three noise models, three grid sizes and
+  boxes of four proportions (the standard one, two flat ones and a tall one).
+  That is 162 extrapolations and 48 062 lines whose true error is known.
+- **Model:** a logistic regression with five terms: the variation of α along the line, the fraction
+  of the line in the boundary layer, and the logarithm of the length relative to the horizontal
+  diagonal of the box, its square, and the logarithm of the length relative to the height of the
+  box. No more complex classifier does better.
+- **Why the height of the box:** a model fitted in boxes of one proportion accepts 8 to 11 % of wrong
+  lines in boxes as flat as those of real regions. With the last term the figure is 4 to 6 % in
+  every box, also in boxes left out of the fit. The model of version 1.1, without that term, is kept
+  as `solarff.confidence.CALIBRATION_V1`.
 - **Validation:** leaving out one whole family at a time, so the model is always tested on a
   geometry it has not seen.
 
 | Threshold | Lines accepted | Wrong among the accepted |
 |---|---|---|
-| 0.7 | 61 % | 7.5 % |
-| **0.8 (default)** | 51 % | 4.0 % |
-| 0.9 | 37 % | 1.6 % |
+| 0.7 | 62 % | 8.4 % |
+| **0.8 (default)** | 51 % | 4.4 % |
+| 0.9 | 37 % | 1.5 % |
 
 On an independent flux rope that was never used for training, the wrong lines among the accepted
 ones drop from 34 % to 3 %.
@@ -57,8 +63,8 @@ ones drop from 34 % to 3 %.
 1. **Use the same code and the same preprocessing.** The preprocessing is the critical choice: with
    other parameters the confidence degrades and does not notice.
 2. **Check the range of the extrapolation.** The mean current-weighted angle `CWsin` should be within
-   0.05–0.21, the divergence energy fraction `E_div/E` within 0.006–0.19 and the boundary weight
-   within 0.04–0.21. Outside these ranges, do not use the published probability.
+   0.04–0.21, the divergence energy fraction `E_div/E` within 0.006–0.24 and the boundary weight
+   within 0.03–0.48. Outside these ranges, do not use the published probability.
 3. **Pick the threshold for your use.** Use 0.9 if almost no accepted line may be wrong, 0.7 to keep
    more lines.
 4. **Report results on reliable lines too.** If a per-line quantity changes when restricted to
@@ -84,7 +90,13 @@ ones drop from 34 % to 3 %.
   azimuth does: at about 5° or more the probability becomes optimistic, and at 10° the ranking
   degrades as well. The force and torque balance of the magnetogram (Aly criteria) does not reveal it.
 - **Idealised training fields.** The calibration fields have an exactly force-free photosphere. Real
-  photospheres do not.
+  photospheres do not. On exact fields built on the observed flux of three regions, and on the
+  models of those regions taken as the truth, the ranking holds (AUC 0.76–0.93) but the accepted
+  lines are wrong about twice as often as in the calibration suite (median 9 %, up to 25 %).
+- **Resolution.** The extrapolations of real regions are not converged. With half the pixel, more
+  than half of the accepted lines move by more than 10 % of their length and the free energy
+  changes by up to 26 %. The confidence ranks the lines by how little they depend on the resolution
+  and on the unobserved boundaries, but an accepted line is not thereby a converged one.
 - **One code.** The published coefficients are valid for the solver in this library.
 
 The coefficients are in `solarff.confidence.DEFAULT_CALIBRATION`. The full analysis is in the

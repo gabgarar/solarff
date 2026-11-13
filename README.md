@@ -63,11 +63,15 @@ against the analytical solution of Low & Lou (1990).
 ## The per-line confidence in brief
 
 - A logistic regression on three indicators of each line: the variation of α along it, the fraction
-  inside the boundary layer of the extrapolation, and its length.
-- Calibrated on 108 extrapolations of exact force-free fields (31 862 lines with known true error)
-  and validated by leaving out one whole family of fields at a time.
-- With the default threshold, 51 % of the lines are accepted and 4.0 % of them are wrong, against
+  inside the boundary layer of the extrapolation, and its length, measured against the horizontal
+  size and against the height of the box.
+- Calibrated on 162 extrapolations of exact force-free fields, in boxes of four proportions
+  (48 062 lines with known true error), and validated by leaving out one whole family of fields at
+  a time.
+- With the default threshold, 51 % of the lines are accepted and 4.4 % of them are wrong, against
   29 % of all lines.
+- On reference fields built on observed regions the accepted lines are wrong about twice as often
+  (median 9 %), and the extrapolations of real regions are not converged with resolution.
 - The probability holds within the calibration domain. Read the
   [limits](https://gabgarar.github.io/solarff/confidence/#known-limits) before applying it.
 
