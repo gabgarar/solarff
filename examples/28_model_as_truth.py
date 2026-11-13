@@ -19,7 +19,8 @@ The criteria (T1 to T3) were registered in the plan of the paper before running 
 
 Saves ``data/model_as_truth.pkl`` (checkpoint, with the per-line records) and ``docs/resultados/model_as_truth.json``.
 
-    python -u examples/28_model_as_truth.py                 # ~40 min
+    python -u examples/28_model_as_truth.py                 # ~10 min
+    python -u examples/28_model_as_truth.py --set post      # the post-flare models as the truth (files with the suffix _post)
     python examples/28_model_as_truth.py --analyze-only
 """
 import argparse
@@ -43,15 +44,25 @@ warnings.filterwarnings("ignore")
 ap = argparse.ArgumentParser()
 ap.add_argument("--regions", nargs="*", default=["11429", "11158", "12673"])
 ap.add_argument("--data", default="data")
-ap.add_argument("--json", default=os.path.join("docs", "resultados", "model_as_truth.json"))
+ap.add_argument("--json", default=None)
+ap.add_argument("--set", choices=("pre", "post", "first"), default="pre",
+                help="which published model of each region is the truth: just before the flare (the registered test), "
+                     "after it, or the first of the earlier times")
 ap.add_argument("--analyze-only", action="store_true")
 a = ap.parse_args()
 
-REGIONS = {"11158": "harp377_study_mc10.pkl", "11429": "harp1449_20120306_2336_r7_nz32_mc10.pkl",
-           "12673": "harp7115_20170906_1136_r4_nz56_mc10.pkl"}
+SETS = {"pre": {"11158": "harp377_study_mc10.pkl", "11429": "harp1449_20120306_2336_r7_nz32_mc10.pkl",
+                "12673": "harp7115_20170906_1136_r4_nz56_mc10.pkl"},
+        "post": {"11158": "harp377_20110215_0300_r4_nz48_mc10.pkl", "11429": "harp1449_20120307_0200_r7_nz32_mc10.pkl",
+                 "12673": "harp7115_20170906_1300_r4_nz56_mc10.pkl"},
+        "first": {"11158": "harp377_20110214_2100_r4_nz48_mc0.pkl", "11429": "harp1449_20120306_2036_r7_nz32_mc0.pkl",
+                  "12673": "harp7115_20170906_0948_r4_nz56_mc0.pkl"}}
+REGIONS = SETS[a.set]
+TAG = "" if a.set == "pre" else "_" + a.set
+a.json = a.json or os.path.join("docs", "resultados", f"model_as_truth{TAG}.json")
 MARGIN, HEIGHT = 0.10, 2.0 / 3.0          # fraction removed on each side; fraction of the height kept
 T = DEFAULT_CALIBRATION["threshold"]
-CKPT = os.path.join(a.data, "model_as_truth.pkl")
+CKPT = os.path.join(a.data, f"model_as_truth{TAG}.pkl")
 N_BOOT = 1000
 
 
@@ -112,7 +123,8 @@ if not a.analyze_only:
     with keep_awake():
         t0 = time.time()
         for noaa in a.regions:
-            study, _ = pickle.load(open(os.path.join(a.data, REGIONS[noaa]), "rb"))
+            study = pickle.load(open(os.path.join(a.data, REGIONS[noaa]), "rb"))
+            study = study[0] if isinstance(study, tuple) else study
             full = study.nlfff
             truth = crop(full)
             del study
@@ -128,7 +140,7 @@ if not a.analyze_only:
                 if key in state["cases"]:
                     continue
                 tc = time.time()
-                k = 104729 * (list(REGIONS).index(noaa) + 1) + j
+                k = 104729 * (list(REGIONS).index(noaa) + 1) + j + 1000 * list(SETS).index(a.set)
                 mag = field_magnetogram(truth, noise=sz, noise_t=st, rng=k)
                 rec = calibration_case(truth, mag, nz, n_seeds=300, seed=k + 7, noise_bt=st, nlfff_kw={"max_iter": 4000},
                                        ensemble=("coarse",))
