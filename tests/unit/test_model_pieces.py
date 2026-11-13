@@ -35,6 +35,10 @@ def test_buffer_length_apex_open_on_uniform_inclined_field():
     L = (n - 1) * h * np.hypot(1.0, 0.3)
     diag = np.hypot((n - 1) * h, (n - 1) * h)
     assert ind["length"][0] == pytest.approx(L / diag, rel=1e-3)
+    # the same length in box heights, and its reconstruction from ``length`` and the grid (for records saved without it)
+    assert ind["length_h"][0] == pytest.approx(L / ((n - 1) * h), rel=1e-3)
+    from solarff.confidence import length_in_heights
+    assert np.allclose(length_in_heights(ind["length"], shape), ind["length_h"])
     assert ind["apex"][0] == pytest.approx(1.0, abs=1e-6)  # reaches the top
     assert ind["open"][0] == 1.0                            # leaves through the top
     # The buffer layer occupies the top nd points: fraction ≈ nd/(n−1) of the length

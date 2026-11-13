@@ -14,6 +14,7 @@ solution, flag whether that part of the model can be trusted:
 | ``base_change`` | relative correction of the transverse field that the model applied at the footpoints (relaxed base): how much it ignored the data there |
 | ``apex`` | maximum height of the line / height of the box (high lines depend more on the unobserved top) |
 | ``length`` | length of the line / horizontal diagonal of the box |
+| ``length_h`` | length of the line / height of the box (a line that is long compared with the height depends on the unobserved top, whatever the horizontal size of the box) |
 
 The indicators are combined into a **confidence** ∈ [0, 1] (1 − probability
 that the line is wrong) by a logistic regression calibrated with exact
@@ -82,7 +83,7 @@ def line_indicators(field: VectorField3D, lines: list[FieldLine], mag: Magnetogr
     # reference α for normalisation (scale of the domain)
     alpha0 = 2 * np.pi / (max(field.shape[:2]) * h) * 0.1
 
-    out = {k: np.full(len(lines), np.nan) for k in ALL_FEATURES}
+    out = {k: np.full(len(lines), np.nan) for k in ALL_FEATURES + ("length_h",)}
     ztop = max(upper[2] * h, 1e-9)
     diag = np.hypot(*(upper[:2] * h))
     for i, l in enumerate(lines):
@@ -111,6 +112,7 @@ def line_indicators(field: VectorField3D, lines: list[FieldLine], mag: Magnetogr
                    (ends[:, 2] >= upper[2] - 1e-6))
         out["open"][i] = float(on_side.any() or not l.closed)
         out["length"][i] = seg.sum() / diag
+        out["length_h"][i] = seg.sum() / ztop
         out["apex"][i] = (p[:, 2].max() - origin[2]) / ztop
 
     if mag is not None and mag.has_vector:
@@ -171,6 +173,16 @@ def line_errors(lines_model: list[FieldLine], lines_ref: list[FieldLine], n: int
             "length_ref": lref, "length_model": lmod}
 
 
+def length_in_heights(length, shape) -> np.ndarray:
+    """Length of the lines in box heights (``length_h``) from ``length`` and the grid ``shape`` of the model.
+
+    ``length`` is relative to the horizontal diagonal of the box. For per-line records saved before
+    ``length_h`` existed: both indicators are the same length divided by two sizes of the same box.
+    """
+    nx, ny, nz = shape
+    return np.asarray(length, dtype=float) * np.hypot(nx - 1, ny - 1) / max(nz - 1, 1)
+
+
 # --------------------------------------------------------------- confidence
 LENGTH_LOG_CENTER = -0.54  # log10 of the typical relative length (median of the suite)
 
@@ -186,7 +198,7 @@ def _design(ind: dict, feats=ALL_FEATURES):
             cols.append((lg - LENGTH_LOG_CENTER) ** 2)
             continue
         x = np.asarray(ind[k], dtype=float)
-        if k in ("sin_jb", "alpha_spread", "div", "base_change", "length"):
+        if k in ("sin_jb", "alpha_spread", "div", "base_change", "length", "length_h"):
             x = np.log10(np.maximum(x, 1e-4))
         elif k == "foot_snr":
             x = np.log10(np.maximum(x, 1e-2))
