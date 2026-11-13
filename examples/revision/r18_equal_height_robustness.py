@@ -17,8 +17,10 @@ The outcome is the registered one (the line moves by more than 20 % of its lengt
 and closed) and, apart, the change between open and closed alone. Intervals by bootstrap over lines; the
 three regions are combined weighting by 1/sigma^2.
 
-    python examples/revision/r18_equal_height_robustness.py
+    python examples/revision/r18_equal_height_robustness.py          # the published model (five terms)
+    python examples/revision/r18_equal_height_robustness.py --v1     # the model of version 1.1 (four terms)
 """
+import argparse
 import json
 import os
 
@@ -28,8 +30,11 @@ from solarff.confidence import DEFAULT_CALIBRATION
 
 REGIONS = ("11158", "11429", "12673")
 T = DEFAULT_CALIBRATION["threshold"]
+ap = argparse.ArgumentParser()
+ap.add_argument("--v1", action="store_true", help="with the confidence of the model of version 1.1; writes <name>_v1.json")
+SUF = "_v1" if ap.parse_args().v1 else ""
 N_BOOT = 2000
-OUT = os.path.join("docs", "revision", "resultados", "r18_equal_height_robustness.json")
+OUT = os.path.join("docs", "revision", "resultados", f"r18_equal_height_robustness{SUF}.json")
 
 
 def bins(x, n=10):
@@ -58,7 +63,7 @@ def pooled(rs):
 out = {"threshold": T, "n_boot": N_BOOT, "regions": {}, "pooled": {}}
 for noaa in REGIONS:
     d = np.load(os.path.join("data", f"resolution_check_lines_{noaa}.npz"))
-    c_lo, c_hi, shape, topo, apex = d["conf_published"], d["conf_double"], d["err_shape"], d["err_topology"] > 0, d["apex"]
+    c_lo, c_hi, shape, topo, apex = d["conf_published" + SUF], d["conf_double" + SUF], d["err_shape"], d["err_topology"] > 0, d["apex"]
     length = d["err_length_ref"]
     use = np.isfinite(shape) & np.isfinite(c_lo) & np.isfinite(c_hi) & (length > 0)
     c_lo, c_hi, shape, topo, apex, length = (v[use] for v in (c_lo, c_hi, shape, topo, apex, length))

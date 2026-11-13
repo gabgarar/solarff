@@ -34,7 +34,7 @@ import numpy as np
 
 from solarff.analytic import field_magnetogram
 from solarff.calibration import NOISE_MODELS, _nz, ece
-from solarff.confidence import DEFAULT_CALIBRATION, auc, calibration_case, confidence
+from solarff.confidence import CALIBRATION_V1, DEFAULT_CALIBRATION, auc, calibration_case, confidence, length_in_heights
 from solarff.field import VectorField3D
 from solarff.magnetogram import aly_criteria
 from solarff.metrics import force_free_metrics
@@ -81,13 +81,21 @@ def crop(f):
     return VectorField3D(f.bx[sl].copy(), f.by[sl].copy(), f.bz[sl].copy(), f.dx, origin, {"method": "published NLFFF model, cropped"})
 
 
+RULES = ("default", "v1", "height")
+
+
 def evaluate(d, grid, rule):
-    factor = 1.0 if rule == "published" else C0 / ratio(*grid)
+    """``default``: the published model (five terms). ``v1``: that of version 1.1 (four terms). ``height``: that of
+    version 1.1 with the length measured relative to the height of the box (the conservative variant)."""
     cs = []
     for x in d:
         ind = dict(x["ind"])
-        ind["length"] = np.asarray(ind["length"], float) * factor
-        cs.append(confidence(ind, DEFAULT_CALIBRATION))
+        if rule == "default":
+            ind.setdefault("length_h", length_in_heights(ind["length"], grid))   # cases saved before that indicator existed
+            cs.append(confidence(ind, DEFAULT_CALIBRATION))
+        else:
+            ind["length"] = np.asarray(ind["length"], float) * (1.0 if rule == "v1" else C0 / ratio(*grid))
+            cs.append(confidence(ind, CALIBRATION_V1))
     c = np.concatenate(cs)
     y = np.concatenate([x["bad"] for x in d]).astype(int)
     ok = np.isfinite(c)
@@ -149,13 +157,13 @@ if not a.analyze_only:
                 pickle.dump(state, open(CKPT, "wb"))
                 print(f"  {key}: {rec['bad'].mean():.0%} wrong lines ({rec['seconds']:.0f} s; total {(time.time() - t0) / 60:.0f} min)", flush=True)
 
-out = {"code_version": code_version()["label"], "calibration": "DEFAULT_CALIBRATION, coefficients not refitted", "c0": C0,
+out = {"code_version": code_version()["label"], "calibration": "DEFAULT_CALIBRATION (five terms) and CALIBRATION_V1 (four terms, version 1.1), not refitted", "c0": C0,
        "margin": MARGIN, "height_kept": HEIGHT, "noise_models": list(NOISE_MODELS), "truth": state["truth"], "regions": {}, "pooled": {}}
 for noaa in state["truth"]:
     d = [x for k, x in state["cases"].items() if k.startswith(noaa + " |")]
     if d:
-        out["regions"][noaa] = {rule: evaluate(d, state["truth"][noaa]["grid"], rule) for rule in ("published", "height")}
-        out["regions"][noaa]["by_noise"] = {x["noise_model"]: {rule: evaluate([x], state["truth"][noaa]["grid"], rule) for rule in ("published", "height")}
+        out["regions"][noaa] = {rule: evaluate(d, state["truth"][noaa]["grid"], rule) for rule in RULES}
+        out["regions"][noaa]["by_noise"] = {x["noise_model"]: {rule: evaluate([x], state["truth"][noaa]["grid"], rule) for rule in RULES}
                                             for x in d}
 json.dump(out, open(a.json, "w", encoding="utf-8"), indent=1, ensure_ascii=False)
 
@@ -168,7 +176,7 @@ for noaa, r in out["regions"].items():
     e = out["truth"][noaa]
     print(f"NOAA {noaa}: truth {e['grid']} (published {e['grid_published']}), height / diagonal {e['height_over_diagonal']:.3f}, "
           f"CWsin {e['cwsin']:.2f}, force residual of its base {e['eps_force']:.2f}")
-    for rule in ("published", "height"):
+    for rule in RULES:
         q = r[rule]
         print(f"  {rule:9s} wrong {q['bad_rate']:.2f} | AUC {q['auc']:.3f} | ECE {q['ece']:.3f} | accepted {q['accepted']:.2f}, wrong among them "
               f"{fmt(q['bad_accepted'])} {[round(v, 3) for v in q.get('bad_accepted_ci', [])]} (0.9: {fmt(q['bad_accepted_0.9'])}, accepted {q['accepted_0.9']:.2f}) | "

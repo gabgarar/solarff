@@ -1,6 +1,6 @@
 {
- "code_version": "1.1.0 (commit 684dbac)",
- "calibration": "DEFAULT_CALIBRATION (3 indicators, 6 families), not refitted",
+ "code_version": "1.1.0 (commit f36638b + cambios sin commit)",
+ "calibration": "DEFAULT_CALIBRATION (five terms) and CALIBRATION_V1 (four terms, version 1.1), not refitted",
  "alpha_frac": 0.5,
  "noise_models": [
   "uniforme-10G",
@@ -52,6 +52,152 @@
   }
  },
  "fields": {
+  "LFFF-obs 11429": {
+   "n_cases": 3,
+   "n_lines": 900,
+   "bad_rate": 0.11444444444444445,
+   "auc": 0.9278240001949056,
+   "auc_ci": [
+    0.9045631473553789,
+    0.9495278657722803
+   ],
+   "ece": 0.09549535798842834,
+   "mean_predicted_bad": 0.18580720342037474,
+   "accepted": 0.7011111111111111,
+   "bad_accepted": 0.014263074484944533,
+   "bad_accepted_by_case": [
+    0.00881057268722467,
+    0.0136986301369863,
+    0.021621621621621623
+   ],
+   "bad_accepted_ci": [
+    0.006339144215530904,
+    0.025356576862123614
+   ],
+   "accepted_0.9": 0.35888888888888887,
+   "bad_accepted_0.9": 0.0030959752321981426,
+   "accepted_0.95": 0.02666666666666667,
+   "bad_accepted_0.95": 0.0,
+   "not_reproduced_10": 0.10888888888888888,
+   "not_reproduced_10_accepted": 0.061806656101426306,
+   "auc_displacement_alone": 0.6369273123728545,
+   "two_keys": {
+    "accepted": 0.6577777777777778,
+    "bad_accepted": 0.010135135135135136
+   }
+  },
+  "LFFF-obs 11158": {
+   "n_cases": 3,
+   "n_lines": 900,
+   "bad_rate": 0.1711111111111111,
+   "auc": 0.8391943177465966,
+   "auc_ci": [
+    0.8053270404773424,
+    0.8718475704071922
+   ],
+   "ece": 0.0617615960929485,
+   "mean_predicted_bad": 0.2215199308014366,
+   "accepted": 0.5777777777777777,
+   "bad_accepted": 0.04423076923076923,
+   "bad_accepted_by_case": [
+    0.035897435897435895,
+    0.05142857142857143,
+    0.04666666666666667
+   ],
+   "bad_accepted_ci": [
+    0.028798076923076926,
+    0.06158653846153842
+   ],
+   "accepted_0.9": 0.23333333333333334,
+   "bad_accepted_0.9": 0.014285714285714285,
+   "accepted_0.95": 0.043333333333333335,
+   "bad_accepted_0.95": 0.0,
+   "not_reproduced_10": 0.10777777777777778,
+   "not_reproduced_10_accepted": 0.06153846153846154,
+   "auc_displacement_alone": 0.6032737369868737,
+   "two_keys": {
+    "accepted": 0.5422222222222223,
+    "bad_accepted": 0.0389344262295082
+   }
+  },
+  "LFFF-obs 12673": {
+   "n_cases": 3,
+   "n_lines": 900,
+   "bad_rate": 0.08555555555555555,
+   "auc": 0.8605671363873065,
+   "auc_ci": [
+    0.8207108803255484,
+    0.9034937747328028
+   ],
+   "ece": 0.09739062612846337,
+   "mean_predicted_bad": 0.17975525885525476,
+   "accepted": 0.7155555555555555,
+   "bad_accepted": 0.020186335403726708,
+   "bad_accepted_by_case": [
+    0.013636363636363636,
+    0.014018691588785047,
+    0.03333333333333333
+   ],
+   "bad_accepted_ci": [
+    0.01083074534161491,
+    0.031055900621118012
+   ],
+   "accepted_0.9": 0.3411111111111111,
+   "bad_accepted_0.9": 0.006514657980456026,
+   "accepted_0.95": 0.09444444444444444,
+   "bad_accepted_0.95": 0.0,
+   "not_reproduced_10": 0.16,
+   "not_reproduced_10_accepted": 0.11645962732919254,
+   "auc_displacement_alone": 0.6895740954064162,
+   "two_keys": {
+    "accepted": 0.6322222222222222,
+    "bad_accepted": 0.012302284710017574
+   }
+  }
+ },
+ "pooled": {
+  "LFFF-obs": {
+   "n_cases": 9,
+   "n_lines": 2700,
+   "bad_rate": 0.1237037037037037,
+   "auc": 0.8781869903472851,
+   "auc_ci": [
+    0.8568091739609728,
+    0.8942882793634193
+   ],
+   "ece": 0.08011684682017486,
+   "mean_predicted_bad": 0.1956941310256887,
+   "accepted": 0.6648148148148149,
+   "bad_accepted": 0.025069637883008356,
+   "bad_accepted_by_case": [
+    0.00881057268722467,
+    0.0136986301369863,
+    0.021621621621621623,
+    0.035897435897435895,
+    0.05142857142857143,
+    0.04666666666666667,
+    0.013636363636363636,
+    0.014018691588785047,
+    0.03333333333333333
+   ],
+   "bad_accepted_ci": [
+    0.01838440111420613,
+    0.03286908077994429
+   ],
+   "accepted_0.9": 0.3111111111111111,
+   "bad_accepted_0.9": 0.007142857142857143,
+   "accepted_0.95": 0.054814814814814816,
+   "bad_accepted_0.95": 0.0,
+   "not_reproduced_10": 0.12555555555555556,
+   "not_reproduced_10_accepted": 0.08133704735376045,
+   "auc_displacement_alone": 0.6154453561178572,
+   "two_keys": {
+    "accepted": 0.6107407407407407,
+    "bad_accepted": 0.019405700424499697
+   }
+  }
+ },
+ "fields_v1": {
   "LFFF-obs 11429": {
    "n_cases": 3,
    "n_lines": 900,
@@ -155,7 +301,7 @@
    }
   }
  },
- "pooled": {
+ "pooled_v1": {
   "LFFF-obs": {
    "n_cases": 9,
    "n_lines": 2700,

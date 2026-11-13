@@ -1,6 +1,6 @@
 {
- "code_version": "1.1.0 (commit 9c1e7ae)",
- "calibration": "DEFAULT_CALIBRATION, coefficients not refitted",
+ "code_version": "1.1.0 (commit f36638b + cambios sin commit)",
+ "calibration": "DEFAULT_CALIBRATION (five terms) and CALIBRATION_V1 (four terms, version 1.1), not refitted",
  "c0": 0.48977980132387594,
  "margin": 0.1,
  "height_kept": 0.6666666666666666,
@@ -61,7 +61,25 @@
  },
  "regions": {
   "11429": {
-   "published": {
+   "default": {
+    "n_lines": 900,
+    "bad_rate": 0.2222222222222222,
+    "auc": 0.8218214285714286,
+    "ece": 0.06897864238971604,
+    "accepted": 0.49666666666666665,
+    "bad_accepted": 0.053691275167785234,
+    "bad_accepted_ci": [
+     0.03355704697986577,
+     0.07606263982102908
+    ],
+    "accepted_0.9": 0.21777777777777776,
+    "bad_accepted_0.9": 0.02040816326530612,
+    "not_reproduced_10": 0.49444444444444446,
+    "not_reproduced_10_accepted": 0.4519015659955257,
+    "accepted_wrong_at_20": 0.03131991051454139,
+    "accepted_open_closed": 0.006711409395973154
+   },
+   "v1": {
     "n_lines": 900,
     "bad_rate": 0.2222222222222222,
     "auc": 0.8144285714285714,
@@ -99,7 +117,25 @@
    },
    "by_noise": {
     "uniforme-10G": {
-     "published": {
+     "default": {
+      "n_lines": 300,
+      "bad_rate": 0.22,
+      "auc": 0.8087930587930587,
+      "ece": 0.08685634418495554,
+      "accepted": 0.5033333333333333,
+      "bad_accepted": 0.059602649006622516,
+      "bad_accepted_ci": [
+       0.026490066225165563,
+       0.09933774834437085
+      ],
+      "accepted_0.9": 0.21666666666666667,
+      "bad_accepted_0.9": 0.03076923076923077,
+      "not_reproduced_10": 0.5033333333333333,
+      "not_reproduced_10_accepted": 0.4768211920529801,
+      "accepted_wrong_at_20": 0.033112582781456956,
+      "accepted_open_closed": 0.0
+     },
+     "v1": {
       "n_lines": 300,
       "bad_rate": 0.22,
       "auc": 0.802059052059052,
@@ -137,7 +173,25 @@
      }
     },
     "uniforme-30G": {
-     "published": {
+     "default": {
+      "n_lines": 300,
+      "bad_rate": 0.23333333333333334,
+      "auc": 0.8095031055900621,
+      "ece": 0.04934911212934439,
+      "accepted": 0.5,
+      "bad_accepted": 0.07333333333333333,
+      "bad_accepted_ci": [
+       0.03333333333333333,
+       0.12
+      ],
+      "accepted_0.9": 0.24,
+      "bad_accepted_0.9": 0.013888888888888888,
+      "not_reproduced_10": 0.5033333333333333,
+      "not_reproduced_10_accepted": 0.48,
+      "accepted_wrong_at_20": 0.03333333333333333,
+      "accepted_open_closed": 0.006666666666666667
+     },
+     "v1": {
       "n_lines": 300,
       "bad_rate": 0.23333333333333334,
       "auc": 0.8016770186335404,
@@ -175,7 +229,25 @@
      }
     },
     "HMI (10/60 G)": {
-     "published": {
+     "default": {
+      "n_lines": 300,
+      "bad_rate": 0.21333333333333335,
+      "auc": 0.8481859110169492,
+      "ece": 0.08338493605496043,
+      "accepted": 0.4866666666666667,
+      "bad_accepted": 0.0273972602739726,
+      "bad_accepted_ci": [
+       0.00684931506849315,
+       0.0547945205479452
+      ],
+      "accepted_0.9": 0.19666666666666666,
+      "bad_accepted_0.9": 0.01694915254237288,
+      "not_reproduced_10": 0.4766666666666667,
+      "not_reproduced_10_accepted": 0.3972602739726027,
+      "accepted_wrong_at_20": 0.0273972602739726,
+      "accepted_open_closed": 0.0136986301369863
+     },
+     "v1": {
       "n_lines": 300,
       "bad_rate": 0.21333333333333335,
       "auc": 0.8401747881355932,
@@ -215,7 +287,25 @@
    }
   },
   "11158": {
-   "published": {
+   "default": {
+    "n_lines": 900,
+    "bad_rate": 0.22555555555555556,
+    "auc": 0.8002063735502611,
+    "ece": 0.04850621445523443,
+    "accepted": 0.4444444444444444,
+    "bad_accepted": 0.07,
+    "bad_accepted_ci": [
+     0.0425,
+     0.0975
+    ],
+    "accepted_0.9": 0.2511111111111111,
+    "bad_accepted_0.9": 0.030973451327433628,
+    "not_reproduced_10": 0.5388888888888889,
+    "not_reproduced_10_accepted": 0.545,
+    "accepted_wrong_at_20": 0.015,
+    "accepted_open_closed": 0.005
+   },
+   "v1": {
     "n_lines": 900,
     "bad_rate": 0.22555555555555556,
     "auc": 0.7922270674459859,
@@ -253,7 +343,25 @@
    },
    "by_noise": {
     "uniforme-10G": {
-     "published": {
+     "default": {
+      "n_lines": 300,
+      "bad_rate": 0.28,
+      "auc": 0.7760692239858906,
+      "ece": 0.06697788498987525,
+      "accepted": 0.4533333333333333,
+      "bad_accepted": 0.10294117647058823,
+      "bad_accepted_ci": [
+       0.051470588235294115,
+       0.16176470588235295
+      ],
+      "accepted_0.9": 0.26666666666666666,
+      "bad_accepted_0.9": 0.0375,
+      "not_reproduced_10": 0.5133333333333333,
+      "not_reproduced_10_accepted": 0.5073529411764706,
+      "accepted_wrong_at_20": 0.029411764705882353,
+      "accepted_open_closed": 0.007352941176470588
+     },
+     "v1": {
       "n_lines": 300,
       "bad_rate": 0.28,
       "auc": 0.7719356261022927,
@@ -291,7 +399,25 @@
      }
     },
     "uniforme-30G": {
-     "published": {
+     "default": {
+      "n_lines": 300,
+      "bad_rate": 0.19333333333333333,
+      "auc": 0.8421915075520091,
+      "ece": 0.0715297988821488,
+      "accepted": 0.45666666666666667,
+      "bad_accepted": 0.051094890510948905,
+      "bad_accepted_ci": [
+       0.021897810218978103,
+       0.08759124087591241
+      ],
+      "accepted_0.9": 0.26666666666666666,
+      "bad_accepted_0.9": 0.0125,
+      "not_reproduced_10": 0.58,
+      "not_reproduced_10_accepted": 0.6058394160583942,
+      "accepted_wrong_at_20": 0.0072992700729927005,
+      "accepted_open_closed": 0.0072992700729927005
+     },
+     "v1": {
       "n_lines": 300,
       "bad_rate": 0.19333333333333333,
       "auc": 0.8286548874323169,
@@ -329,7 +455,25 @@
      }
     },
     "HMI (10/60 G)": {
-     "published": {
+     "default": {
+      "n_lines": 300,
+      "bad_rate": 0.20333333333333334,
+      "auc": 0.795527813979011,
+      "ece": 0.07146799297617121,
+      "accepted": 0.42333333333333334,
+      "bad_accepted": 0.05511811023622047,
+      "bad_accepted_ci": [
+       0.015748031496062992,
+       0.10236220472440945
+      ],
+      "accepted_0.9": 0.22,
+      "bad_accepted_0.9": 0.045454545454545456,
+      "not_reproduced_10": 0.5233333333333333,
+      "not_reproduced_10_accepted": 0.5196850393700787,
+      "accepted_wrong_at_20": 0.007874015748031496,
+      "accepted_open_closed": 0.0
+     },
+     "v1": {
       "n_lines": 300,
       "bad_rate": 0.20333333333333334,
       "auc": 0.7862679196103985,
@@ -369,7 +513,25 @@
    }
   },
   "12673": {
-   "published": {
+   "default": {
+    "n_lines": 900,
+    "bad_rate": 0.31222222222222223,
+    "auc": 0.8071737793134375,
+    "ece": 0.07123693951465834,
+    "accepted": 0.5255555555555556,
+    "bad_accepted": 0.11627906976744186,
+    "bad_accepted_ci": [
+     0.09090909090909091,
+     0.14799154334038056
+    ],
+    "accepted_0.9": 0.2811111111111111,
+    "bad_accepted_0.9": 0.039525691699604744,
+    "not_reproduced_10": 0.6622222222222223,
+    "not_reproduced_10_accepted": 0.7061310782241015,
+    "accepted_wrong_at_20": 0.05496828752642706,
+    "accepted_open_closed": 0.0021141649048625794
+   },
+   "v1": {
     "n_lines": 900,
     "bad_rate": 0.31222222222222223,
     "auc": 0.8063976451514612,
@@ -407,7 +569,25 @@
    },
    "by_noise": {
     "uniforme-10G": {
-     "published": {
+     "default": {
+      "n_lines": 300,
+      "bad_rate": 0.31,
+      "auc": 0.8081658095683341,
+      "ece": 0.08248633129585659,
+      "accepted": 0.55,
+      "bad_accepted": 0.11515151515151516,
+      "bad_accepted_ci": [
+       0.07257575757575759,
+       0.16363636363636364
+      ],
+      "accepted_0.9": 0.31,
+      "bad_accepted_0.9": 0.043010752688172046,
+      "not_reproduced_10": 0.6633333333333333,
+      "not_reproduced_10_accepted": 0.6909090909090909,
+      "accepted_wrong_at_20": 0.06666666666666667,
+      "accepted_open_closed": 0.0
+     },
+     "v1": {
       "n_lines": 300,
       "bad_rate": 0.31,
       "auc": 0.8056204872474158,
@@ -445,7 +625,25 @@
      }
     },
     "uniforme-30G": {
-     "published": {
+     "default": {
+      "n_lines": 300,
+      "bad_rate": 0.30333333333333334,
+      "auc": 0.8081392291918608,
+      "ece": 0.07010151243307401,
+      "accepted": 0.51,
+      "bad_accepted": 0.1111111111111111,
+      "bad_accepted_ci": [
+       0.06535947712418301,
+       0.16339869281045752
+      ],
+      "accepted_0.9": 0.25333333333333335,
+      "bad_accepted_0.9": 0.013157894736842105,
+      "not_reproduced_10": 0.6666666666666666,
+      "not_reproduced_10_accepted": 0.7450980392156863,
+      "accepted_wrong_at_20": 0.058823529411764705,
+      "accepted_open_closed": 0.0
+     },
+     "v1": {
       "n_lines": 300,
       "bad_rate": 0.30333333333333334,
       "auc": 0.8088227561911773,
@@ -483,7 +681,25 @@
      }
     },
     "HMI (10/60 G)": {
-     "published": {
+     "default": {
+      "n_lines": 300,
+      "bad_rate": 0.3233333333333333,
+      "auc": 0.8077802041541822,
+      "ece": 0.07626499605016857,
+      "accepted": 0.5166666666666667,
+      "bad_accepted": 0.12258064516129032,
+      "bad_accepted_ci": [
+       0.07096774193548387,
+       0.17419354838709677
+      ],
+      "accepted_0.9": 0.28,
+      "bad_accepted_0.9": 0.05952380952380952,
+      "not_reproduced_10": 0.6566666666666666,
+      "not_reproduced_10_accepted": 0.6838709677419355,
+      "accepted_wrong_at_20": 0.03870967741935484,
+      "accepted_open_closed": 0.0064516129032258064
+     },
+     "v1": {
       "n_lines": 300,
       "bad_rate": 0.3233333333333333,
       "auc": 0.8080341272662638,

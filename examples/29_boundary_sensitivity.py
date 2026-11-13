@@ -28,7 +28,7 @@ import warnings
 import numpy as np
 
 from solarff.calibration import _nz
-from solarff.confidence import DEFAULT_CALIBRATION, assess_lines, auc, confidence, line_errors
+from solarff.confidence import CALIBRATION_V1, DEFAULT_CALIBRATION, assess_lines, auc, confidence, line_errors
 from solarff.helicity import energy_decomposition
 from solarff.metrics import force_free_metrics
 from solarff.montecarlo import base_seeds
@@ -70,7 +70,7 @@ def equal_height(y, reliable, apex, rng, n_boot=2000):
 
 
 out = json.load(open(a.json, encoding="utf-8")) if os.path.exists(a.json) else {}
-out.update(code_version=code_version()["label"], calibration="DEFAULT_CALIBRATION, not refitted", c0=C0)
+out.update(code_version=code_version()["label"], calibration="DEFAULT_CALIBRATION (five terms) and CALIBRATION_V1 (four terms, version 1.1), not refitted", c0=C0)
 out.setdefault("regions", {})
 with keep_awake():
     for noaa in a.regions:
@@ -90,16 +90,18 @@ with keep_awake():
         seeds = base_seeds(pub, 2)                                   # the seeds of the paper
         lines = trace_field_lines(pub, seeds)
         res = assess_lines(pub, lines, mag=src if src.has_vector else None, noise_bt=float(study.mag.meta.get("noise") or 100.0))
-        c = np.asarray(res["confidence"], float)
-        ind = {k: np.asarray(res["indicators"][k], float) for k in ("alpha_spread", "buffer", "length")}
+        c = np.asarray(res["confidence"], float)                      # the published model (five terms)
+        ind = {k: np.asarray(res["indicators"][k], float) for k in ("alpha_spread", "buffer", "length", "length_h")}
         assert np.allclose(confidence(ind, DEFAULT_CALIBRATION), c, equal_nan=True)
+        c1 = confidence(ind, CALIBRATION_V1)                         # the model of version 1.1 (four terms)
         ind["length"] = ind["length"] * C0 / ratio(*pub.shape)
-        ch = confidence(ind, DEFAULT_CALIBRATION)                    # conservative variant: length relative to the height of the box
-        acc, acc_h = np.nan_to_num(c, nan=0.0) >= T, np.nan_to_num(ch, nan=0.0) >= T
+        ch = confidence(ind, CALIBRATION_V1)                         # conservative variant of version 1.1: length relative to the height of the box
+        acc, acc_1, acc_h = np.nan_to_num(c, nan=0.0) >= T, np.nan_to_num(c1, nan=0.0) >= T, np.nan_to_num(ch, nan=0.0) >= T
         apex = np.array([l.points[:, 2].max() for l in lines])
         e0 = energy_decomposition(pub)
         r = {"grid": [int(n) for n in pub.shape], "alpha_best_fit": float(study.lfff.meta["alpha"]), "alpha_over_alpha_max": float(study.alpha["fit"] / study.alpha["max"]),
-             "n_lines": int(len(lines)), "frac_reliable": float(acc.mean()), "frac_reliable_height": float(acc_h.mean()),
+             "n_lines": int(len(lines)), "frac_reliable": float(acc.mean()), "frac_reliable_v1": float(acc_1.mean()),
+             "frac_reliable_height": float(acc_h.mean()),
              "seconds": float(fields.get("seconds", float("nan")))}
         for name in ("control", "lfff"):
             f = fields[name]
@@ -112,19 +114,22 @@ with keep_awake():
                  "E_J_change": float(e["E_J"] / e0["E_J"] - 1), "E_free_change": float(e["E_free"] / e0["E_free"] - 1),
                  "CWsin": float(force_free_metrics(f, margin=int(f.meta.get("nd", 0)))["CWsin"]),
                  "message": f.meta.get("message"), "iterations": int(f.meta.get("iterations", -1))}
-            groups = {"all": val, "accepted": val & acc, "rejected": val & ~acc, "accepted_height": val & acc_h,
-                      "accepted_only_published": val & acc & ~acc_h, "accepted_both": val & acc & acc_h}
+            groups = {"all": val, "accepted": val & acc, "rejected": val & ~acc, "accepted_v1": val & acc_1, "rejected_v1": val & ~acc_1,
+                      "accepted_height": val & acc_h, "accepted_only_v1": val & acc_1 & ~acc, "accepted_both": val & acc & acc_1,
+                      "accepted_only_default": val & acc & ~acc_1}
             for g, sel in groups.items():
                 q["moved_10"][g], q["moved_20"][g], q["open_closed"][g] = frac(moved, sel), frac(moved20, sel), frac(topo, sel)
             q["n_groups"] = {g: int(sel.sum()) for g, sel in groups.items()}
-            use = val & np.isfinite(c) & np.isfinite(ch)
+            use = val & np.isfinite(c) & np.isfinite(c1) & np.isfinite(ch)
             if moved[use].any() and not moved[use].all():
-                q["auc_published_vs_moved"] = auc(1 - c[use], moved[use].astype(int))
+                q["auc_default_vs_moved"] = auc(1 - c[use], moved[use].astype(int))
+                q["auc_v1_vs_moved"] = auc(1 - c1[use], moved[use].astype(int))
                 q["auc_height_vs_moved"] = auc(1 - ch[use], moved[use].astype(int))
                 q["auc_apex_vs_moved"] = auc(apex[use], moved[use].astype(int))
             q["median_shift"] = {g: (float(np.nanmedian(err["shape"][sel])) if sel.any() else None) for g, sel in groups.items()}
             if name == "lfff":      # added after seeing the result: is it only the height of the line?
                 q["equal_height_moved_10"] = equal_height(moved[use].astype(float), acc[use].astype(float), apex[use], np.random.default_rng(0))
+                q["equal_height_moved_10_v1"] = equal_height(moved[use].astype(float), acc_1[use].astype(float), apex[use], np.random.default_rng(0))
                 q["equal_height_moved_10_height_variant"] = equal_height(moved[use].astype(float), acc_h[use].astype(float), apex[use], np.random.default_rng(0))
             r[name] = q
         out["regions"][noaa] = r
@@ -132,18 +137,21 @@ with keep_awake():
         v, k = r["lfff"], r["control"]
         m = v["moved_10"]
         print(f"NOAA {noaa}: alpha / alpha_max {r['alpha_over_alpha_max']:+.2f} | control: moved {k['moved_10']['all']:.3f}, E_J {100 * k['E_J_change']:+.2f} % | "
-              f"faces changed: moved all {m['all']:.2f}, accepted {m['accepted']:.2f}, rejected {m['rejected']:.2f} | "
-              f"accepted only by the published definition {m['accepted_only_published']} (n {v['n_groups']['accepted_only_published']}), "
+              f"faces changed: moved all {m['all']:.2f}, accepted {m['accepted']:.2f}, rejected {m['rejected']:.2f} "
+              f"(version 1.1: accepted {m['accepted_v1']:.2f}, rejected {m['rejected_v1']:.2f}) | "
+              f"accepted only by version 1.1 {m['accepted_only_v1']} (n {v['n_groups']['accepted_only_v1']}), "
               f"by both {m['accepted_both']} (n {v['n_groups']['accepted_both']}) | open/closed among accepted {v['open_closed']['accepted']:.3f} | "
-              f"AUC for the lines that move: published {v.get('auc_published_vs_moved', float('nan')):.3f}, height {v.get('auc_height_vs_moved', float('nan')):.3f}, "
+              f"AUC for the lines that move: default {v.get('auc_default_vs_moved', float('nan')):.3f}, version 1.1 {v.get('auc_v1_vs_moved', float('nan')):.3f}, "
+              f"height {v.get('auc_height_vs_moved', float('nan')):.3f}, "
               f"apex {v.get('auc_apex_vs_moved', float('nan')):.3f} | E_J {100 * v['E_J_change']:+.1f} %, E - E_p {100 * v['E_free_change']:+.1f} % | "
               f"CWsin {v['CWsin']:.3f} | {v['message']}", flush=True)
         e = v["equal_height_moved_10"]
         print(f"   at equal apex height, accepted minus rejected: {e['value']:+.3f} [{e['ci'][0]:+.3f}, {e['ci'][1]:+.3f}]", flush=True)
-eh = [out["regions"][n]["lfff"]["equal_height_moved_10"] for n in out["regions"]]
-w = 1 / np.array([e["sigma"] for e in eh]) ** 2
-m, sd = float((w * np.array([e["value"] for e in eh])).sum() / w.sum()), float(w.sum() ** -0.5)
-out["pooled_equal_height_moved_10"] = {"value": m, "ci": [m - 1.96 * sd, m + 1.96 * sd], "sigma": sd, "regions": list(out["regions"])}
+for suffix in ("", "_v1"):
+    eh = [out["regions"][n]["lfff"]["equal_height_moved_10" + suffix] for n in out["regions"]]
+    w = 1 / np.array([e["sigma"] for e in eh]) ** 2
+    m, sd = float((w * np.array([e["value"] for e in eh])).sum() / w.sum()), float(w.sum() ** -0.5)
+    out["pooled_equal_height_moved_10" + suffix] = {"value": m, "ci": [m - 1.96 * sd, m + 1.96 * sd], "sigma": sd, "regions": list(out["regions"])}
+    print(f"three regions, at equal apex height{' (version 1.1)' if suffix else ''}: {m:+.3f} [{m - 1.96 * sd:+.3f}, {m + 1.96 * sd:+.3f}]")
 json.dump(out, open(a.json, "w", encoding="utf-8"), indent=1, ensure_ascii=False)
-print(f"three regions, at equal apex height: {m:+.3f} [{m - 1.96 * sd:+.3f}, {m + 1.96 * sd:+.3f}]")
 print("written", a.json)

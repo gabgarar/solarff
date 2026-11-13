@@ -11,8 +11,10 @@ Per region: angle ~ stable + log(1 + apex height), the regression the paper uses
 of a line is the mean of the 171 and 193 A channels it has. Interval by bootstrap over lines; the three regions
 are combined weighting by 1/sigma^2.
 
-    python examples/revision/r19_stability_vs_aia.py
+    python examples/revision/r19_stability_vs_aia.py          # the published model (five terms)
+    python examples/revision/r19_stability_vs_aia.py --v1     # the model of version 1.1 (four terms)
 """
+import argparse
 import json
 import os
 import pickle
@@ -24,8 +26,11 @@ from solarff.confidence import DEFAULT_CALIBRATION
 
 REGIONS = {"11158": "aia_validation_harp377.pkl", "11429": "harp1449_20120306_2336_aia.pkl", "12673": "harp7115_20170906_1136_aia.pkl"}
 T = DEFAULT_CALIBRATION["threshold"]
+ap = argparse.ArgumentParser()
+ap.add_argument("--v1", action="store_true", help="with the confidence of the model of version 1.1; writes <name>_v1.json")
+SUF = "_v1" if ap.parse_args().v1 else ""
 N_BOOT = 2000
-OUT = os.path.join("docs", "revision", "resultados", "r19_stability_vs_aia.json")
+OUT = os.path.join("docs", "revision", "resultados", f"r19_stability_vs_aia{SUF}.json")
 
 
 def coefficients(y, cols, controls, rng):
@@ -55,8 +60,9 @@ for noaa, f in REGIONS.items():
     ang = np.array([np.asarray(w["angles"], float) for w in aia["plot"]["wavelengths"].values()])
     assert ang.shape[1] == len(d["conf_published"]), "the lines of the two analyses are not the same"
     rel_aia = np.asarray(aia["plot"]["reliable"], bool)
-    c = d["conf_published"]
-    assert np.array_equal(rel_aia, np.nan_to_num(c, nan=0.0) >= T), "the confidence of the two analyses differs"
+    c = d["conf_published" + SUF]
+    # the AIA validation keeps the decision of the published model only
+    assert SUF or np.array_equal(rel_aia, np.nan_to_num(c, nan=0.0) >= T), "the confidence of the two analyses differs"
     with np.errstate(all="ignore"):
         angle = np.nanmean(ang, axis=0)
     shape, topo, apex, length = d["err_shape"], d["err_topology"] > 0, d["apex"], d["err_length_ref"]

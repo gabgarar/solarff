@@ -35,7 +35,7 @@ from scipy.stats import spearmanr
 import solarff as sff
 from solarff.analytic import CALIBRATION_FIELDS
 from solarff.calibration import NOISE_MODELS, bootstrap_ci, calibration_suite, ece
-from solarff.confidence import DEFAULT_CALIBRATION, assess_lines, auc, confidence, line_errors
+from solarff.confidence import CALIBRATION_V1, DEFAULT_CALIBRATION, assess_lines, auc, confidence, line_errors
 from solarff.helicity import energy_decomposition
 from solarff.metrics import force_free_metrics
 from solarff.montecarlo import base_seeds
@@ -143,59 +143,69 @@ def region(out):
     seeds = base_seeds(lo_study.nlfff, 2)     # the seeds of the paper (every second pixel of the base where |Bz| > 5 % of its maximum)
     lines_lo, c_lo, s_lo, ind_lo = region_fields(lo_study, seeds)
     lines_hi, c_hi, s_hi, ind_hi = region_fields(hi_study, seeds)
-    ok = np.isfinite(c_lo) & np.isfinite(c_hi)
-    acc_lo, acc_hi = c_lo >= THRESHOLD, c_hi >= THRESHOLD
+    v1_lo, v1_hi = confidence(ind_lo, CALIBRATION_V1), confidence(ind_hi, CALIBRATION_V1)     # the model of version 1.1
     err = line_errors(lines_hi, lines_lo)     # how far each line moves when the resolution doubles
     moved = (err["shape"] > 0.1) | (err["topology"] > 0)
+    moved20 = ((err["shape"] > 0.2) | (err["topology"] > 0))
     val = np.isfinite(err["shape"])
     apex = np.array([l.points[:, 2].max() for l in lines_lo])                  # apex height in the published field, Mm
     if not a.dry:                                                              # per-line arrays, for later analyses
-        np.savez(os.path.join(a.data, f"resolution_check_lines_{a.region}{tag}.npz"), conf_published=c_lo, conf_double=c_hi, apex=apex,
+        np.savez(os.path.join(a.data, f"resolution_check_lines_{a.region}{tag}.npz"), conf_published=c_lo, conf_double=c_hi,
+                 conf_published_v1=v1_lo, conf_double_v1=v1_hi, apex=apex,
                  closed_published=np.array([l.closed for l in lines_lo]), seeds=np.asarray(seeds),
                  **{"err_" + k: np.asarray(v) for k, v in err.items()},
                  **{"published_" + k: np.asarray(v) for k, v in ind_lo.items()},
                  **{"double_" + k: np.asarray(v) for k, v in ind_hi.items()})
-    rng = np.random.default_rng(0)
-    use = val & np.isfinite(c_lo)
-    rel = acc_lo[use].astype(float)
-    moved20 = ((err["shape"] > 0.2) | (err["topology"] > 0))
-    both = ok & acc_lo & acc_hi
     # Lower bound of the error of the accepted lines. If two lines are within 10 % of the true one, they differ by at
     # most 20 % of its length. The true length is not known: the longer of the two is used, which gives the smaller figure.
     rel_long = err["shape_abs"] / np.maximum(err["length_ref"], err["length_model"])
-    differ, rng_d = {}, np.random.default_rng(1)   # its own generator, so that the intervals of the equal-height test do not change
-    for t in (0.20, 0.25, 0.30):
-        d = ((rel_long > t) | (err["topology"] > 0))[both & val].astype(float)
-        b = [float(np.mean(rng_d.choice(d, d.size))) for _ in range(N_BOOT)]
-        differ[f"{t:.2f}"] = {"value": float(d.mean()), "ci": [float(np.percentile(b, 2.5)), float(np.percentile(b, 97.5))], "n": int(d.size)}
-    out.setdefault(key, {})[a.region] = {
-        "accepted_both_differ_longer_line": differ,
-        "not_reproduced_10": float(np.mean(moved[val])), "not_reproduced_10_accepted": float(np.mean(moved[val & acc_lo])),
-        "published": s_lo, "double": s_hi, "n_seeds": int(len(seeds)), "n_valid": int(ok.sum()),
-        "equal_height": {"moved_20": equal_height(moved20[use].astype(float), rel, apex[use], rng),
-                         "open_closed": equal_height((err["topology"][use] > 0).astype(float), rel, apex[use], rng),
-                         "displacement": equal_height(err["shape"][use], rel, apex[use], rng)},
-        "accepted_both_differ_20": float(np.mean(moved20[both])), "accepted_both_open_closed": float(np.mean(err["topology"][both] > 0)),
-        "rejected_both_open_closed": float(np.mean(err["topology"][ok & ~acc_lo & ~acc_hi] > 0)),
-        "auc_confidence_vs_moved_20": auc(1 - c_lo[use], moved20[use]),
-        "spearman_confidence": float(spearmanr(c_lo[ok], c_hi[ok])[0]),
-        "same_decision": float(np.mean(acc_lo[ok] == acc_hi[ok])),
-        "accepted_both": float(np.mean(acc_lo[ok] & acc_hi[ok])), "accepted_only_published": float(np.mean(acc_lo[ok] & ~acc_hi[ok])),
-        "accepted_only_double": float(np.mean(~acc_lo[ok] & acc_hi[ok])),
-        "E_J_change": float(s_hi["E_J"] / s_lo["E_J"] - 1), "E_free_change": float(s_hi["E_free"] / s_lo["E_free"] - 1),
-        "line_shift": {"reliable_median": float(np.nanmedian(err["shape"][val & acc_lo])),
-                       "unreliable_median": float(np.nanmedian(err["shape"][val & ~acc_lo])),
-                       "reliable_moved": float(np.mean(moved[val & acc_lo])), "unreliable_moved": float(np.mean(moved[val & ~acc_lo]))},
-    }
-    r = out[key][a.region]
-    e = r["equal_height"]["moved_20"]
-    print(f"NOAA {a.region}, at equal height, reliable - unreliable lines that move by more than 20 %: {e['value']:+.3f} "
-          f"[{e['ci'][0]:+.3f}, {e['ci'][1]:+.3f}]", flush=True)
-    print(f"region: reliable {s_lo['frac_reliable']:.3f} -> {s_hi['frac_reliable']:.3f} | Spearman {r['spearman_confidence']:.3f} | "
-          f"same decision {r['same_decision']:.3f} | E_J {100 * r['E_J_change']:+.1f} % | E - E_p {100 * r['E_free_change']:+.1f} % | "
-          f"lines that move: reliable {r['line_shift']['reliable_moved']:.3f}, unreliable {r['line_shift']['unreliable_moved']:.3f}", flush=True)
-    print("accepted at both resolutions that differ by more than 20, 25 and 30 % of the longer line: " +
-          ", ".join(f"{v['value']:.3f} [{v['ci'][0]:.3f}, {v['ci'][1]:.3f}]" for v in differ.values()) + f" (n = {differ['0.20']['n']})", flush=True)
+
+    def compare(c_lo, c_hi):
+        """The comparison of the two resolutions with the confidences of one model."""
+        ok = np.isfinite(c_lo) & np.isfinite(c_hi)
+        acc_lo, acc_hi = c_lo >= THRESHOLD, c_hi >= THRESHOLD
+        rng = np.random.default_rng(0)
+        use = val & np.isfinite(c_lo)
+        rel = acc_lo[use].astype(float)
+        both = ok & acc_lo & acc_hi
+        differ, rng_d = {}, np.random.default_rng(1)   # its own generator, so that the intervals of the equal-height test do not change
+        for t in (0.20, 0.25, 0.30):
+            d = ((rel_long > t) | (err["topology"] > 0))[both & val].astype(float)
+            b = [float(np.mean(rng_d.choice(d, d.size))) for _ in range(N_BOOT)]
+            differ[f"{t:.2f}"] = {"value": float(d.mean()), "ci": [float(np.percentile(b, 2.5)), float(np.percentile(b, 97.5))], "n": int(d.size)}
+        own = lambda s, c: {**s, "frac_reliable": float(np.mean(np.nan_to_num(c, nan=0.0) >= THRESHOLD)), "conf_median": float(np.nanmedian(c))}  # noqa: E731
+        return {
+            "accepted_both_differ_longer_line": differ,
+            "not_reproduced_10": float(np.mean(moved[val])), "not_reproduced_10_accepted": float(np.mean(moved[val & acc_lo])),
+            "published": own(s_lo, c_lo), "double": own(s_hi, c_hi), "n_seeds": int(len(seeds)), "n_valid": int(ok.sum()),
+            "equal_height": {"moved_20": equal_height(moved20[use].astype(float), rel, apex[use], rng),
+                             "open_closed": equal_height((err["topology"][use] > 0).astype(float), rel, apex[use], rng),
+                             "displacement": equal_height(err["shape"][use], rel, apex[use], rng)},
+            "accepted_both_differ_20": float(np.mean(moved20[both])), "accepted_both_open_closed": float(np.mean(err["topology"][both] > 0)),
+            "rejected_both_open_closed": float(np.mean(err["topology"][ok & ~acc_lo & ~acc_hi] > 0)),
+            "auc_confidence_vs_moved_20": auc(1 - c_lo[use], moved20[use]),
+            "spearman_confidence": float(spearmanr(c_lo[ok], c_hi[ok])[0]),
+            "same_decision": float(np.mean(acc_lo[ok] == acc_hi[ok])),
+            "accepted_both": float(np.mean(acc_lo[ok] & acc_hi[ok])), "accepted_only_published": float(np.mean(acc_lo[ok] & ~acc_hi[ok])),
+            "accepted_only_double": float(np.mean(~acc_lo[ok] & acc_hi[ok])),
+            "E_J_change": float(s_hi["E_J"] / s_lo["E_J"] - 1), "E_free_change": float(s_hi["E_free"] / s_lo["E_free"] - 1),
+            "line_shift": {"reliable_median": float(np.nanmedian(err["shape"][val & acc_lo])),
+                           "unreliable_median": float(np.nanmedian(err["shape"][val & ~acc_lo])),
+                           "reliable_moved": float(np.mean(moved[val & acc_lo])), "unreliable_moved": float(np.mean(moved[val & ~acc_lo]))},
+        }
+
+    # ``key``: the published model (five terms); ``key + "_v1"``: the model of version 1.1 (four terms)
+    for suffix, (cl, ch) in (("", (c_lo, c_hi)), ("_v1", (v1_lo, v1_hi))):
+        r = out.setdefault(key + suffix, {})[a.region] = compare(cl, ch)
+        e = r["equal_height"]["moved_20"]
+        print(f"NOAA {a.region}{', model of version 1.1' if suffix else ''}, at equal height, reliable - unreliable lines that move by more "
+              f"than 20 %: {e['value']:+.3f} [{e['ci'][0]:+.3f}, {e['ci'][1]:+.3f}]", flush=True)
+        print(f"region: reliable {r['published']['frac_reliable']:.3f} -> {r['double']['frac_reliable']:.3f} | Spearman {r['spearman_confidence']:.3f} | "
+              f"same decision {r['same_decision']:.3f} | E_J {100 * r['E_J_change']:+.1f} % | E - E_p {100 * r['E_free_change']:+.1f} % | "
+              f"lines that move: reliable {r['line_shift']['reliable_moved']:.3f}, unreliable {r['line_shift']['unreliable_moved']:.3f}", flush=True)
+        print("accepted at both resolutions that differ by more than 20, 25 and 30 % of the longer line: " +
+              ", ".join(f"{v['value']:.3f} [{v['ci'][0]:.3f}, {v['ci'][1]:.3f}]" for v in r["accepted_both_differ_longer_line"].values()) +
+              f" (n = {r['accepted_both_differ_longer_line']['0.20']['n']})", flush=True)
     save(out)
 
 
@@ -220,11 +230,11 @@ def suite(out):
         save(out)
 
 
-out = {"code_version": code_version()["label"], "calibration": "DEFAULT_CALIBRATION (3 indicators, 6 families), not refitted",
+out = {"code_version": code_version()["label"], "calibration": "DEFAULT_CALIBRATION (five terms) and CALIBRATION_V1 (four terms, version 1.1), not refitted",
        "noise_models": list(NOISE_MODELS), "realizations": 1, "dry_run": bool(a.dry)}
 if os.path.exists(a.json) and not a.dry:
     old = json.load(open(a.json, encoding="utf-8"))
-    out.update({k: old[k] for k in ("regions", "regions_coarser", "suite") if k in old})
+    out.update({k: v for k, v in old.items() if k.startswith(("regions", "suite"))})
 if a.dry:
     a.json = a.json.replace(".json", "_dry.json")
 with keep_awake():

@@ -35,7 +35,7 @@ import numpy as np
 from solarff.alpha import alpha_best_fit
 from solarff.analytic import field_magnetogram
 from solarff.calibration import NOISE_MODELS, bootstrap_ci, ece
-from solarff.confidence import DEFAULT_CALIBRATION, auc, calibration_case, confidence
+from solarff.confidence import CALIBRATION_V1, DEFAULT_CALIBRATION, auc, calibration_case, confidence, length_in_heights
 from solarff.lfff import alpha_max, linear_mhs
 from solarff.magnetogram import Magnetogram, aly_criteria
 from solarff.metrics import force_free_metrics
@@ -64,9 +64,9 @@ CKPT = os.path.join(a.data, f"observed_flux_fields{TAG}.pkl")
 a.json = a.json or os.path.join("docs", "resultados", f"observed_flux_fields{TAG}.json")
 
 
-def evaluate(d):
-    """Metrics of the published model on the cases ``d``; the intervals resample lines within the pooled cases."""
-    c = np.concatenate([confidence(x["ind"], DEFAULT_CALIBRATION) for x in d])
+def evaluate(d, cal=DEFAULT_CALIBRATION):
+    """Metrics of the model ``cal`` on the cases ``d``; the intervals resample lines within the pooled cases."""
+    c = np.concatenate([confidence(x["ind"], cal) for x in d])
     y = np.concatenate([x["bad"] for x in d]).astype(int)
     ok = np.isfinite(c)
     acc = ok & (np.nan_to_num(c, nan=0.0) >= T)
@@ -74,7 +74,7 @@ def evaluate(d):
     out = {"n_cases": len(d), "n_lines": int(ok.sum()), "bad_rate": float(y[ok].mean()), "auc": auc(p, y[ok]),
            "auc_ci": list(bootstrap_ci(p, y[ok], auc, n_boot=500)), "ece": ece(p, y[ok]), "mean_predicted_bad": float(p.mean()),
            "accepted": float(acc[ok].mean()), "bad_accepted": float(y[acc].mean()) if acc.any() else None,
-           "bad_accepted_by_case": [float(x["bad"][np.nan_to_num(confidence(x["ind"], DEFAULT_CALIBRATION), nan=0.0) >= T].mean())
+           "bad_accepted_by_case": [float(x["bad"][np.nan_to_num(confidence(x["ind"], cal), nan=0.0) >= T].mean())
                                     for x in d]}
     if acc.any():
         rng = np.random.default_rng(0)
@@ -131,16 +131,21 @@ if not a.analyze_only:
                     pickle.dump(state, open(CKPT, "wb"))
                     print(f"  {key}: {rec['bad'].mean():.0%} wrong lines ({rec['seconds']:.0f} s; total {(time.time() - t0) / 60:.0f} min)", flush=True)
 
-out = {"code_version": code_version()["label"], "calibration": "DEFAULT_CALIBRATION (3 indicators, 6 families), not refitted",
-       "alpha_frac": ALPHA_FRAC, "noise_models": list(NOISE_MODELS), "exact": state["exact"], "fields": {}, "pooled": {}}
+for key, x in state["cases"].items():      # cases saved before the length in box heights existed
+    if "length_h" not in x["ind"]:
+        x["ind"]["length_h"] = length_in_heights(x["ind"]["length"], state["exact"][key.split(" |")[0]]["grid"])
+# ``fields`` and ``pooled``: the default model; ``fields_v1`` and ``pooled_v1``: the model of version 1.1
+out = {"code_version": code_version()["label"], "calibration": "DEFAULT_CALIBRATION (five terms) and CALIBRATION_V1 (four terms, version 1.1), not refitted",
+       "alpha_frac": ALPHA_FRAC, "noise_models": list(NOISE_MODELS), "exact": state["exact"], "fields": {}, "pooled": {},
+       "fields_v1": {}, "pooled_v1": {}}
 for name in state["exact"]:
     d = [x for k, x in state["cases"].items() if k.startswith(name + " |")]
     if d:
-        out["fields"][name] = evaluate(d)
+        out["fields"][name], out["fields_v1"][name] = evaluate(d), evaluate(d, CALIBRATION_V1)
 for fname in FIELDS:
     d = [x for k, x in state["cases"].items() if k.startswith(fname + " ")]
     if d:
-        out["pooled"][fname] = evaluate(d)
+        out["pooled"][fname], out["pooled_v1"][fname] = evaluate(d), evaluate(d, CALIBRATION_V1)
 json.dump(out, open(a.json, "w", encoding="utf-8"), indent=1, ensure_ascii=False)
 for name, r in {**out["fields"], **{k + " (three regions)": v for k, v in out["pooled"].items()}}.items():
     e = out["exact"].get(name, {})
@@ -149,4 +154,7 @@ for name, r in {**out["fields"], **{k + " (three regions)": v for k, v in out["p
           f"(0.9: {'-' if r['bad_accepted_0.9'] is None else format(r['bad_accepted_0.9'], '.3f')}) | not reproduced at half resolution: "
           f"all {r['not_reproduced_10']:.2f}, accepted {'-' if r['not_reproduced_10_accepted'] is None else format(r['not_reproduced_10_accepted'], '.2f')} | "
           f"two keys: accepted {r['two_keys']['accepted']:.2f}, wrong {'-' if r['two_keys']['bad_accepted'] is None else format(r['two_keys']['bad_accepted'], '.3f')}")
+for name, r in {**out["fields_v1"], **{k + " (three regions)": v for k, v in out["pooled_v1"].items()}}.items():
+    print(f"version 1.1  {name:26s} AUC {r['auc']:.3f} | accepted {r['accepted']:.2f}, wrong among them "
+          f"{'-' if r['bad_accepted'] is None else format(r['bad_accepted'], '.3f')}")
 print("written", a.json)
