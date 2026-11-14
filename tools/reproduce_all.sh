@@ -72,6 +72,9 @@ analisis() {   # ~1-2 h; AIA, fulguraciones, tabla de regiones y figuras del art
 
 revision() {   # revisión de 9-nov-2026 (docs/revision/): estadística, física e indicadores
   $PY examples/revision/r0_suite.py
+  # otra vez, ahora que existe la cuerda externa TD2 de r0: la añade al resumen de las familias externas
+  # (docs/resultados/external_families.json). Usa las extrapolaciones guardadas de la fase calib: segundos
+  $PY examples/17_external_families.py
   $PY examples/18_applicability.py       # indicador global de aplicabilidad: necesita 04, 17, r0 y los pkl de las regiones, ~1.5 h
   $PY examples/revision/r2_stats.py --tag original --suite data/calibration_suite_s32-48-64_r2_mc0_plus_TD-relax.pkl \
       --features sin_jb alpha_spread buffer apex length length_sq      # el modelo de cinco indicadores de los primeros borradores
