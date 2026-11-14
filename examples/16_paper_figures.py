@@ -100,7 +100,7 @@ def fig_scheme(lang, path):
         for i in (0, 1, 2, 3):
             arrow(i + 0.94, y, i + 1.06, y)
     arrow(3.5, TOP - 0.02, 3.5, BOT + H + 0.02, color=BLUE)
-    ax.text(3.53, (TOP + BOT + H) / 2, T(lang, "coeficientes\npublicados", "published\ncoefficients"), ha="left", va="center",
+    ax.text(3.53, (TOP + BOT + H) / 2, T(lang, "coeficientes\ndel modelo", "model\ncoefficients"), ha="left", va="center",
             fontsize=8.5, color=BLUE)
     ax.text(0.06, 0.965, T(lang, "CALIBRACIÓN: la solución exacta se conoce", "CALIBRATION: the exact solution is known"),
             ha="left", fontsize=8.5, color=BLUE, weight="bold")
@@ -251,8 +251,9 @@ def fig_flares(lang, path):
     fig, ax = plt.subplots(1, 2, figsize=(12, 4.4), layout="constrained")
     x = np.arange(len(F))
     labels = [f"NOAA {e['noaa']}\n{e['flare'].split(' ')[0]}" for e in F]
-    zones = (("reliable", T(lang, "líneas fiables", "reliable lines"), BLUE),
-             ("unreliable", T(lang, "líneas no fiables", "unreliable lines"), ORANGE),
+    # the paper calls the lines with confidence >= 0.8 accepted, and the others rejected
+    zones = (("reliable", T(lang, "líneas aceptadas", "accepted lines"), BLUE),
+             ("unreliable", T(lang, "líneas rechazadas", "rejected lines"), ORANGE),
              ("rest", T(lang, "resto de la caja (no la cruza ninguna línea trazada)", "rest of the box (crossed by no traced line)"), GREY))
     w = 0.26
     top = max(-v / 1e32 for e in F for v in e["H1"]["dE_by_zone"].values())
@@ -277,7 +278,7 @@ def fig_flares(lang, path):
                        "o" if d else ".", color=BLUE if d else GREY, ms=9 if d else 7)
     ax[1].axhline(50, color=GREY, ls=":", lw=1)
     ax[1].set_ylim(bottom=0)        # room for the note under the lowest point
-    ax[1].set_ylabel(T(lang, "parte de la caída en la zona fiable [%]", "share of the drop in the reliable zone [%]"))
+    ax[1].set_ylabel(T(lang, "parte de la caída en la zona aceptada [%]", "share of the drop in the accepted zone [%]"))
     ax[1].set_title(T(lang, "(b) Sensibilidad a semillas, dilatación y umbral (azul: por defecto)",
                       "(b) Sensitivity to seeds, dilation and threshold (blue: default)"), fontsize=10)
     ax[1].text(0.01, 0.02, T(lang, "izquierda de cada región: semillas por defecto; derecha: 4 veces más",
@@ -299,7 +300,7 @@ def fig_threshold_global(lang, path):
     fig, ax = plt.subplots(1, 3, figsize=(14, 4.3), layout="constrained")
     x = np.arange(len(keys))
     ax[0].plot(x, [r11[k]["auc_refit"] for k in keys], "o-", color=INK, label=T(lang, "modelo reajustado a la etiqueta", "model refitted to the label"))
-    ax[0].plot(x, [r11[k]["auc_published_model"] for k in keys], "s--", color=BLUE, label=T(lang, "modelo publicado", "published model"))
+    ax[0].plot(x, [r11[k]["auc_published_model"] for k in keys], "s--", color=BLUE, label=T(lang, "modelo adoptado", "adopted model"))
     ax[0].set_ylabel("AUC")
     ax[0].set_ylim(0.84, 0.94)
     ax[0].legend(fontsize=8, frameon=False, loc="lower right")
@@ -395,8 +396,8 @@ def fig_height(lang, path):
         a.xaxis.set_minor_formatter(matplotlib.ticker.NullFormatter())
         a.set_xlabel(T(lang, "altura del ápice [Mm]", "apex height [Mm]"))
         s = H["summary"][noaa]
-        a.set_title(f"NOAA {noaa}: " + T(lang, f"{100 * s['frac_reliable']:.0f} % fiables, ρ = {s['spearman_conf_apex']:+.2f}",
-                                       f"{100 * s['frac_reliable']:.0f}% reliable, ρ = {s['spearman_conf_apex']:+.2f}"), fontsize=10)
+        a.set_title(f"NOAA {noaa}: " + T(lang, f"{100 * s['frac_reliable']:.0f} % aceptadas, ρ = {s['spearman_conf_apex']:+.2f}",
+                                       f"{100 * s['frac_reliable']:.0f}% accepted, ρ = {s['spearman_conf_apex']:+.2f}"), fontsize=10)
         style(a)
     ax[0].set_ylabel(T(lang, "confianza de la línea", "line confidence"))
     ax[0].legend(fontsize=8, frameon=False, loc="lower left")
@@ -527,7 +528,7 @@ for lang in ("es", "en"):
     fig_lines_region(lang, os.path.join(out, "fig4_harp377.png"))
     from solarff.report.figures import fig_aia_steps
     aia = pickle.load(open("data/aia_validation_harp377.pkl", "rb"))
-    fig_aia_steps(aia["summary"], aia["plot"], lang, os.path.join(out, "fig5_aia.png"))
+    fig_aia_steps(aia["summary"], aia["plot"], lang, os.path.join(out, "fig5_aia.png"), word=("aceptadas", "accepted"))
     fig_flares(lang, os.path.join(out, "fig6_fulguraciones.png" if lang == "es" else "fig6_flares.png"))
     fig_threshold_global(lang, os.path.join(out, "fig7_umbral_global.png" if lang == "es" else "fig7_threshold_global.png"))
     fig_height(lang, os.path.join(out, "fig8_altura.png" if lang == "es" else "fig8_height.png"))

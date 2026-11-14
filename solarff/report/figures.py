@@ -666,8 +666,12 @@ def fig_calibration_cv(S, lang, path):
 
 
 @P._styled
-def fig_aia_steps(S, plot, lang, path):
-    """The processing of the AIA comparison, step by step, on the 171 Å image."""
+def fig_aia_steps(S, plot, lang, path, word=("fiables", "reliable")):
+    """The processing of the AIA comparison, step by step, on the 171 Å image.
+
+    ``word`` is how the lines with confidence above the threshold are called in the title of panel 2,
+    in Spanish and in English.
+    """
     from ..aia import ridge_orientation
     W = plot["wavelengths"]
     w0 = 171 if 171 in W else sorted(W)[0]
@@ -722,7 +726,7 @@ def fig_aia_steps(S, plot, lang, path):
     a.imshow(logimg, origin="lower", cmap="gray", extent=ext)
     for p, r in zip(d["pix"], rel):
         a.plot(p[:, 0], p[:, 1], lw=0.5, color="#2a6fdb" if r else "#e8833a", alpha=0.8 if r else 0.6)
-    a.set_title(_L(lang, "2. Líneas NLFFF proyectadas (azul: fiables)", "2. Projected NLFFF lines (blue: reliable)"), fontsize=10)
+    a.set_title(_L(lang, f"2. Líneas NLFFF proyectadas (azul: {word[0]})", f"2. Projected NLFFF lines (blue: {word[1]})"), fontsize=10)
     a = axs[0, 2]
     a.imshow(np.log10(st + 1e-3), origin="lower", cmap="magma", extent=ext)
     a.set_title(_L(lang, "3. Fuerza de cresta (hessiana)", "3. Ridge strength (Hessian)"), fontsize=10)
