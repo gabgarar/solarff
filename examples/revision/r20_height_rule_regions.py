@@ -68,7 +68,8 @@ for noaa, f in REGIONS.items():
     coarse = np.load(os.path.join("data", f"resolution_check_lines_{noaa}_coarser.npz"))
     grids = {"published": res["regions"][noaa]["published"]["grid"], "double": res["regions"][noaa]["double"]["grid"],
              "half": res["regions_coarser"][noaa]["double"]["grid"]}
-    assert np.allclose(conf(fine, "published", 1.0), fine["conf_published"], equal_nan=True), "the published confidence is not reproduced"
+    # 22_resolution_check.py saves the confidence of the default model and that of version 1.1; this test uses the latter
+    assert np.allclose(conf(fine, "published", 1.0), fine["conf_published_v1"], equal_nan=True), "the version 1.1 confidence is not reproduced"
     r = {"grids": grids, "height_over_diagonal": {k: float(ratio(*g)) for k, g in grids.items()},
          "factor": {k: float(C0 / ratio(*g)) for k, g in grids.items()}}
     aia = pickle.load(open(os.path.join("data", f), "rb"))
