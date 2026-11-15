@@ -57,8 +57,10 @@ if args.noaa is not None:
 
 stamp = args.time.replace("-", "").replace(":", "").replace("T", "_")[:13]
 data_dir = f"data/harp{args.harp}_{stamp}"
-if args.harp == 377 and args.time.startswith("2011-02-15T00:00") and os.path.isdir("data/harp377"):
-    data_dir = "data/harp377"  # compatibility with earlier downloads
+if args.harp == 377 and args.time.startswith("2011-02-15T00:00"):
+    # the first region of the paper keeps the folder name of the first download, also in a fresh clone:
+    # 08, 09, 10, 12, 15 and the revision scripts read data/harp377_study_mc10.pkl and docs/informes/harp377
+    data_dir = "data/harp377"
 if not os.path.isdir(data_dir) or not any(f.endswith("Br.fits") for f in os.listdir(data_dir)):
     if not args.email:
         sys.exit("Los datos no están descargados: añade --email <registrado en JSOC>")
