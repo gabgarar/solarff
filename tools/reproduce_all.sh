@@ -27,6 +27,7 @@ calib() {   # ~5-7 h; campos exactos: calibración, sesgo, robustez, cuerdas
   $PY examples/17_external_families.py   # tres familias externas nuevas (LL-IV, LFFF-delta, TD3-relax), ~1 h
   $PY examples/23_mhs_test.py            # dos familias magnetohidrostáticas exactas
   $PY examples/11_divergence_weight_exact.py --weights 1 4 --package
+  $PY examples/32_divergence_weight_lines.py --package   # líneas malas con w_d = 4 en las 108 cajas estándar, ~50 min
 }
 
 regiones() {   # ~6-8 h; descarga SHARP de JSOC si no está en data/ (HARP 377 = NOAA 11158,
@@ -41,7 +42,7 @@ regiones() {   # ~6-8 h; descarga SHARP de JSOC si no está en data/ (HARP 377 =
     set -- $job
     $PY examples/02_hmi_sharp.py --harp $1 --time $2 --email "$EMAIL" --mc 0 --no-grad-rubin --no-report
   done
-  $PY examples/09_divergence_weight.py --weights 1 2 3 4 8 --package   # barrido de w_d en HARP 377
+  $PY examples/09_divergence_weight.py --weights 1 2 3 4 8 --package --stricter   # barrido de w_d en HARP 377 y criterio de parada estricto (~1.5 h)
   $PY examples/10_tracing_step.py --package                             # paso del trazador en HARP 377
 }
 

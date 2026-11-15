@@ -99,3 +99,15 @@ def test_monte_carlo_checkpoint_resume(tmp_path):
     res = sff.monte_carlo(st, n=3, noise=30, verbose=False, checkpoint=ck)
     assert np.allclose(full["values"]["E_free"], res["values"]["E_free"])
     assert np.array_equal(full["stability"], res["stability"])
+
+
+def test_calibration_suite_passes_nlfff_options(tmp_path):
+    """``nlfff_kw`` reaches the NLFFF of every case, the noise and the seeds stay those of the default suite, and a
+    checkpoint of one setting is not resumed with the other."""
+    from solarff.calibration import calibration_suite
+    args = dict(fields=["LL-I"], noises=["uniforme-10G"], sizes=(16,), realizations=1, n_seeds=40, verbose=False)
+    ck = str(tmp_path / "suite.ckpt")
+    a = calibration_suite(**args, checkpoint=ck)
+    b = calibration_suite(**args, checkpoint=ck, nlfff_kw={"div_weight": 4.0})
+    assert len(a[0]["bad"]) == len(b[0]["bad"])
+    assert not np.allclose(a[0]["ind"]["div"], b[0]["ind"]["div"], equal_nan=True)   # another field, not the cached one

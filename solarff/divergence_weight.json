@@ -17,7 +17,7 @@
    "E_div_over_free": 0.22155430208264248,
    "gauge": 0.15607773984099776,
    "H_V": 5.971131779956939e+42,
-   "seconds": 0.7585327625274658
+   "seconds": 0.8055202960968018
   },
   {
    "div_weight": 2.0,
@@ -29,7 +29,7 @@
    "E_div_over_free": 0.13169369147217372,
    "gauge": 0.09322747281221215,
    "H_V": 5.935430944065903e+42,
-   "seconds": 137.83963656425476
+   "seconds": 139.39139533042908
   },
   {
    "div_weight": 3.0,
@@ -41,7 +41,7 @@
    "E_div_over_free": 0.09803205617090101,
    "gauge": 0.046500909643436505,
    "H_V": 6.104605272396199e+42,
-   "seconds": 163.21466279029846
+   "seconds": 171.84151935577393
   },
   {
    "div_weight": 4.0,
@@ -53,7 +53,7 @@
    "E_div_over_free": 0.07693049973150906,
    "gauge": 0.03382281821570605,
    "H_V": 6.065970710028387e+42,
-   "seconds": 157.38425660133362
+   "seconds": 158.87128591537476
   },
   {
    "div_weight": 8.0,
@@ -65,47 +65,59 @@
    "E_div_over_free": 0.044260886138949664,
    "gauge": 0.001460814954304696,
    "H_V": 6.195156076456708e+42,
-   "seconds": 199.7006332874298
+   "seconds": 195.05590724945068
   }
  ],
  "stricter_tol": {
   "div_weight": 1.0,
   "tol": 1e-08,
-  "E_div_frac": 0.05668286949099108,
-  "gauge": 0.1764003326390886,
-  "E_free": 3.36125846296936e+32,
-  "note": "criterio de parada 100 veces más estricto; examples/09 + prueba del 8-nov-2026"
+  "max_iter": 20000,
+  "iterations": 20029,
+  "converged": false,
+  "message": "max_iter alcanzado",
+  "E_div_frac": 0.06166459535948397,
+  "gauge": 0.19957099798842928,
+  "E_free": 3.280370618780932e+32,
+  "seconds": 5366.908487319946,
+  "note": "criterio de parada 100 veces más estricto (examples/09_divergence_weight.py --stricter)"
  },
  "meets_thresholds": 4.0,
  "calibration": {
   "1.0": {
    "bad_all": 0.29505366894733537,
-   "auc": 0.8903186579770442,
-   "auc_ci": [
-    0.8782498537142578,
-    0.9038514487826321
-   ],
-   "ece": 0.04212287095739475,
-   "accepted": 0.5243266997300521,
-   "bad_accepted": 0.0447198275862069,
-   "rope_bad_all": 0.5804778662715318,
-   "rope_bad_accepted": 0.029827315541601257,
-   "n_cases": 108
+   "bad_by_size": {
+    "32": 0.30822451763788733,
+    "48": 0.29009259259259257,
+    "64": 0.2875
+   },
+   "rope_bad_all": 0.5805555555555556,
+   "n_cases": 108,
+   "n_lines": 31862
   },
   "4.0": {
    "bad_all": 0.33070742577364887,
-   "auc": 0.8925636471719708,
-   "auc_ci": [
-    0.8800217248793136,
-    0.9059379073540192
+   "bad_by_size": {
+    "32": 0.33560709413369716,
+    "48": 0.3262037037037037,
+    "64": 0.33055555555555555
+   },
+   "rope_bad_all": 0.6327777777777778,
+   "n_cases": 108,
+   "n_lines": 31862
+  },
+  "difference": {
+   "bad_all": 0.0356537568263135,
+   "ci": [
+    0.031227209622295568,
+    0.03990467094948646
    ],
-   "ece": 0.04421092294648911,
-   "accepted": 0.4793458471969364,
-   "bad_accepted": 0.04204046886254993,
-   "rope_bad_all": 0.6327097610668643,
-   "rope_bad_accepted": 0.07816968541468065,
-   "n_cases": 108
-  }
+   "n_boot": 2000,
+   "cases_worse": 104,
+   "cases_better": 3
+  },
+  "cases": "108 standard boxes of the suite (examples/04 --extra-fields TD-relax), same magnetograms, noise and seeds",
+  "script": "examples/32_divergence_weight_lines.py",
+  "code_version": "1.2.0 (commit 8606f15 + cambios sin commit)"
  },
  "exact": {
   "1.0": {

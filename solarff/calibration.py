@@ -103,7 +103,7 @@ def with_proportions(data: list, checkpoint: str = "data/proportion_suite.ckpt")
 def calibration_suite(fields=None, noises=None, sizes=(32, 48), realizations: int = 2,
                       n_seeds: int = 300, bad_threshold: float = 0.1, method: str = "lbfgs",
                       mc: int = 0, seed: int = 0, checkpoint: str | None = None,
-                      verbose: bool = True, ensemble: tuple = ()) -> list:
+                      verbose: bool = True, ensemble: tuple = (), nlfff_kw: dict | None = None) -> list:
     """Suite of calibration cases: fields × noises × resolutions × realizations.
 
     Each element is the result of ``solarff.confidence.calibration_case``
@@ -111,6 +111,8 @@ def calibration_suite(fields=None, noises=None, sizes=(32, 48), realizations: in
     The true error of each line (``err``) is stored, so the "wrong line"
     threshold can be changed afterwards without recomputing (see ``relabel``).
     ``checkpoint``: saved after each case and resumed if interrupted.
+    ``nlfff_kw``: passed to the NLFFF of every case (e.g. ``{"div_weight": 4.0}``); the magnetograms,
+    noise and seeds stay those of the default suite, so the cases can be compared one by one.
     """
     from .analytic import CALIBRATION_FIELDS, EXTERNAL_TEST_FIELDS, field_magnetogram
     known = {**CALIBRATION_FIELDS, **EXTERNAL_TEST_FIELDS}
@@ -122,6 +124,8 @@ def calibration_suite(fields=None, noises=None, sizes=(32, 48), realizations: in
                  "method": method, "mc": mc, "seed": seed}
     if ensemble:
         signature["ensemble"] = list(ensemble)
+    if nlfff_kw:
+        signature["nlfff_kw"] = dict(nlfff_kw)
     state = load_checkpoint(checkpoint, signature)
     data = state["data"] if state is not None else []
     if data:
@@ -138,7 +142,8 @@ def calibration_suite(fields=None, noises=None, sizes=(32, 48), realizations: in
         k = seed * 100003 + i
         mag = field_magnetogram(exact, noise=sz, noise_t=st, rng=k)
         rec = calibration_case(exact, mag, _nz(size), n_seeds=n_seeds, bad_threshold=bad_threshold,
-                               method=method, seed=k + 7, noise_bt=st, mc=mc, mc_seed=k + 13, ensemble=tuple(ensemble))
+                               method=method, seed=k + 7, noise_bt=st, mc=mc, mc_seed=k + 13, ensemble=tuple(ensemble),
+                               nlfff_kw=nlfff_kw)
         rec.update(field=fname, noise_model=nm, size=size, realization=r, seconds=time.time() - tc)
         data.append(rec)
         say(f"  caso {i + 1}/{len(cases)}: {fname}, {nm}, {size}², real. {r}: "

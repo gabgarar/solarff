@@ -692,13 +692,14 @@ Result: <<it>> iterations (<<ev>> functional evaluations); $L$ was reduced by a 
             self.p(r"""El funcional suma con el mismo peso la fuerza de Lorentz y la divergencia ($w_d=1$, la forma estándar). Con él, la solución de HARP 377 queda algo por encima de los umbrales que \citet{Thalmann2019} recomiendan para que la energía y la helicidad sean fiables:
 (1) $E_{\rm div}/E=$ <<e1>> (umbral $\lesssim$ <<te>>) y $\langle|f_i|\rangle=$ <<f1>> (umbral $\lesssim$ <<tf>>).
 (2) La helicidad relativa, que sólo es independiente del gauge si $\nabla\cdot\mathbf{B}=0$, cambia un <<g1>> entre dos gauges.
-(3) Dejar converger más no lo cambia: con un criterio de parada 100 veces más estricto, $E_{\rm div}/E=$ <<est>> y el error de gauge es del <<gs>>.""",
+(3) Dejar converger más no lo cambia: con un criterio de parada 100 veces más estricto (<<it>> iteraciones), $E_{\rm div}/E=$ <<est>> y el error de gauge es del <<gs>>.""",
                    r"""The functional weights the Lorentz force and the divergence equally ($w_d=1$, the standard form). With it, the HARP 377 solution lies somewhat above the thresholds that \citet{Thalmann2019} recommend for reliable energy and helicity:
 (1) $E_{\rm div}/E=$ <<e1>> (threshold $\lesssim$ <<te>>) and $\langle|f_i|\rangle=$ <<f1>> (threshold $\lesssim$ <<tf>>).
 (2) The relative helicity, which is gauge-independent only if $\nabla\cdot\mathbf{B}=0$, changes by <<g1>> between two gauges.
-(3) Letting it converge further does not change this: with a stopping criterion 100 times stricter, $E_{\rm div}/E=$ <<est>> and the gauge error is <<gs>>.""",
+(3) Letting it converge further does not change this: with a stopping criterion 100 times stricter (<<it>> iterations), $E_{\rm div}/E=$ <<est>> and the gauge error is <<gs>>.""",
                    e1=fx(w1["E_div_frac"], 3), f1=num(w1["fi"], 2), te=fx(th["E_div_frac"], 2), tf=num(th["fi"], 1),
-                   g1=pct(w1["gauge"], 0), est=fx(st.get("E_div_frac", float("nan")), 3), gs=pct(st.get("gauge", float("nan")), 0))
+                   g1=pct(w1["gauge"], 0), est=fx(st.get("E_div_frac", float("nan")), 3), gs=pct(st.get("gauge", float("nan")), 0),
+                   it=f"{st['iterations']:,}".replace(",", r"\,") if st.get("iterations") else "?")
             self.p(r"""Por eso se probó a dar más peso a la divergencia, $w_d|\nabla\cdot\mathbf{B}|^2$ con la fuerza a peso 1, como en \citet{Wiegelmann2012} y \citet{Thalmann2019}. Primero en HARP 377, con todo lo demás igual:""",
                    r"""We therefore tested giving more weight to the divergence, $w_d|\nabla\cdot\mathbf{B}|^2$ with the force at weight 1, as in \citet{Wiegelmann2012} and \citet{Thalmann2019}. First on HARP 377, with everything else unchanged:""")
             self.w(r"\begin{center}\resizebox{\textwidth}{!}{\begin{tabular}{rcccccc}\toprule" "\n")

@@ -42,6 +42,7 @@ The email is only passed to JSOC for the downloads and can be empty if the data 
 | `28_model_as_truth.py` | the published model of each region, cropped, taken as the truth |
 | `29_boundary_sensitivity.py` | unobserved faces taken from the linear force-free field instead of the potential one |
 | `31_external_boxes.py` | the four external families in boxes of other proportions: does the fifth term transfer to unseen geometries? |
+| `09`, `11`, `32` | weight of the divergence term: sweep and a stricter stopping criterion in NOAA 11158, energy and helicity on exact fields, wrong lines on the 108 standard boxes of the suite |
 | `24`, `26`, `27`, `30` | how the fifth term of the model was reached: ensemble indicator, length in box heights, boxes of other proportions, recalibration. They use the model of version 1.1 |
 
 The additional checks are in `examples/revision/`:
