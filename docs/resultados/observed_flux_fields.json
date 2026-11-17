@@ -1,5 +1,5 @@
 {
- "code_version": "1.1.0 (commit f36638b + cambios sin commit)",
+ "code_version": "1.2.1 (commit a1472bf + cambios sin commit)",
  "calibration": "DEFAULT_CALIBRATION (five terms) and CALIBRATION_V1 (four terms, version 1.1), not refitted",
  "alpha_frac": 0.9,
  "noise_models": [
@@ -137,7 +137,7 @@
     0.8615560509869404,
     0.9077642101237063
    ],
-   "ece": 0.10577915012473826,
+   "ece": 0.10577915012473829,
    "mean_predicted_bad": 0.20377932750043729,
    "accepted": 0.6833333333333333,
    "bad_accepted": 0.08780487804878048,
@@ -205,7 +205,7 @@
     0.8493721693932273,
     0.8902004436128989
    ],
-   "ece": 0.22971694468999834,
+   "ece": 0.22971694468999831,
    "mean_predicted_bad": 0.24434527264463812,
    "accepted": 0.5333333333333333,
    "bad_accepted": 0.2,
@@ -273,7 +273,7 @@
     0.7965687891715708,
     0.8674628411444296
    ],
-   "ece": 0.05976412662207386,
+   "ece": 0.059764126622073865,
    "mean_predicted_bad": 0.18353063286434057,
    "accepted": 0.7355555555555555,
    "bad_accepted": 0.10574018126888217,
@@ -350,7 +350,7 @@
     0.8844766781351234
    ],
    "ece": 0.12912894215209958,
-   "mean_predicted_bad": 0.210551744336472,
+   "mean_predicted_bad": 0.21055174433647203,
    "accepted": 0.6507407407407407,
    "bad_accepted": 0.12521343198634036,
    "bad_accepted_by_case": [

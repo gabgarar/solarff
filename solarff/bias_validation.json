@@ -13,7 +13,7 @@
  "obs": 3,
  "mc": 12,
  "size": 40,
- "code_version": "0.1.0 (commit 531a760 + cambios sin commit)",
+ "code_version": "1.2.1 (commit a1472bf + cambios sin commit)",
  "refs": {
   "LL-I": {
    "model_clean": {

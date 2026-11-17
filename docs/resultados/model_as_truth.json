@@ -1,5 +1,5 @@
 {
- "code_version": "1.1.0 (commit f36638b + cambios sin commit)",
+ "code_version": "1.2.1 (commit a1472bf + cambios sin commit)",
  "calibration": "DEFAULT_CALIBRATION (five terms) and CALIBRATION_V1 (four terms, version 1.1), not refitted",
  "c0": 0.48977980132387594,
  "margin": 0.1,
@@ -177,7 +177,7 @@
       "n_lines": 300,
       "bad_rate": 0.26666666666666666,
       "auc": 0.7707386363636364,
-      "ece": 0.06540875485552264,
+      "ece": 0.06540875485552262,
       "accepted": 0.5033333333333333,
       "bad_accepted": 0.11258278145695365,
       "bad_accepted_ci": [
@@ -291,7 +291,7 @@
     "n_lines": 900,
     "bad_rate": 0.23222222222222222,
     "auc": 0.7884211911175122,
-    "ece": 0.05712579236571139,
+    "ece": 0.05712579236571138,
     "accepted": 0.5088888888888888,
     "bad_accepted": 0.07423580786026202,
     "bad_accepted_ci": [
@@ -629,7 +629,7 @@
       "n_lines": 300,
       "bad_rate": 0.36,
       "auc": 0.81640625,
-      "ece": 0.07930481056336829,
+      "ece": 0.07930481056336826,
       "accepted": 0.4633333333333333,
       "bad_accepted": 0.12949640287769784,
       "bad_accepted_ci": [

@@ -1,5 +1,5 @@
 {
- "code_version": "1.1.0 (commit f36638b + cambios sin commit)",
+ "code_version": "1.2.1 (commit a1472bf + cambios sin commit)",
  "calibration": "DEFAULT_CALIBRATION (five terms) and CALIBRATION_V1 (four terms, version 1.1), not refitted",
  "c0": 0.48977980132387594,
  "margin": 0.1,
@@ -347,7 +347,7 @@
       "n_lines": 300,
       "bad_rate": 0.23666666666666666,
       "auc": 0.7796912479242266,
-      "ece": 0.05305157672433914,
+      "ece": 0.05305157672433913,
       "accepted": 0.5166666666666667,
       "bad_accepted": 0.0967741935483871,
       "bad_accepted_ci": [

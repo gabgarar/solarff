@@ -1,5 +1,5 @@
 {
- "code_version": "1.1.0 (commit f36638b + cambios sin commit)",
+ "code_version": "1.2.1 (commit a1472bf + cambios sin commit)",
  "calibration": "DEFAULT_CALIBRATION (five terms) and CALIBRATION_V1 (four terms, version 1.1), not refitted",
  "c0": 0.48977980132387594,
  "regions": {
@@ -15,7 +15,7 @@
    "frac_reliable": 0.48672566371681414,
    "frac_reliable_v1": 0.6305309734513275,
    "frac_reliable_height": 0.2013274336283186,
-   "seconds": 152.51430678367615,
+   "seconds": 98.43554782867432,
    "control": {
     "n_valid": 452,
     "moved_10": {
@@ -183,7 +183,7 @@
    "frac_reliable": 0.45098039215686275,
    "frac_reliable_v1": 0.5187165775401069,
    "frac_reliable_height": 0.31907308377896615,
-   "seconds": 342.58009338378906,
+   "seconds": 312.51697754859924,
    "control": {
     "n_valid": 561,
     "moved_10": {
@@ -351,7 +351,7 @@
    "frac_reliable": 0.36231884057971014,
    "frac_reliable_v1": 0.37777777777777777,
    "frac_reliable_height": 0.26763285024154587,
-   "seconds": 414.562949180603,
+   "seconds": 393.7937774658203,
    "control": {
     "n_valid": 1035,
     "moved_10": {

@@ -1,5 +1,5 @@
 {
- "code_version": "1.1.0 (commit f36638b + cambios sin commit)",
+ "code_version": "1.2.1 (commit a1472bf + cambios sin commit)",
  "calibration": "DEFAULT_CALIBRATION (five terms) and CALIBRATION_V1 (four terms, version 1.1), not refitted",
  "noise_models": [
   "uniforme-10G",
@@ -54,7 +54,7 @@
     "E_J": 3.631272661175533e+32,
     "converged": true,
     "message": "convergido: dL/L por iteracion = 8.12e-07",
-    "seconds_nlfff": 128.31407403945923
+    "seconds_nlfff": 128.56069564819336
    },
    "double": {
     "grid": [
@@ -72,7 +72,7 @@
     "E_J": 3.336725297577313e+32,
     "converged": true,
     "message": "convergido: dL/L por iteracion = 9.76e-07",
-    "seconds_nlfff": 2302.045471429825
+    "seconds_nlfff": 2268.9714901447296
    },
    "n_seeds": 561,
    "n_valid": 561,
@@ -165,7 +165,7 @@
     "E_J": 1.6576696094645973e+33,
     "converged": true,
     "message": "convergido: dL/L por iteracion = 4.86e-07",
-    "seconds_nlfff": 41.9395797252655
+    "seconds_nlfff": 47.13663125038147
    },
    "double": {
     "grid": [
@@ -183,7 +183,7 @@
     "E_J": 1.6879682970286985e+33,
     "converged": true,
     "message": "convergido: dL/L por iteracion = 7.74e-07",
-    "seconds_nlfff": 469.18440413475037
+    "seconds_nlfff": 426.6690125465393
    },
    "n_seeds": 452,
    "n_valid": 452,
@@ -276,7 +276,7 @@
     "E_J": 1.319148330851038e+33,
     "converged": true,
     "message": "convergido: dL/L por iteracion = 8.89e-07",
-    "seconds_nlfff": 211.3933401107788
+    "seconds_nlfff": 210.55240678787231
    },
    "double": {
     "grid": [
@@ -294,7 +294,7 @@
     "E_J": 1.0430802471725252e+33,
     "converged": true,
     "message": "convergido: dL/L por iteracion = 9.15e-07",
-    "seconds_nlfff": 3340.8299210071564
+    "seconds_nlfff": 3348.350569009781
    },
    "n_seeds": 1035,
    "n_valid": 1033,
@@ -389,7 +389,7 @@
     "E_J": 3.631272661175533e+32,
     "converged": true,
     "message": "convergido: dL/L por iteracion = 8.12e-07",
-    "seconds_nlfff": 128.31407403945923
+    "seconds_nlfff": 128.56069564819336
    },
    "double": {
     "grid": [
@@ -407,7 +407,7 @@
     "E_J": 4.12644552118521e+32,
     "converged": true,
     "message": "convergido: dL/L por iteracion = 4.38e-07",
-    "seconds_nlfff": 27.541406869888306
+    "seconds_nlfff": 11.071678638458252
    },
    "n_seeds": 561,
    "n_valid": 561,
@@ -500,7 +500,7 @@
     "E_J": 1.6576696094645973e+33,
     "converged": true,
     "message": "convergido: dL/L por iteracion = 4.86e-07",
-    "seconds_nlfff": 41.9395797252655
+    "seconds_nlfff": 47.13663125038147
    },
    "double": {
     "grid": [
@@ -518,7 +518,7 @@
     "E_J": 1.5931509997810768e+33,
     "converged": true,
     "message": "convergido: dL/L por iteracion = 3.02e-07",
-    "seconds_nlfff": 17.768879413604736
+    "seconds_nlfff": 6.765847444534302
    },
    "n_seeds": 452,
    "n_valid": 452,
@@ -611,7 +611,7 @@
     "E_J": 1.319148330851038e+33,
     "converged": true,
     "message": "convergido: dL/L por iteracion = 8.89e-07",
-    "seconds_nlfff": 211.3933401107788
+    "seconds_nlfff": 210.55240678787231
    },
    "double": {
     "grid": [
@@ -629,7 +629,7 @@
     "E_J": 1.558158322905331e+33,
     "converged": true,
     "message": "convergido: dL/L por iteracion = 3.14e-07",
-    "seconds_nlfff": 69.23730850219727
+    "seconds_nlfff": 33.43997001647949
    },
    "n_seeds": 1035,
    "n_valid": 1032,
@@ -724,7 +724,7 @@
     "E_J": 3.631272661175533e+32,
     "converged": true,
     "message": "convergido: dL/L por iteracion = 8.12e-07",
-    "seconds_nlfff": 128.31407403945923
+    "seconds_nlfff": 128.56069564819336
    },
    "double": {
     "grid": [
@@ -742,7 +742,7 @@
     "E_J": 3.25770349578785e+32,
     "converged": true,
     "message": "convergido: dL/L por iteracion = 9.96e-07",
-    "seconds_nlfff": 6575.591203927994
+    "seconds_nlfff": 6692.1838710308075
    },
    "n_seeds": 561,
    "n_valid": 561,
@@ -837,7 +837,7 @@
     "E_J": 3.631272661175533e+32,
     "converged": true,
     "message": "convergido: dL/L por iteracion = 8.12e-07",
-    "seconds_nlfff": 128.31407403945923
+    "seconds_nlfff": 128.56069564819336
    },
    "double": {
     "grid": [
@@ -855,7 +855,7 @@
     "E_J": 3.336725297577313e+32,
     "converged": true,
     "message": "convergido: dL/L por iteracion = 9.76e-07",
-    "seconds_nlfff": 2302.045471429825
+    "seconds_nlfff": 2268.9714901447296
    },
    "n_seeds": 561,
    "n_valid": 561,
@@ -948,7 +948,7 @@
     "E_J": 1.6576696094645973e+33,
     "converged": true,
     "message": "convergido: dL/L por iteracion = 4.86e-07",
-    "seconds_nlfff": 41.9395797252655
+    "seconds_nlfff": 47.13663125038147
    },
    "double": {
     "grid": [
@@ -966,7 +966,7 @@
     "E_J": 1.6879682970286985e+33,
     "converged": true,
     "message": "convergido: dL/L por iteracion = 7.74e-07",
-    "seconds_nlfff": 469.18440413475037
+    "seconds_nlfff": 426.6690125465393
    },
    "n_seeds": 452,
    "n_valid": 452,
@@ -1059,7 +1059,7 @@
     "E_J": 1.319148330851038e+33,
     "converged": true,
     "message": "convergido: dL/L por iteracion = 8.89e-07",
-    "seconds_nlfff": 211.3933401107788
+    "seconds_nlfff": 210.55240678787231
    },
    "double": {
     "grid": [
@@ -1077,7 +1077,7 @@
     "E_J": 1.0430802471725252e+33,
     "converged": true,
     "message": "convergido: dL/L por iteracion = 9.15e-07",
-    "seconds_nlfff": 3340.8299210071564
+    "seconds_nlfff": 3348.350569009781
    },
    "n_seeds": 1035,
    "n_valid": 1033,
@@ -1172,7 +1172,7 @@
     "E_J": 3.631272661175533e+32,
     "converged": true,
     "message": "convergido: dL/L por iteracion = 8.12e-07",
-    "seconds_nlfff": 128.31407403945923
+    "seconds_nlfff": 128.56069564819336
    },
    "double": {
     "grid": [
@@ -1190,7 +1190,7 @@
     "E_J": 4.12644552118521e+32,
     "converged": true,
     "message": "convergido: dL/L por iteracion = 4.38e-07",
-    "seconds_nlfff": 27.541406869888306
+    "seconds_nlfff": 11.071678638458252
    },
    "n_seeds": 561,
    "n_valid": 561,
@@ -1283,7 +1283,7 @@
     "E_J": 1.6576696094645973e+33,
     "converged": true,
     "message": "convergido: dL/L por iteracion = 4.86e-07",
-    "seconds_nlfff": 41.9395797252655
+    "seconds_nlfff": 47.13663125038147
    },
    "double": {
     "grid": [
@@ -1301,7 +1301,7 @@
     "E_J": 1.5931509997810768e+33,
     "converged": true,
     "message": "convergido: dL/L por iteracion = 3.02e-07",
-    "seconds_nlfff": 17.768879413604736
+    "seconds_nlfff": 6.765847444534302
    },
    "n_seeds": 452,
    "n_valid": 452,
@@ -1394,7 +1394,7 @@
     "E_J": 1.319148330851038e+33,
     "converged": true,
     "message": "convergido: dL/L por iteracion = 8.89e-07",
-    "seconds_nlfff": 211.3933401107788
+    "seconds_nlfff": 210.55240678787231
    },
    "double": {
     "grid": [
@@ -1412,7 +1412,7 @@
     "E_J": 1.558158322905331e+33,
     "converged": true,
     "message": "convergido: dL/L por iteracion = 3.14e-07",
-    "seconds_nlfff": 69.23730850219727
+    "seconds_nlfff": 33.43997001647949
    },
    "n_seeds": 1035,
    "n_valid": 1032,
@@ -1507,7 +1507,7 @@
     "E_J": 3.631272661175533e+32,
     "converged": true,
     "message": "convergido: dL/L por iteracion = 8.12e-07",
-    "seconds_nlfff": 128.31407403945923
+    "seconds_nlfff": 128.56069564819336
    },
    "double": {
     "grid": [
@@ -1525,7 +1525,7 @@
     "E_J": 3.25770349578785e+32,
     "converged": true,
     "message": "convergido: dL/L por iteracion = 9.96e-07",
-    "seconds_nlfff": 6575.591203927994
+    "seconds_nlfff": 6692.1838710308075
    },
    "n_seeds": 561,
    "n_valid": 561,

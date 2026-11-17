@@ -234,3 +234,6 @@ docs/paper/*.nuevo.pdf
 
 # resultados antiguos apartados durante un recálculo completo (se borran tras compararlos)
 old/
+
+# Figures that examples/revision/r2_stats.py writes next to its results; no document uses them
+docs/revision/resultados/r2_*.png
