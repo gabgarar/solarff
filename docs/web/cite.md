@@ -5,8 +5,8 @@ associated paper.
 
 ## Software
 
-> García, G. (2026). *solarff: NLFFF extrapolations with a calibrated per-line confidence* (v1.2.1).
-> Zenodo. <https://doi.org/10.5281/zenodo.24264637>
+> García, G. (2026). *solarff: NLFFF extrapolations with a calibrated per-line confidence* (v1.2.2).
+> Zenodo. <https://doi.org/10.5281/zenodo.24298450>
 
 The DOI [10.5281/zenodo.24133574](https://doi.org/10.5281/zenodo.24133574) always resolves to the latest version. The source is at
 <https://github.com/gabgarar/solarff>.
