@@ -666,12 +666,15 @@ def fig_calibration_cv(S, lang, path):
 
 
 @P._styled
-def fig_aia_steps(S, plot, lang, path, word=("fiables", "reliable")):
+def fig_aia_steps(S, plot, lang, path, word=("fiables", "reliable"), compact=False):
     """The processing of the AIA comparison, step by step, on the 171 Å image.
 
     ``word`` is how the lines with confidence above the threshold are called in the title of panel 2,
-    in Spanish and in English.
+    in Spanish and in English. ``compact`` draws the figure for a journal page 17 cm wide: close to that
+    width, on white, and with short titles, since the caption explains each step. Returns the size in
+    points of the smallest text of the figure.
     """
+    from matplotlib.text import Text
     from ..aia import ridge_orientation
     W = plot["wavelengths"]
     w0 = 171 if 171 in W else sorted(W)[0]
@@ -717,25 +720,35 @@ def fig_aia_steps(S, plot, lang, path, word=("fiables", "reliable")):
     zx0 = int(np.clip(cx - zw / 2, 0, Wd - zw)); zx1 = int(zx0 + zw)
     zy0 = int(np.clip(cy - zh / 2, 0, H - zh)); zy1 = int(zy0 + zh)
 
-    fig, axs = plt.subplots(2, 3, figsize=(13, 6.4), layout="constrained")
+    ts, small = (9.5, 8) if compact else (10, 7)          # titles; colour bar of panel 5
+    fig, axs = plt.subplots(2, 3, figsize=(8.5, 3.85) if compact else (13, 6.4), layout="constrained")
+    if compact:
+        fig.set_facecolor("white")
+        for a in axs.flat:
+            a.set_facecolor("white")
+
+    def title(a, long, short):
+        a.set_title(_L(lang, *(short if compact else long)), fontsize=ts)
+
     ext = (0, img.shape[1], 0, img.shape[0])
     a = axs[0, 0]
     a.imshow(logimg, origin="lower", cmap="gray", extent=ext)
-    a.set_title(_L(lang, f"1. Imagen AIA {w0} Å (log)", f"1. AIA {w0} Å image (log)"), fontsize=10)
+    title(a, (f"1. Imagen AIA {w0} Å (log)", f"1. AIA {w0} Å image (log)"), (f"1. AIA {w0} Å", f"1. AIA {w0} Å"))
     a = axs[0, 1]
     a.imshow(logimg, origin="lower", cmap="gray", extent=ext)
     for p, r in zip(d["pix"], rel):
         a.plot(p[:, 0], p[:, 1], lw=0.5, color="#2a6fdb" if r else "#e8833a", alpha=0.8 if r else 0.6)
-    a.set_title(_L(lang, f"2. Líneas NLFFF proyectadas (azul: {word[0]})", f"2. Projected NLFFF lines (blue: {word[1]})"), fontsize=10)
+    title(a, (f"2. Líneas NLFFF proyectadas (azul: {word[0]})", f"2. Projected NLFFF lines (blue: {word[1]})"),
+          ("2. Líneas NLFFF", "2. NLFFF lines"))
     a = axs[0, 2]
     a.imshow(np.log10(st + 1e-3), origin="lower", cmap="magma", extent=ext)
-    a.set_title(_L(lang, "3. Fuerza de cresta (hessiana)", "3. Ridge strength (Hessian)"), fontsize=10)
+    title(a, ("3. Fuerza de cresta (hessiana)", "3. Ridge strength (Hessian)"), ("3. Fuerza de cresta", "3. Ridge strength"))
     a = axs[1, 0]
     a.imshow(logimg, origin="lower", cmap="gray", extent=ext)
     a.imshow(np.ma.masked_where(st < thr, np.ones_like(st)), origin="lower", cmap="autumn", alpha=0.55, extent=ext)
     a.add_patch(plt.Rectangle((zx0, zy0), zx1 - zx0, zy1 - zy0, fill=False, color="cyan", lw=1.2))
-    a.set_title(_L(lang, f"4. Crestas claras (el {100 - pct:.0f} % más intenso)",
-                   f"4. Clear ridges (strongest {100 - pct:.0f}%)"), fontsize=10)
+    title(a, (f"4. Crestas claras (el {100 - pct:.0f} % más intenso)", f"4. Clear ridges (strongest {100 - pct:.0f}%)"),
+          ("4. Crestas claras", "4. Clear ridges"))
     a = axs[1, 1]
     a.imshow(logimg, origin="lower", cmap="gray", extent=ext)
     yy, xx = np.mgrid[zy0:zy1:4, zx0:zx1:4]
@@ -751,9 +764,13 @@ def fig_aia_steps(S, plot, lang, path, word=("fiables", "reliable")):
     a.add_patch(plt.Rectangle((0.02, 0.02), 0.5, 0.25, transform=a.transAxes, fc="white", ec="none", alpha=0.85, zorder=4))
     cax = a.inset_axes([0.05, 0.17, 0.44, 0.05])
     cb = fig.colorbar(sc_, cax=cax, orientation="horizontal")
-    cb.set_label(_L(lang, "ángulo local [°]", "local angle [°]"), fontsize=7, color="#333333")
-    cb.ax.tick_params(labelsize=7, colors="#333333")
-    a.set_title(_L(lang, "5. Dirección de los bucles (amarillo) y ángulo local", "5. Loop direction (yellow) and local angle"), fontsize=10)
+    if compact:
+        cb.ax.xaxis.set_major_formatter("{x:.0f}°")
+    else:
+        cb.set_label(_L(lang, "ángulo local [°]", "local angle [°]"), fontsize=small, color="#333333")
+    cb.ax.tick_params(labelsize=small, colors="#333333")
+    title(a, ("5. Dirección de los bucles (amarillo) y ángulo local", "5. Loop direction (yellow) and local angle"),
+          ("5. Ángulo local", "5. Local angle"))
     a = axs[1, 2]
     a.hist(dd[good], bins=np.linspace(0, 90, 19), color="#2a6fdb", alpha=0.8)
     a.axvline(np.median(dd[good]) if good.any() else np.nan, color="k", lw=1.5)
@@ -761,12 +778,21 @@ def fig_aia_steps(S, plot, lang, path, word=("fiables", "reliable")):
     a.set_xlabel(_L(lang, "ángulo local [°]", "local angle [°]"))
     a.set_ylabel(_L(lang, "puntos", "points"))
     a.set_box_aspect(img.shape[0] / img.shape[1])
-    a.set_title(_L(lang, f"6. Mediana = ángulo de la línea ({np.median(dd[good]):.0f}°)",
-                   f"6. Median = line angle ({np.median(dd[good]):.0f}°)") if good.any() else "6.", fontsize=10)
+    if good.any():
+        title(a, (f"6. Mediana = ángulo de la línea ({np.median(dd[good]):.0f}°)", f"6. Median = line angle ({np.median(dd[good]):.0f}°)"),
+              (f"6. Mediana: {np.median(dd[good]):.0f}°", f"6. Median: {np.median(dd[good]):.0f}°"))
+    else:
+        a.set_title("6.", fontsize=ts)
     for a in axs.flat[:5]:
         a.set_xticks([]); a.set_yticks([])
-    fig.savefig(path, dpi=150)
+    if compact:
+        fig.savefig(path, dpi=300, facecolor="white")
+    else:
+        fig.savefig(path, dpi=150)
+    # read after drawing: the tick labels exist only then
+    smallest = min(t.get_fontsize() for t in fig.findobj(Text) if t.get_visible() and t.get_text().strip())
     plt.close(fig)
+    return smallest
 
 
 def fig_aia(S, plot, lang, path):
