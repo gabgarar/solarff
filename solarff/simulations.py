@@ -44,14 +44,14 @@ def cube_path(sim: str, var: str, snap: int, raw: str, code: str | None = None, 
     return path
 
 
-def _planes(z: np.ndarray, step: float):
-    """Planes and weights that give the heights z0, z0 + step, ... above the plane closest to z = 0.
+def _planes(z: np.ndarray, step: float, z0: float = 0.0):
+    """Planes and weights that give the heights zb, zb + step, ... above the plane closest to z = ``z0``.
 
     Returns ``k0``, the heights and, for each one, ``(i, w)``: the field there is ``(1 - w) plane[i] + w plane[i + 1]``.
     """
     z = np.asarray(z, dtype=float)
     assert np.all(np.diff(z) > 0), "the heights of the planes must increase"
-    k0 = int(np.argmin(np.abs(z)))
+    k0 = int(np.argmin(np.abs(z - z0)))
     heights = z[k0] + step * np.arange(int(np.floor((z[-1] - z[k0]) / step + 1e-6)) + 1)
     out = []
     for hgt in heights:
@@ -65,13 +65,17 @@ def _planes(z: np.ndarray, step: float):
     return k0, heights, out
 
 
-def reduced_field(sim: str, snap: int, r: int, raw: str, code: str | None = None, download: bool = True) -> VectorField3D:
+def reduced_field(sim: str, snap: int, r: int, raw: str, code: str | None = None, download: bool = True,
+                  z0: float = 0.0) -> VectorField3D:
     """Magnetic field of a snapshot above the photosphere, on cubic cells of ``r`` pixels of the simulation (G, Mm).
 
     Horizontally the field is averaged in blocks of ``r`` x ``r`` pixels, as a magnetogram is rebinned. In height it
     is taken at the plane closest to z = 0, the photosphere of these runs, and at every cell size above it, with a
     linear interpolation between planes when the vertical grid of the run does not contain those heights. The base
     of the field is therefore the photospheric plane itself and not an average with higher layers.
+
+    ``z0``: height of the base in Mm, 0 by default. With a positive value the base is the plane closest to that
+    height, in the chromosphere for 1 to 2 Mm, where the field is closer to force-free than at the photosphere.
 
     ``meta`` keeps the time of the snapshot (``elapsed_s``) and the plane of the photosphere (``k0``).
     """
@@ -85,7 +89,7 @@ def reduced_field(sim: str, snap: int, r: int, raw: str, code: str | None = None
             assert hd["BUNIT"] is True or str(hd["BUNIT"]).strip() == "T", "the field is expected in tesla"
             assert abs(hd["CDELT1"] - hd["CDELT2"]) < 1e-6, "the pixels are expected square"
             step = float(hd["CDELT1"]) * r
-            k0, heights, planes = _planes(z, step)
+            k0, heights, planes = _planes(z, step, z0)
             data = h[0].data                                    # (z, y, x)
             ny, nx = data.shape[1] - data.shape[1] % r, data.shape[2] - data.shape[2] % r
             out = np.empty((len(planes), ny // r, nx // r), dtype=np.float32)

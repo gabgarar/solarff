@@ -39,6 +39,14 @@ def test_reduced_field_block_mean_and_heights(tmp_path):
     assert f.meta["k0"] == 2 and f.meta["elapsed_s"] == 10.0
 
 
+def test_reduced_field_with_the_base_above_the_photosphere(tmp_path):
+    z = -0.2 + 0.1 * np.arange(12)                      # z = 0.4 at plane 6
+    write_cubes(tmp_path, z)
+    f = reduced_field("test", 1, 2, str(tmp_path), code="CODE", download=False, z0=0.42)
+    assert f.shape == (4, 2, 3) and f.meta["k0"] == 6 and f.origin[2] == pytest.approx(0.4, abs=1e-6)       # heights 0.4, 0.6, 0.8
+    assert np.allclose(f.bz[:, :, 0], 1.4, atol=1e-4) and np.allclose(f.bz[:, :, 2], 1.8, atol=1e-4)
+
+
 def test_reduced_field_accepts_the_unit_written_as_a_logical_value(tmp_path):
     """The Bifrost cubes write BUNIT = T without quotes, which is read as the logical value true."""
     write_cubes(tmp_path, -0.2 + 0.1 * np.arange(12), unit=True)
