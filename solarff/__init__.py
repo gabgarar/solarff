@@ -55,7 +55,7 @@ from .montecarlo import monte_carlo
 from .helicity import (volume_potential, energy_decomposition, relative_helicity,
                        helicity_report, poisson_neumann)
 from .confidence import (assess_lines, confidence_map, reliable_volume, line_indicators,
-                         line_errors, calibrate)
+                         line_errors, calibrate, potential_departure, rank_lines)
 from .report import generate_report
 
 __version__ = "1.2.2"
@@ -78,4 +78,5 @@ __all__ = [
     "decay_index", "decay_index_profile", "pil_mask", "run_validation", "monte_carlo", "keep_awake",
     "volume_potential", "energy_decomposition", "relative_helicity", "helicity_report", "poisson_neumann",
     "assess_lines", "confidence_map", "reliable_volume", "line_indicators", "line_errors", "calibrate",
+    "potential_departure", "rank_lines",
 ]

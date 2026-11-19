@@ -15,6 +15,7 @@ solution, flag whether that part of the model can be trusted:
 | ``apex`` | maximum height of the line / height of the box (high lines depend more on the unobserved top) |
 | ``length`` | length of the line / horizontal diagonal of the box |
 | ``length_h`` | length of the line / height of the box (a line that is long compared with the height depends on the unobserved top, whatever the horizontal size of the box) |
+| ``departure`` | distance between the line and the potential-field line traced from the same seed, relative to the length of the latter. Not part of the default confidence: see ``potential_departure`` and ``rank_lines`` |
 
 The indicators are combined into a **confidence** ∈ [0, 1] (1 − probability
 that the line is wrong) by a logistic regression calibrated with exact
@@ -23,6 +24,11 @@ known. The default calibration (``DEFAULT_CALIBRATION``) was fitted
 with the diverse suite of ``solarff.calibration`` (6 field families,
 3 noise models, 3 resolutions and boxes of four proportions) and validated
 leaving out each family.
+
+Against radiative MHD simulations, whose photosphere is not force-free, that confidence does not tell the wrong
+lines apart (``examples/33_mhd_truth.py``). What does rank them there, in three simulations made with two codes,
+is the indicator ``departure``. ``rank_lines`` orders the lines of a model with a calibration fitted on those
+simulations (``CALIBRATION_MHD``). It is experimental and gives an order, not a probability.
 
 Limitation: these are *necessary* conditions, not sufficient ones. A line can be
 perfectly force-free and still be wrong if the data at its footpoint are
@@ -203,6 +209,8 @@ def _design(ind: dict, feats=ALL_FEATURES):
             x = np.log10(np.maximum(x, 1e-4))
         elif k == "foot_snr":
             x = np.log10(np.maximum(x, 1e-2))
+        elif k == "departure":
+            x = np.log10(np.maximum(x, 1e-3))
         cols.append(x)
     return np.column_stack(cols)
 
@@ -562,6 +570,25 @@ DEFAULT_CALIBRATION_MC_GR: dict = {}
 CALIBRATION_METRICS_MC_GR: dict = {}
 
 
+# Ranking fitted on radiative MHD simulations (examples/35_realistic_truths.py and 36_mixed_model.py): the five
+# terms of the default calibration and the departure from the potential line, on 36 extrapolations of three public
+# simulations (MURaM active region ar098192; Bifrost qs024048_by3363 and en024048_hion), each simulation with the
+# same weight. It has no threshold: the fraction of wrong lines it predicts does not carry over from one
+# simulation to another, only the order does. It is not selected by default.
+CALIBRATION_MHD = {'intercept': 2.205368285866325, 'coef': [0.273176494216878, 0.37777851615003877, 0.31844252408292295, 0.1304613523783045, 0.10330539995767032, 1.0705822116936503], 'mu': [-0.12751088745187458, 0.1770537987509959, -0.5032173791619737, 0.20163225583935565, -0.11517583020852559, -0.3848336515574959], 'sd': [0.5035979701113831, 0.2635999444165264, 0.4475257474654797, 0.33668666905556555, 0.44538137396959, 0.4986385703506085], 'features': ['alpha_spread', 'buffer', 'length', 'length_sq', 'length_h', 'departure'], 'bad_threshold': 0.1, 'noise': 'varios', 'threshold': None, 'kind': 'ranking'}
+CALIBRATION_METRICS_MHD = {
+    "n_lines": 10696, "n_cases": 36, "simulations": ["ar098192", "qs024048_by3363", "en024048_hion"],
+    # each simulation ranked by a fit with the other two (wrong line: shape error above 10 % or 20 % of its length)
+    "auc_left_out_10": {"ar098192": 0.717, "qs024048_by3363": 0.851, "en024048_hion": 0.904},
+    "auc_left_out_20": {"ar098192": 0.791, "qs024048_by3363": 0.867, "en024048_hion": 0.870},
+    "bad_rate_10": {"ar098192": 0.616, "qs024048_by3363": 0.930, "en024048_hion": 0.975},
+    "bad_rate_20": {"ar098192": 0.336, "qs024048_by3363": 0.809, "en024048_hion": 0.877},
+    # wrong lines in the best-ranked 36 % of the active region, ranked by a fit with the two quiet-Sun runs
+    "bad_best_36_active_region": {"10": 0.430, "20": 0.114},
+    "note": "one simulated active region only; the level of the error does not carry over between simulations",
+}
+
+
 def select_calibration(extras: tuple = ()) -> dict:
     """Calibration suited to the additional indicators available."""
     has_mc = "mc_instability" in extras
@@ -593,6 +620,7 @@ def calibration_metrics(cal: dict) -> dict:
     """Metrics of the calibration ``cal`` (for the report)."""
     for c, m in ((DEFAULT_CALIBRATION_MC_GR, CALIBRATION_METRICS_MC_GR), (DEFAULT_CALIBRATION_GR, CALIBRATION_METRICS_GR),
                  (DEFAULT_CALIBRATION_MC, CALIBRATION_METRICS_MC), (CALIBRATION_V1, CALIBRATION_METRICS_V1),
+                 (CALIBRATION_MHD, CALIBRATION_METRICS_MHD),
                  (DEFAULT_CALIBRATION, CALIBRATION_METRICS)):
         if c and c is cal:
             return m
@@ -612,6 +640,8 @@ def assess_lines(field: VectorField3D, lines: list[FieldLine], mag: Magnetogram 
     if calibration is None:
         calibration = select_calibration(tuple(sorted(extra)) if extra else ())
     cal = calibration
+    if cal.get("kind") == "ranking":
+        raise ValueError("this calibration gives an order of the lines, not a confidence: use rank_lines")
     ind = line_indicators(field, lines, mag=mag, noise_bt=noise_bt)
     if extra:
         ind.update({k: np.asarray(v, float) for k, v in extra.items()})
@@ -620,6 +650,57 @@ def assess_lines(field: VectorField3D, lines: list[FieldLine], mag: Magnetogram 
             "reliable": np.nan_to_num(conf, nan=0.0) >= cal["threshold"],
             "threshold": cal["threshold"],
             "calibration": "+".join(["base"] + [x for x in ("mc_instability", "method_disagreement") if x in cal["features"]])}
+
+
+def potential_departure(field: VectorField3D, lines: list[FieldLine], mag: Magnetogram) -> np.ndarray:
+    """Departure of each line from the potential-field line traced from the same seed (indicator ``departure``).
+
+    It is the mean distance between the two lines, sampled at the same fractions of their length, divided by the
+    length of the potential line. A line that is closed in one field and open in the other counts as 0.5 at least.
+    It needs no reference solution, so it can be computed in a real region.
+
+    ``mag``: the magnetogram used as boundary condition of ``field`` (the preprocessed one if there was one). The
+    potential field is computed from its vertical component, on the grid of ``field``.
+
+    Against radiative MHD simulations the lines that depart more from the potential line are wrong more often:
+    on its own this indicator ranks the wrong lines with an AUC of 0.69, 0.82 and 0.95 in the three simulations
+    of ``CALIBRATION_METRICS_MHD``. In exact force-free fields it adds nothing to the default confidence.
+    """
+    from .potential import potential_field
+    from .tracing import trace_field_lines
+    if not len(lines):
+        return np.zeros(0)
+    ref = trace_field_lines(potential_field(mag, field.shape[2]), np.array([l.seed for l in lines], dtype=float))
+    d = line_errors(lines, ref)
+    return np.where(d["topology"] > 0, np.maximum(np.nan_to_num(d["shape"], nan=0.5), 0.5), d["shape"])
+
+
+def rank_lines(field: VectorField3D, lines: list[FieldLine], mag: Magnetogram, noise_bt: float = 100.0,
+               calibration: dict | None = None) -> dict:
+    """Order of the lines of a model, from the most to the least reliable (experimental).
+
+    It uses ``CALIBRATION_MHD``, fitted on radiative MHD simulations, where the photosphere is not force-free,
+    instead of the exact force-free fields of the default confidence. What was tested is the order: each
+    simulation was ranked by a fit that had not seen it (``CALIBRATION_METRICS_MHD``). The fraction of wrong
+    lines was not predicted well, so this function returns no probability and accepts no line.
+
+    Returns ``score`` (higher: more likely wrong), ``percentile`` (0 for the most reliable line of this model, 1 for
+    the least; NaN where the indicators could not be computed), ``order`` (indices of the lines from the most to
+    the least reliable, those without a score last) and ``indicators`` (with ``departure``).
+    """
+    cal = calibration or CALIBRATION_MHD
+    ind = line_indicators(field, lines, mag=mag, noise_bt=noise_bt)
+    ind["departure"] = potential_departure(field, lines, mag)
+    X = _design(ind, cal["features"])
+    score = (X - np.array(cal["mu"])) / np.array(cal["sd"]) @ np.array(cal["coef"]) + cal["intercept"]
+    ok = np.isfinite(score)
+    order = np.argsort(np.where(ok, score, np.inf), kind="stable")
+    pct = np.full(len(score), np.nan)
+    if ok.sum() > 1:
+        pct[order[:ok.sum()]] = np.arange(ok.sum()) / (ok.sum() - 1)
+    elif ok.sum() == 1:
+        pct[ok] = 0.0
+    return {"score": score, "percentile": pct, "order": order, "indicators": ind}
 
 
 def confidence_map(field: VectorField3D, mag: Magnetogram | None = None, step: int = 1,

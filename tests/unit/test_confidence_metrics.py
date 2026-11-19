@@ -1,8 +1,41 @@
 """Performance metrics, design of the confidence model, uncertainty budget and citations."""
 import numpy as np
+import pytest
 
+import solarff as sff
 from solarff.calibration import bootstrap_ci, brier, ece
 from solarff.confidence import auc
+
+
+def test_potential_departure_is_zero_for_the_potential_field_and_grows_with_the_currents(lowlou):
+    """The departure from the potential line: nothing when the model is the potential field itself, and more with currents."""
+    mag, exact = lowlou
+    pot = sff.potential_field(mag, nz=20)
+    seeds = sff.seeds_from_magnetogram(mag, n=40, method="random", polarity="both", threshold=0.05, rng=1)
+    d0 = sff.potential_departure(pot, sff.trace_field_lines(pot, seeds), mag)
+    d1 = sff.potential_departure(exact, sff.trace_field_lines(exact, seeds), mag)
+    assert d0.shape == (len(seeds),) and np.nanmax(d0) < 1e-9
+    assert np.nanmedian(d1) > 0.02 and np.nanmin(d1) >= 0
+    assert sff.potential_departure(pot, [], mag).shape == (0,)
+
+
+def test_rank_lines_orders_the_lines_and_gives_no_confidence(lowlou):
+    """The ranking fitted on MHD simulations: an order from the most to the least reliable line, without a threshold."""
+    from solarff.confidence import CALIBRATION_MHD, CALIBRATION_METRICS_MHD, calibration_metrics
+    mag, exact = lowlou
+    lines = sff.trace_field_lines(exact, sff.seeds_from_magnetogram(mag, n=40, method="random", polarity="both", threshold=0.05, rng=1))
+    r = sff.rank_lines(exact, lines, mag)
+    n, ok = len(lines), np.isfinite(r["score"])
+    assert r["score"].shape == (n,) and sorted(r["order"].tolist()) == list(range(n)) and ok.sum() > n // 2
+    assert np.all(np.diff(r["score"][r["order"][:ok.sum()]]) >= 0)             # from the most to the least reliable
+    assert np.nanmin(r["percentile"]) == 0 and np.nanmax(r["percentile"]) == 1 and np.isnan(r["percentile"][~ok]).all()
+    assert np.allclose(r["indicators"]["departure"], sff.potential_departure(exact, lines, mag), equal_nan=True)
+    # the departure is the heaviest term, and a line that departs more gets a worse place
+    k = CALIBRATION_MHD["features"].index("departure")
+    assert int(np.argmax(np.abs(CALIBRATION_MHD["coef"]))) == k and CALIBRATION_MHD["coef"][k] > 0
+    assert CALIBRATION_MHD["threshold"] is None and calibration_metrics(CALIBRATION_MHD) is CALIBRATION_METRICS_MHD
+    with pytest.raises(ValueError, match="rank_lines"):
+        sff.assess_lines(exact, lines, mag=mag, calibration=CALIBRATION_MHD)
 
 
 def test_auc_ece_brier_match_reference_implementations():
