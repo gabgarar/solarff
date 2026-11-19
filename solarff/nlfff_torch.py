@@ -204,6 +204,8 @@ def nlfff_lbfgs(mag: Magnetogram, nz: int, initial: VectorField3D | None = None,
                               "L_initial": history[0][1], "nd": nd, "eps": eps,
                               "relax_bottom": relax_bottom if relax else None, "smooth": smooth,
                               "div_weight": div_weight,
+                              # the two terms of the functional at the end: force and divergence, and data of the base
+                              "L_force": history[-1][2], "L_data": history[-1][3],
                               "message": message})
     if return_result:
         # History compatible with the classic method: (iteration, L, step) with step = NaN

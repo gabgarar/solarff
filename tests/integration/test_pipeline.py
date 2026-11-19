@@ -128,3 +128,13 @@ def test_calibration_case_with_potential_lines():
     assert np.nanmedian(rec["err"]["shape"]) < np.nanmedian(rec["pot"]["pp"]["shape"])
     # without the option the record is the one of always
     assert "departure" not in calibration_case(exact, mag, 17, n_seeds=10, seed=5, nlfff_kw={"max_iter": 50})["ind"]
+
+
+def test_lbfgs_keeps_the_two_terms_of_the_functional(lowlou_study):
+    # L_data divided by the weight of the base term is the misfit of the base: how far the relaxed base ended from the data
+    m = lowlou_study.nlfff.meta
+    assert m["L_force"] > 0 and m["L_data"] > 0
+    assert np.isclose(m["L_force"] + m["L_data"], m["L_final"], rtol=1e-9)
+    mag, _ = sff.low_lou_magnetogram(nx=16, ny=16, nz=10)
+    fixed = sff.nlfff_lbfgs(mag, 10, relax_bottom=None, max_iter=20, verbose=False)
+    assert fixed.meta["L_data"] == 0.0                                          # with a fixed base there is no data term
