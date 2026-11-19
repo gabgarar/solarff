@@ -81,7 +81,8 @@ def reduced_field(sim: str, snap: int, r: int, raw: str, code: str | None = None
     for var in ("bx", "by", "bz"):
         with fits.open(cube_path(sim, var, snap, raw, code, download), memmap=True) as h:
             hd, z = h[0].header, np.asarray(h[1].data, dtype=float)
-            assert hd["BUNIT"].strip() == "T", "the field is expected in tesla"
+            # the Bifrost cubes write the unit as BUNIT = T, without quotes, which a FITS reader takes for the logical value true
+            assert hd["BUNIT"] is True or str(hd["BUNIT"]).strip() == "T", "the field is expected in tesla"
             assert abs(hd["CDELT1"] - hd["CDELT2"]) < 1e-6, "the pixels are expected square"
             step = float(hd["CDELT1"]) * r
             k0, heights, planes = _planes(z, step)

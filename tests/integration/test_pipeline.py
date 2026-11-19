@@ -111,3 +111,20 @@ def test_calibration_suite_passes_nlfff_options(tmp_path):
     b = calibration_suite(**args, checkpoint=ck, nlfff_kw={"div_weight": 4.0})
     assert len(a[0]["bad"]) == len(b[0]["bad"])
     assert not np.allclose(a[0]["ind"]["div"], b[0]["ind"]["div"], equal_nan=True)   # another field, not the cached one
+
+
+def test_calibration_case_with_potential_lines():
+    """``potential=True`` adds the departure of every NLFFF line from the potential line, and the true error of the potential lines."""
+    from solarff.analytic import field_magnetogram
+    from solarff.confidence import calibration_case
+    _, exact = sff.low_lou_magnetogram(nx=24, ny=24, nz=17)
+    mag = field_magnetogram(exact, noise=10.0, noise_t=10.0, rng=3)
+    rec = calibration_case(exact, mag, 17, n_seeds=40, seed=5, nlfff_kw={"max_iter": 300}, potential=True)
+    n = len(rec["bad"])
+    dep = np.asarray(rec["ind"]["departure"], float)
+    assert dep.shape == (n,) and np.isfinite(dep).mean() > 0.8 and np.nanmin(dep) >= 0
+    assert set(rec["pot"]) == {"pp", "obs"} and all(len(rec["pot"][k]["shape"]) == n for k in rec["pot"])
+    # with a force-free truth the NLFFF lines are closer to it than the potential lines
+    assert np.nanmedian(rec["err"]["shape"]) < np.nanmedian(rec["pot"]["pp"]["shape"])
+    # without the option the record is the one of always
+    assert "departure" not in calibration_case(exact, mag, 17, n_seeds=10, seed=5, nlfff_kw={"max_iter": 50})["ind"]

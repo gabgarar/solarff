@@ -264,7 +264,7 @@ def calibration_case(exact: VectorField3D, mag: Magnetogram, nz: int, n_seeds: i
                      noise_bt: float | None = None, mc: int = 0, gr: bool = False,
                      mc_seed: int = 1000, nlfff_kw: dict | None = None,
                      preprocess_kw: dict | None = None, keep_model: bool = False,
-                     ensemble: tuple = ()) -> dict:
+                     ensemble: tuple = (), potential: bool = False) -> dict:
     """One calibration case: NLFFF model of ``mag``, indicators and true error per line.
 
     ``ensemble``: variants of the extrapolation in which something that is not known is changed; for each
@@ -274,6 +274,13 @@ def calibration_case(exact: VectorField3D, mag: Magnetogram, nz: int, n_seeds: i
     half the levels in height), ``"lfff"`` (side and top faces fixed to the LFFF of best-fit alpha instead of
     the potential field), ``"smooth"`` (three times the smoothing weight of the preprocessing). Unlike the
     Monte Carlo over the noise, they probe systematic errors.
+
+    ``potential``: also trace the potential-field line of every seed. The record then has the indicator
+    ``departure`` (and ``departure_topo``): how far the NLFFF line is from the line of the potential field of
+    the preprocessed base, the field the NLFFF starts from, measured as the shape error. It needs no truth, so
+    it can be computed in a real region. And ``pot``: the true error of the potential lines themselves, with
+    the potential field of the preprocessed base (``pp``) and with that of the base as given (``obs``), which
+    says whether the extrapolation improves on the potential field.
 
     ``exact``: true field; ``mag``: its base with noise (with ``*_err`` if
     ``mc`` is wanted). Returns ``{"ind", "err", "bad", "noise", "bad_threshold"}``
@@ -342,6 +349,15 @@ def calibration_case(exact: VectorField3D, mag: Magnetogram, nz: int, n_seeds: i
     err = line_errors(lm, le)
     bad = (err["shape"] > bad_threshold) | (err["topology"] > 0)
     rec = {"ind": ind, "err": err, "bad": bad, "noise": noise, "bad_threshold": bad_threshold}
+    if potential:
+        from .potential import potential_field
+        lp = trace_field_lines(potential_field(pp, nz), seeds)
+        d = line_errors(lm, lp)
+        ind["departure"], ind["departure_topo"] = d["shape"], d["topology"]
+        rec["pot"] = {}
+        for name, lines in (("pp", lp), ("obs", trace_field_lines(potential_field(mag, nz), seeds))):
+            e = line_errors(lines, le)
+            rec["pot"][name] = {"shape": e["shape"], "topology": e["topology"], "shape_abs": e["shape_abs"]}
     if keep_model:
         rec.update(model=model, pp=pp)
     return rec
