@@ -115,7 +115,7 @@ maintenance remain the responsibility of the author.
 `solarff` is distributed under the [BSD 3-Clause](LICENSE) license. If you use it in academic work,
 please cite the software (`CITATION.cff`; GitHub shows it under "Cite this repository").
 
-> García, G. (2026). *solarff: NLFFF extrapolations with a calibrated per-line confidence* (v1.2.2).
-> Zenodo. <https://doi.org/10.5281/zenodo.24298450>
+> García, G. (2026). *solarff: NLFFF extrapolations with a calibrated per-line confidence* (v1.3.0).
+> Zenodo. <https://doi.org/10.5281/zenodo.24378815>
 
 The DOI [10.5281/zenodo.24133574](https://doi.org/10.5281/zenodo.24133574) always resolves to the latest version.
