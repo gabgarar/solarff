@@ -115,6 +115,11 @@ by its mean, so the weights do not depend on the size or strength of the magneto
     The confidence is calibrated with these defaults. Changing `mu3` or `mu4` degrades it without
     notice.
 
+!!! note "Photospheric magnetograms"
+    Against a simulated active region, less smoothing (`mu3` 10⁻¹) and a base that is trusted less
+    (`relax_bottom` 10⁻²) give fewer wrong lines than the defaults. See
+    [Tests against simulations](realistic.md#recommended-treatment-of-a-photospheric-base).
+
 ## Step 2: extrapolation
 
 **Potential and linear fields** are solved in Fourier space (Alissandrakis 1981). Each horizontal
@@ -143,7 +148,7 @@ is exact, by automatic differentiation, and the minimiser is L-BFGS.
 |---|---|---|
 | `nz` | required | number of grid levels in height |
 | `nd` | max(4, min(nx, ny, nz)/10) | width of the buffer layer, in cells |
-| `relax_bottom` | 0.1 | $\nu$, freedom of the transverse field at the base |
+| `relax_bottom` | 0.1 | $\nu$, weight of the term that ties the transverse field of the base to the data: the smaller, the freer the base |
 | `eps` | 0.03 | $\varepsilon$ in units of max abs($B_z$), regularisation near nulls |
 | `smooth` | 10⁻² | $\lambda$, smoothness |
 | `div_weight` | 1 | $w_d$, weight of the divergence term |

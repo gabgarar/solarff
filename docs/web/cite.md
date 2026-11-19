@@ -1,7 +1,6 @@
 # Cite
 
-If you use `solarff` in academic work, please cite the software and, once it is published, the
-associated paper.
+If you use `solarff` in academic work, please cite the software.
 
 ## Software
 
@@ -12,11 +11,6 @@ The DOI [10.5281/zenodo.24133574](https://doi.org/10.5281/zenodo.24133574) alway
 <https://github.com/gabgarar/solarff>.
 
 GitHub shows a ready-made citation under "Cite this repository", generated from `CITATION.cff`.
-
-## Paper
-
-> García, G. *Which coronal field lines can we trust? Per-line reliability in nonlinear
-> force-free extrapolations*. In preparation.
 
 ## License
 
@@ -33,4 +27,6 @@ maintenance remain the responsibility of the author.
 
 The library uses data from the Helioseismic and Magnetic Imager and the Atmospheric Imaging Assembly
 on board the Solar Dynamics Observatory, courtesy of NASA/SDO and the HMI and AIA science teams, and
-builds on NumPy, SciPy, Matplotlib, Astropy, SunPy and PyTorch.
+builds on NumPy, SciPy, Matplotlib, Astropy, SunPy and PyTorch. The tests against simulations use
+the public MURaM and Bifrost cubes of the [simulation catalogue](https://sdc.uio.no/search/simulations)
+hosted at the University of Oslo (Cheung et al. 2019; Hansteen et al. 2017; Carlsson et al. 2016).

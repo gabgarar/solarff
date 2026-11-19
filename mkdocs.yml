@@ -40,8 +40,9 @@ nav:
   - Getting started: getting-started.md
   - Method and equations: method.md
   - Per-line confidence: confidence.md
+  - Tests against simulations: realistic.md
   - Diagnostics: diagnostics.md
-  - Reproducing the paper: reproduce.md
+  - Reproducing the results: reproduce.md
   - API reference:
       - Data and fields: api/core.md
       - Extrapolation: api/extrapolation.md

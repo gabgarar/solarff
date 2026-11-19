@@ -1,11 +1,10 @@
 cff-version: 1.2.0
 message: >-
-  If you use solarff in academic work, please cite this software and, once published, the
-  associated paper.
+  If you use solarff in academic work, please cite this software.
 type: software
 title: "solarff: NLFFF extrapolations with a calibrated per-line confidence"
-version: 1.2.2
-date-released: 2026-11-17
+version: 1.3.0
+date-released: 2026-11-19
 authors:
   - family-names: "García"
     given-names: "Gabriel"
@@ -19,18 +18,10 @@ identifiers:
     description: "Version 1.2.2"
 abstract: >-
   Extrapolation of solar magnetic fields (potential, LFFF, NLFFF) from SDO/HMI vector
-  magnetograms, field-line tracing and a calibrated per-line confidence.
+  magnetograms, field-line tracing, a per-line confidence calibrated on exact force-free fields,
+  and tests of it against radiative MHD simulations.
 keywords:
   - solar physics
   - NLFFF
   - magnetic field extrapolation
   - field-line reliability
-preferred-citation:
-  type: unpublished
-  title: "Which coronal field lines can we trust? Per-line reliability in nonlinear force-free extrapolations"
-  authors:
-    - family-names: "García"
-      given-names: "Gabriel"
-      orcid: "https://orcid.org/0000-0001-7256-2609"
-  year: 2026
-  notes: "In preparation"

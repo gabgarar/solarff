@@ -58,7 +58,7 @@ from .confidence import (assess_lines, confidence_map, reliable_volume, line_ind
                          line_errors, calibrate, potential_departure, rank_lines)
 from .report import generate_report
 
-__version__ = "1.2.2"
+__version__ = "1.3.0"
 
 __all__ = [
     "VectorField3D", "Magnetogram", "aly_criteria",

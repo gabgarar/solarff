@@ -5,3 +5,4 @@
 ::: solarff.study
 ::: solarff.plotting
 ::: solarff.aia
+::: solarff.simulations

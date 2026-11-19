@@ -395,8 +395,8 @@ Section~\ref{sec:physics} assesses whether the region is eruptive (twist, torus 
                 ed=pct(f["e_div"]))
         if k == "reliability":
             return fill(self.L(
-                r"\textbf{Fiabilidad:} el <<fr>> de las líneas del <<m>> tiene confianza suficiente (sección~\ref{sec:reliability}); el resto depende de bordes no observados o no está bien resuelto.",
-                r"\textbf{Reliability:} <<fr>> of the <<m>> field lines have sufficient confidence (Section~\ref{sec:reliability}); the rest depend on unobserved boundaries or are not well resolved."),
+                r"\textbf{Fiabilidad:} el <<fr>> de las líneas del <<m>> tiene confianza suficiente (sección~\ref{sec:reliability}); el resto depende de bordes no observados o no está bien resuelto. Esa confianza está calibrada con campos libres de fuerzas exactos y no es una probabilidad de error en una región real.",
+                r"\textbf{Reliability:} <<fr>> of the <<m>> field lines have sufficient confidence (Section~\ref{sec:reliability}); the rest depend on unobserved boundaries or are not well resolved. That confidence is calibrated with exact force-free fields and is not an error probability in a real region."),
                 fr=pct(f["frac_reliable"], 0), m=nm(f["model"]))
         if k == "combined_reliable":
             return r"\textbf{" + self.L("Lectura conjunta (sólo líneas fiables):", "Combined reading (reliable lines only):") + "} " + self.combined_text(f)
@@ -1165,6 +1165,18 @@ H_J=\int_V(\mathbf{A}-\mathbf{A}_p)\cdot(\mathbf{B}-\mathbf{B}_p)\,dV .
                + r"}\label{sec:reliability}" "\n")
         self.p(r"""Las métricas globales (CW$_{\sin}$, $E/E_{\rm pot}$...) resumen todo el volumen en un número, pero un modelo puede ser bueno en unas zonas y malo en otras. Esta sección asigna a \textbf{cada línea de campo} una \textbf{confianza} entre 0 y 1, para analizar sólo las partes significativas del modelo.""",
                r"""Global metrics (CW$_{\sin}$, $E/E_{\rm pot}$...) summarise the whole volume in one number, but a model can be good in some regions and poor in others. This section assigns \textbf{each field line} a \textbf{confidence} between 0 and 1, so that only the significant parts of the model are analysed.""")
+        self.p(r"""\textbf{Límite de validez.} La confianza se calibró con campos libres de fuerzas exactos. Frente a una simulación MHD radiativa de una región activa \citep{Cheung2019}, cuya fotosfera no está libre de fuerzas, no se sostiene:
+\begin{itemize}[nosep]
+\item El 62\,\% de las líneas del modelo son malas y la confianza no las separa: el 51\,\% de las líneas aceptadas también lo son (AUC 0.61).
+\item Con menos suavizado en el preprocesado y una base más libre (\texttt{mu3} $=10^{-1}$, \texttt{relax\_bottom} $=10^{-2}$) las líneas malas bajan del 64 al 48\,\% en instantes de la simulación no usados antes. Los valores por defecto de la librería no han cambiado.
+\item En una región real la confianza de esta sección no es una probabilidad de error. Debe leerse como una indicación condicionada a que la base se parezca a la de la calibración.
+\end{itemize}""",
+               r"""\textbf{Limit of validity.} The confidence was calibrated with exact force-free fields. Against a radiative MHD simulation of an active region \citep{Cheung2019}, whose photosphere is not force-free, it does not hold:
+\begin{itemize}[nosep]
+\item 62\,\% of the lines of the model are wrong and the confidence does not separate them: 51\,\% of the accepted lines are wrong too (AUC 0.61).
+\item With less smoothing in the preprocessing and a freer base (\texttt{mu3} $=10^{-1}$, \texttt{relax\_bottom} $=10^{-2}$) the wrong lines fall from 64 to 48\,\% on snapshots of the simulation not used before. The defaults of the library are unchanged.
+\item In a real region the confidence of this section is not an error probability. It must be read as an indication conditional on the base resembling that of the calibration.
+\end{itemize}""")
         self.w(r"\subsection{" + self.L("Indicadores y calibración", "Indicators and calibration") + "}\n")
         self.w(r"\begin{center}\small\begin{tabular}{>{\raggedright}p{3.6cm}>{\raggedright}p{7.6cm}rc}\toprule" "\n")
         self.w(self.L(r"Indicador & Qué detecta & AUC & Usado", r"Indicator & What it detects & AUC & Used") + r"\\\midrule" "\n")
@@ -1932,7 +1944,7 @@ H_J=\int_V(\mathbf{A}-\mathbf{A}_p)\cdot(\mathbf{B}-\mathbf{B}_p)\,dV .
 \item \textbf{Contornos no observados:} las caras laterales y superior proceden del campo potencial. La solución es más fiable cerca de la base y en el centro de la caja.
 \item \textbf{Fotosfera no libre de fuerzas:} el preprocesado lo mitiga, pero introduce cambios en los datos. Lo ideal serían medidas cromosféricas.
 \item \textbf{Dependencia del método:} con datos reales, distintos códigos NLFFF pueden dar energías libres que difieren en decenas de por ciento \citep{DeRosa2009}, y las soluciones de cada polaridad pueden no coincidir \citep{WheatlandLeka2011}. Conviene acompañar los resultados de barras de error (p.\,ej., variando el preprocesado o la resolución) y, si es posible, compararlos con métodos de otra familia, como las redes neuronales con física \citep{Jarolim2023}.
-\item \textbf{Validación externa:} la confianza por línea se ha calibrado con campos libres de fuerzas exactos. En una cuerda de flujo (Titov--Démoulin) ordena bien las líneas pero subestima sus errores (sección~\ref{sec:reliability}). Falta comprobarla frente a bucles coronales observados \citep{Warren2018} y frente a simulaciones MHD, que no son libres de fuerzas en la base \citep{Fleishman2017}.
+\item \textbf{Validación externa:} la confianza por línea se ha calibrado con campos libres de fuerzas exactos. En una cuerda de flujo (Titov--Démoulin) ordena bien las líneas pero subestima sus errores (sección~\ref{sec:reliability}). Frente a una simulación MHD radiativa de una región activa \citep{Cheung2019}, que no es libre de fuerzas en la base \citep{Fleishman2017}, no se sostiene: el 51\,\% de las líneas aceptadas son malas. En una región real no debe leerse como una probabilidad de error. La comparación con bucles coronales observados \citep{Warren2018} es una comprobación independiente y parcial.
 \item \textbf{LFFF:} el dominio es periódico y $|\alpha|<\alpha_{\max}$; su energía depende del tamaño de la caja.
 \end{itemize}""",
                r"""\begin{itemize}[nosep]
@@ -1940,7 +1952,7 @@ H_J=\int_V(\mathbf{A}-\mathbf{A}_p)\cdot(\mathbf{B}-\mathbf{B}_p)\,dV .
 \item \textbf{Unobserved boundaries:} the side and top faces come from the potential field. The solution is most reliable near the base and in the centre of the box.
 \item \textbf{Non-force-free photosphere:} preprocessing mitigates this but changes the data. Chromospheric measurements would be ideal.
 \item \textbf{Method dependence:} with real data, different NLFFF codes can give free energies differing by tens of per cent \citep{DeRosa2009}, and the solutions from each polarity may disagree \citep{WheatlandLeka2011}. Results should come with error bars (e.g.\ by varying the preprocessing or the resolution) and, where possible, be compared with methods of another family, such as physics-informed neural networks \citep{Jarolim2023}.
-\item \textbf{External validation:} the per-line confidence has been calibrated with exact force-free fields. In a flux rope (Titov--Démoulin) it ranks lines well but underestimates their errors (Section~\ref{sec:reliability}). It still has to be tested against observed coronal loops \citep{Warren2018} and against MHD simulations, which are not force-free at the base \citep{Fleishman2017}.
+\item \textbf{External validation:} the per-line confidence has been calibrated with exact force-free fields. In a flux rope (Titov--Démoulin) it ranks lines well but underestimates their errors (Section~\ref{sec:reliability}). Against a radiative MHD simulation of an active region \citep{Cheung2019}, which is not force-free at the base \citep{Fleishman2017}, it does not hold: 51\,\% of the accepted lines are wrong. In a real region it must not be read as an error probability. The comparison with observed coronal loops \citep{Warren2018} is an independent and partial check.
 \item \textbf{LFFF:} the domain is periodic and $|\alpha|<\alpha_{\max}$; its energy depends on the box size.
 \end{itemize}""")
 

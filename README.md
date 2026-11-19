@@ -24,9 +24,11 @@ field line is to reproduce the true geometry.
 | Preprocessing of the vector magnetogram | `preprocess` |
 | Field-line tracing | `trace_field_lines`, `seeds_from_magnetogram` |
 | **Per-line confidence** | `assess_lines`, `confidence_map`, `reliable_volume` |
+| Ranking of the lines fitted on MHD simulations (experimental) | `potential_departure`, `rank_lines` |
 | Free energy and relative helicity with their uncertainties | `helicity_report`, `monte_carlo` |
 | Twist, decay index and squashing factor Q | `twist_map`, `decay_index_profile`, `squashing_q` |
 | SHARP download and reading, sunpy interoperability | `download_sharp`, `load_sharp_cea`, `from_sunpy`, `to_sunpy` |
+| Public MHD simulation cubes as a truth | `solarff.simulations.reduced_field` |
 | PDF report of a region | `run_study`, `generate_report` |
 
 ## Installation
@@ -72,6 +74,10 @@ against the analytical solution of Low & Lou (1990).
   29 % of all lines.
 - On reference fields built on observed regions the accepted lines are wrong about twice as often
   (median 9 %), and the extrapolations of real regions are not converged with resolution.
+- **Against a radiative MHD simulation of an active region, taken as the truth, it does not hold:**
+  62 % of the lines are wrong and so are 51 % of the accepted ones. A treatment of the base that
+  trusts it less lowers the wrong lines from 64 to 48 % on snapshots never used before. See
+  [Tests against simulations](https://gabgarar.github.io/solarff/realistic/).
 - The probability holds within the calibration domain. Read the
   [limits](https://gabgarar.github.io/solarff/confidence/#known-limits) before applying it.
 
@@ -82,8 +88,9 @@ against the analytical solution of Low & Lou (1990).
 | Physical context, equations, inputs and outputs of each step | [Method and equations](https://gabgarar.github.io/solarff/method/) |
 | Data, first run, sunpy, PDF reports | [Getting started](https://gabgarar.github.io/solarff/getting-started/) |
 | How to apply the confidence, and its limits | [Per-line confidence](https://gabgarar.github.io/solarff/confidence/) |
+| The confidence against MHD simulations, and the recommended treatment of a photospheric base | [Tests against simulations](https://gabgarar.github.io/solarff/realistic/) |
 | Energy, helicity, twist, decay index, QSLs, Monte Carlo, figures, limitations | [Diagnostics](https://gabgarar.github.io/solarff/diagnostics/) |
-| Every figure and number of the paper from the scripts | [Reproducing the paper](https://gabgarar.github.io/solarff/reproduce/) |
+| Every figure and number from the scripts | [Reproducing the results](https://gabgarar.github.io/solarff/reproduce/) |
 | All functions and classes | [API reference](https://gabgarar.github.io/solarff/api/core/) |
 
 ## Repository layout
@@ -94,7 +101,7 @@ against the analytical solution of Low & Lou (1990).
 | `examples/` | numbered scripts that produce every result |
 | `tests/` | unit and integration tests (`pytest`) |
 | `tools/` | reproduction script, interactive 3D view of the field lines (`lines3d.py`) and documentation helpers |
-| `docs/resultados/`, `docs/revision/resultados/` | result files behind the numbers of the paper, including the per-line table of the calibration (`docs/resultados/line_table.md`) |
+| `docs/resultados/`, `docs/revision/resultados/` | result files behind the published numbers, including the per-line table of the calibration (`docs/resultados/line_table.md`) |
 | `docs/web/` | source of the documentation site |
 
 ## Development note
@@ -106,8 +113,7 @@ maintenance remain the responsibility of the author.
 ## License and citation
 
 `solarff` is distributed under the [BSD 3-Clause](LICENSE) license. If you use it in academic work,
-please cite the software (`CITATION.cff`; GitHub shows it under "Cite this repository") and, once
-published, the associated paper.
+please cite the software (`CITATION.cff`; GitHub shows it under "Cite this repository").
 
 > García, G. (2026). *solarff: NLFFF extrapolations with a calibrated per-line confidence* (v1.2.2).
 > Zenodo. <https://doi.org/10.5281/zenodo.24298450>

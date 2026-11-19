@@ -1,6 +1,6 @@
-# Reproducing the paper
+# Reproducing the results
 
-Every figure, table and number of the associated paper is produced by a script in `examples/`.
+Every figure, table and number of this documentation is produced by a script in `examples/`.
 
 ## One command
 
@@ -31,7 +31,7 @@ The email is only passed to JSOC for the downloads and can be empty if the data 
 | `07_flux_rope_test.py` | external test on the Titov–Démoulin flux rope |
 | `08_aia_validation.py`, `13`, `14` | comparison with AIA loops and its null tests |
 | `12_flare_energy.py` | free-energy changes across three flares |
-| `16_paper_figures.py` | the figures of the paper |
+| `16_paper_figures.py` | the figures |
 | `17_external_families.py` | three further external families |
 | `18_applicability.py` | search for a global applicability indicator |
 | `20_systematic_base.py` | systematic errors in the base: scale, height and azimuth |
@@ -44,10 +44,11 @@ The email is only passed to JSOC for the downloads and can be empty if the data 
 | `31_external_boxes.py` | the four external families in boxes of other proportions: does the fifth term transfer to unseen geometries? |
 | `09`, `11`, `32` | weight of the divergence term: sweep and a stricter stopping criterion in NOAA 11158, energy and helicity on exact fields, wrong lines on the 108 standard boxes of the suite |
 | `24`, `26`, `27`, `30` | how the fifth term of the model was reached: ensemble indicator, length in box heights, boxes of other proportions, recalibration. They use the model of version 1.1 |
+| `33` to `45` | tests against radiative MHD simulations and the treatment of the base, listed in [Tests against simulations](realistic.md#scripts-and-result-files). They are run one by one and are not part of `reproduce_all.sh` |
 
 The additional checks are in `examples/revision/`:
 
-| Script | Purpose | Where it appears in the paper |
+| Script | Purpose | What it supports |
 |---|---|---|
 | `r0_suite.py` | calibration suite rerun that also stores absolute errors and the external rope | baselines and label definitions |
 | `r1_flare_energy.py` | split of the energy drop by zones and its sensitivity | flare figure and the hypotheses table |
@@ -69,7 +70,7 @@ The additional checks are in `examples/revision/`:
 
 ## Result files
 
-Every script writes its numbers to a JSON file in `docs/resultados/` or `docs/revision/resultados/`. The figures and tables of the paper are built from those files.
+Every script writes its numbers to a JSON file in `docs/resultados/` or `docs/revision/resultados/`. The figures and tables are built from those files.
 
 ## Tests
 

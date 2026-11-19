@@ -80,10 +80,15 @@ ones drop from 34 % to 3 %.
 !!! warning "Read it as a conditional score"
     Passing the range checks is necessary, not sufficient. For real magnetograms the confidence is a
     conditional reliability score, not a guaranteed error probability. Within one region, use it
-    above all to rank lines.
+    above all to rank lines. Against a simulated active region it fails even as a ranking: see the
+    first of the known limits.
 
 ## Known limits
 
+- **It does not hold against a simulated active region.** With a radiative MHD simulation as the
+  truth, whose photosphere is not force-free, 62 % of the lines are wrong and 51 % of the accepted
+  ones are wrong too (AUC 0.61). This is the most serious limit: for real magnetograms the
+  confidence is not an error probability. See [Tests against simulations](realistic.md).
 - **Optimistic cases that nothing flags.** On four external families the ranking holds (AUC 0.86–0.95),
   but in two of them 18–21 % of the accepted lines are wrong. Their wrong lines look like good ones to the
   indicators, and no global quantity of the extrapolation warns of it. A high failure rate is not the
@@ -102,5 +107,5 @@ ones drop from 34 % to 3 %.
   and on the unobserved boundaries, but an accepted line is not thereby a converged one.
 - **One code.** The published coefficients are valid for the solver in this library.
 
-The coefficients are in `solarff.confidence.DEFAULT_CALIBRATION`. The full analysis is in the
-associated paper.
+The coefficients are in `solarff.confidence.DEFAULT_CALIBRATION`. The scripts and result files
+behind every figure of this page are listed in [Reproducing the results](reproduce.md).

@@ -1,7 +1,7 @@
 {
   "title": "solarff: NLFFF extrapolations with a calibrated per-line confidence",
   "upload_type": "software",
-  "description": "<p>Python library for the extrapolation of the solar coronal magnetic field from SDO/HMI vector magnetograms (potential, linear force-free and nonlinear force-free), with field-line tracing, a calibrated per-line confidence, energy and helicity diagnostics, and the scripts that reproduce the results of the associated paper.</p><p>Documentation: https://gabgarar.github.io/solarff/</p>",
+  "description": "<p>Python library for the extrapolation of the solar coronal magnetic field from SDO/HMI vector magnetograms (potential, linear force-free and nonlinear force-free), with field-line tracing, a per-line confidence calibrated on exact force-free fields, energy and helicity diagnostics, tests against radiative MHD simulations, and the scripts that reproduce every published result.</p><p>Documentation: https://gabgarar.github.io/solarff/</p>",
   "creators": [
     {
       "name": "García, Gabriel",

@@ -256,6 +256,47 @@
   "volume": "289",
   "year": 2014
  },
+ "Carlsson2016": {
+  "authors": [
+   "Carlsson, M.",
+   "Hansteen, V. H.",
+   "Gudiksen, B. V.",
+   "Leenaarts, J.",
+   "De Pontieu, B."
+  ],
+  "bibcode": "2016A&A...585A...4C",
+  "doi": "10.1051/0004-6361/201527226",
+  "page": "A4",
+  "pub": "Astronomy and Astrophysics",
+  "title": "A publicly available simulation of an enhanced network region of the Sun",
+  "volume": "585",
+  "year": 2016
+ },
+ "Cheung2019": {
+  "authors": [
+   "Cheung, M. C. M.",
+   "Rempel, M.",
+   "Chintzoglou, G.",
+   "Chen, F.",
+   "Testa, P.",
+   "Martínez-Sykora, J.",
+   "Sainz Dalda, A.",
+   "DeRosa, M. L.",
+   "Malanushenko, A.",
+   "Hansteen, V.",
+   "De Pontieu, B.",
+   "Carlsson, M.",
+   "Gudiksen, B.",
+   "McIntosh, S. W."
+  ],
+  "bibcode": "2019NatAs...3..160C",
+  "doi": "10.1038/s41550-018-0629-3",
+  "page": "160",
+  "pub": "Nature Astronomy",
+  "title": "A comprehensive three-dimensional radiative magnetohydrodynamic simulation of a solar flare",
+  "volume": "3",
+  "year": 2019
+ },
  "Chifu2017": {
   "authors": [
    "Chifu, I.",
@@ -455,6 +496,23 @@
   "title": "Latitude Variation of Helicity in Solar Active Regions",
   "volume": "56",
   "year": 2004
+ },
+ "Hansteen2017": {
+  "authors": [
+   "Hansteen, V. H.",
+   "Archontis, V.",
+   "Pereira, T. M. D.",
+   "Carlsson, M.",
+   "Rouppe van der Voort, L.",
+   "Leenaarts, J."
+  ],
+  "bibcode": "2017ApJ...839...22H",
+  "doi": "10.3847/1538-4357/aa6844",
+  "page": "22",
+  "pub": "The Astrophysical Journal",
+  "title": "Bombs and Flares at the Surface and Lower Atmosphere of the Sun",
+  "volume": "839",
+  "year": 2017
  },
  "Harris2020": {
   "authors": [
@@ -738,6 +796,26 @@
   "title": "Guiding Nonlinear Force-free Modeling Using Coronal Observations: First Results Using a Quasi-Grad-Rubin Scheme",
   "volume": "756",
   "year": 2012
+ },
+ "Metcalf2008": {
+  "authors": [
+   "Metcalf, T. R.",
+   "DeRosa, M. L.",
+   "Schrijver, C. J.",
+   "Barnes, G.",
+   "van Ballegooijen, A. A.",
+   "Wiegelmann, T.",
+   "Wheatland, M. S.",
+   "Valori, G.",
+   "McTtiernan, J. M."
+  ],
+  "bibcode": "2008SoPh..247..269M",
+  "doi": "10.1007/s11207-007-9110-7",
+  "page": "269",
+  "pub": "Solar Physics",
+  "title": "Nonlinear Force-Free Modeling of Coronal Magnetic Fields. II. Modeling a Filament Arcade and Simulated Chromospheric and Photospheric Vector Fields",
+  "volume": "247",
+  "year": 2008
  },
  "Moraitis2019": {
   "authors": [
@@ -1302,5 +1380,18 @@
   "title": "On the Extrapolation of Magnetohydrostatic Equilibria on the Sun",
   "volume": "866",
   "year": 2018
+ },
+ "Zhu2019": {
+  "authors": [
+   "Zhu, X.",
+   "Wiegelmann, T."
+  ],
+  "bibcode": "2019A&A...631A.162Z",
+  "doi": "10.1051/0004-6361/201936433",
+  "page": "A162",
+  "pub": "Astronomy and Astrophysics",
+  "title": "Testing magnetohydrostatic extrapolation with radiative MHD simulation of a solar flare",
+  "volume": "631",
+  "year": 2019
  }
 }
