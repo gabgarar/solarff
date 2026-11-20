@@ -13,6 +13,8 @@ seeds = sff.seeds_from_magnetogram(mag, n=300, polarity="both",
                                    method="random", rng=1)           # both polarities, more in the cores
 ```
 
+*Parameters of `seeds_from_magnetogram`. **Parameter**, **Default**: its name and value if not given. **What it does**: its effect on where the lines start.*
+
 | Parameter | Default | What it does |
 |---|---|---|
 | `n` | 80 | approximate number of seeds |

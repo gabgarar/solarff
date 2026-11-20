@@ -31,6 +31,8 @@ print(mag, mag.flux_imbalance())
 sff.plot_magnetogram(mag)
 ```
 
+*How the SHARP segments become the components of the library. **Segment**: the FITS file of the SHARP. **Meaning**: the component it holds. **In the library**: the Cartesian component it becomes, with x to the west and y to the north.*
+
 | Segment | Meaning | In the library |
 |---|---|---|
 | `Br` | radial component | `Bz` |
@@ -74,6 +76,8 @@ pp = sff.preprocess(mag)                            # defaults: mu3 = mu4 = 0.01
 
 *Original and preprocessed $B_z$, and the change in the transverse field. The change concentrates in
 the strong-field cores.*
+
+*The parameters of `preprocess` you are most likely to change. **Parameter**, **Default**: its name and value if not given. **What it does**: its effect. **When to change it**: the situations that call for another value.*
 
 | Parameter | Default | What it does | When to change it |
 |---|---|---|---|

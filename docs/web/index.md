@@ -11,6 +11,8 @@ field line is to reproduce the true geometry.
 
 ## What it does
 
+*What the library does. **Task**: the step of the work. **Functions**: the calls that do it, described in the [API reference](api/core.md).*
+
 | Task | Functions |
 |---|---|
 | Potential, linear and nonlinear force-free extrapolation | `potential_field`, `lfff`, `nlfff_lbfgs`, `nlfff` |

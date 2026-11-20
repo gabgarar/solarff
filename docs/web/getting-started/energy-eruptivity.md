@@ -14,6 +14,8 @@ h["H_V"], h["H_J"], h["ratio_HJ_HV"]                          # Mx^2
 rep["gauge_diff"]                                              # numerical error of the helicity
 ```
 
+*Contents of the result of `helicity_report`. **Quantity**: the key in `rep["energy"]`, `rep["helicity"]` or `rep`. **Meaning**: what it is. Energies are in erg and helicities in Mx².*
+
 | Quantity | Meaning |
 |---|---|
 | `E`, `E_p` | energy of the model and of the potential field with the same flux on the six faces |
@@ -94,6 +96,8 @@ sff.plot_alpha_histogram({"Potential": pot, "LFFF": lin, "NLFFF": nl}, seeds)
 constant along each line, so the spread is a measure of how force-free the model really is.*
 
 ## The parameters
+
+*Parameters of the eruptivity diagnostics. **Function**: the call they belong to; an empty cell repeats the one above. **Parameter**, **Default**: its name and value if not given. **What it does**: its effect.*
 
 | Function | Parameter | Default | What it does |
 |---|---|---|---|

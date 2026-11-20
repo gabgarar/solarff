@@ -49,6 +49,8 @@ onto it. (3) Ridge strength from the Hessian of the image. (4) The clearest 10 %
 as loops. (5) The direction of each loop and the angle with the line that crosses it. (6) The angle
 of each line is the median over its points on loops.*
 
+*Parameters of `aia_validation`. **Parameter**: its name. **Default**: its value if not given. **What it does**: its effect on the measurement.*
+
 | Parameter | Default | What it does |
 |---|---|---|
 | `sigma` | 2 | smoothing of the image, in AIA pixels, before finding the ridges |

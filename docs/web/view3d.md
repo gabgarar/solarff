@@ -1,14 +1,23 @@
+---
+hide:
+  - navigation
+  - toc
+---
+
 # Interactive 3D view
 
 The field lines of three active regions, extrapolated with `solarff`, in 3D. Drag to rotate, scroll to
 zoom, and hover over a line to see its confidence. The panel on the side changes the region, the
 colouring and the arrows of the horizontal field.
 
-<iframe src="../3d/lines3d.html" title="Interactive 3D view of the field lines" loading="lazy"
-        style="width: 100%; height: 75vh; min-height: 480px; border: 1px solid var(--md-default-fg-color--lightest); border-radius: 4px;"></iframe>
+<div class="view3d">
+<iframe src="../3d/lines3d.html" title="Interactive 3D view of the field lines" loading="lazy"></iframe>
+</div>
 
 [Open it in a full window](3d/lines3d.html){ target="_blank" } · The page weighs about 5 MB and works offline once
 loaded.
+
+*The regions in the 3D view. **Region** and **HARP**: their NOAA and SHARP numbers. **Time (TAI)**: the magnetogram used. **Lines**: number of lines traced.*
 
 | Region | HARP | Time (TAI) | Lines |
 |---|---|---|---|

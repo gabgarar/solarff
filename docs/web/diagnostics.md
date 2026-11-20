@@ -22,6 +22,8 @@ which one you quote.
 
 ## Is the region eruptive?
 
+*Diagnostics of eruptivity. **Function**: the call in the library. **What it computes**: the quantity and its reference. **Usual threshold**: the value commonly taken as the sign of a flux rope, an instability or a separatrix layer.*
+
 | Function | What it computes | Usual threshold |
 |---|---|---|
 | `twist_map(field)`, `twist_number(field, lines)` | twist number Tw of each line (Berger & Prior 2006; Liu et al. 2016) | abs(Tw) ≳ 1: flux rope |
@@ -61,6 +63,8 @@ twist.
 
 ## Comparing models
 
+*Metrics printed by `compare_models`. **Metric**: its name in the table. **What it measures**: the property of the model. **Ideal**: the value of a perfect model; a dash where there is none.*
+
 | Metric | What it measures | Ideal |
 |---|---|---|
 | `CWsin`, `theta_J_deg` | mean angle between J and B, weighted by the current | 0 |
@@ -80,6 +84,8 @@ Use `margin=nd` to exclude the boundary layer of the NLFFF from the comparison.
 
 `sff.run_validation()` checks every tool against an exact solution:
 
+*Checks of `run_validation`. **Tool**: what is tested. **Analytical case**: the field with a known answer. **Typical error**: how far the library is from that answer.*
+
 | Tool | Analytical case | Typical error |
 |---|---|---|
 | Potential field | buried dipole | 1 − C_vec ≈ 10⁻⁴ |
@@ -91,6 +97,8 @@ Use `margin=nd` to exclude the boundary layer of the NLFFF from the comparison.
 
 On the Low & Lou benchmark (n = m = 1, 48×48×32 grid) the three models compare as follows:
 
+*Three models of the Low & Lou field against the exact one; bold marks the best. **C_vec**: vector correlation with the exact field (1 is perfect). **E / E_exact**: energy over the exact energy (1 is perfect). **same topology**: fraction of lines from the same seed that join the same polarities as the exact ones.*
+
 | | Potential | LFFF | NLFFF |
 |---|---|---|---|
 | C_vec | 0.851 | 0.930 | **0.990** |
@@ -98,6 +106,8 @@ On the Low & Lou benchmark (n = m = 1, 48×48×32 grid) the three models compare
 | same topology | 0.74 | 0.87 | **0.90** |
 
 ## Figures
+
+*Plotting functions. **Function**: the call. **What it shows**: what the figure contains.*
 
 | Function | What it shows |
 |---|---|

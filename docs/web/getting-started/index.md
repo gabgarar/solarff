@@ -6,6 +6,8 @@ explained in the [parameter reference](parameters.md).
 
 ## Choose your case
 
+*Where to start. **I want to...**: the task. **Page**: the recipe that does it.*
+
 | I want to... | Page |
 |---|---|
 | Check the installation against an exact solution | [First run](#first-run-an-exact-solution) (below) |
@@ -29,7 +31,7 @@ source .venv/bin/activate          # Windows: .venv\Scripts\activate
 pip install -e ".[all]"
 ```
 
-Optional extras:
+*Optional groups of dependencies, installed with `pip install -e ".[name]"`. **Extra**: the name of the group. **Adds**: the packages it installs. **Needed for**: what stops working without it.*
 
 | Extra | Adds | Needed for |
 |---|---|---|

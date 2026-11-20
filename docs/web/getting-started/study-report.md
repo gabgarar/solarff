@@ -15,6 +15,8 @@ study.mag_pp                                     # the preprocessed magnetogram
 study.nlfff_converged, study.nlfff_message
 ```
 
+*Parameters of `run_study`. **Parameter**: its name. **Default**: its value if not given; *required* if it has none. **What it does**: its effect.*
+
 | Parameter | Default | What it does |
 |---|---|---|
 | `nz` | required | levels in height |
@@ -46,6 +48,8 @@ mc["summary"]["E_free"]          # mean, std, p16, p50, p84 and the nominal valu
 
 The preprocessing and the NLFFF are repeated `n` times, each with noise drawn from the HMI error
 maps (`*_err` segments). Each realisation costs as much as the nominal extrapolation.
+
+*Parameters of `monte_carlo`. Columns as in the table of `run_study`.*
 
 | Parameter | Default | What it does |
 |---|---|---|
@@ -89,6 +93,8 @@ methods on the same data. In this region they differ by factors of two to five.*
 sff.generate_report(study, "reports/noaa11158", monte_carlo=mc, title="NOAA 11158")
 # -> reports/noaa11158/informe_es.pdf, report_en.pdf, figures/, paper/
 ```
+
+*Parameters of `generate_report`. Columns as in the table of `run_study`.*
 
 | Parameter | Default | What it does |
 |---|---|---|

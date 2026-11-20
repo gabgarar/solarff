@@ -58,6 +58,8 @@ mag = analytic.field_magnetogram(truth, noise=10.0, noise_t=60.0, rng=1)
 nl = sff.nlfff_lbfgs(sff.preprocess(mag), nz=truth.shape[2])
 ```
 
+*Arguments of `simulations.reduced_field`. **Parameter**: its name. **What it does**: its meaning and the values it takes.*
+
 | Parameter | What it does |
 |---|---|
 | `sim`, `snap` | run and snapshot of the [Oslo catalogue](https://sdc.uio.no/search/simulations): `"ar098192"` (MURaM active region), `"qs024048_by3363"` and `"en024048_hion"` (Bifrost) |

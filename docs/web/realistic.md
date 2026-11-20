@@ -13,6 +13,8 @@ that trusts the base less is recommended below for photospheric magnetograms.
 
 ## How the tests were made
 
+*The simulations used as the truth. **Simulation**: the name of the run in the catalogue. **Code**: the MHD code that produced it. **What it is**: the solar region it represents. **Reference**: the paper that describes it.*
+
 | Simulation | Code | What it is | Reference |
 |---|---|---|---|
 | `ar098192` | MURaM | active region with a flare | Cheung et al. (2019) |
@@ -48,6 +50,8 @@ written to `docs/informes/simulations/`.
 
 Eighteen extrapolations of the simulated active region (three snapshots, two pixels, three noise
 models, 5397 lines), with the default settings and the published coefficients, nothing refitted:
+
+*The published confidence in the calibration suite and against the simulated active region. Rows: the fraction of wrong lines, the fraction accepted by the confidence, and the fraction of wrong lines among the accepted, with its interval in brackets.*
 
 | | Calibration suite | Simulated active region |
 |---|---|---|
@@ -95,6 +99,8 @@ The published confidence still fails there (AUC 0.55).
 
 ## Recommended treatment of a photospheric base
 
+*The two treatments of the base compared on this page. **mu3**, **mu4**: weights of the distance to the data and of the smoothing in `preprocess`. **relax_bottom**: weight of the base term in `nlfff_lbfgs`.*
+
 | | `mu3` | `mu4` | `relax_bottom` |
 |---|---|---|---|
 | Default | 10⁻² | 10⁻² | 10⁻¹ |
@@ -106,6 +112,8 @@ nl = sff.nlfff_lbfgs(pp, nz=48, relax_bottom=1e-2)  # a base that is trusted les
 ```
 
 Wrong lines at the simulated photosphere, on three snapshots never used before:
+
+*Wrong lines with each treatment, on snapshots never used before. **Pixel**: size of the cell and definition of a wrong line (error above 10 % or 20 % of its length). **Default** and **Recommended**: fraction of wrong lines. **Difference in points**: recommended minus default, with its interval and the number of cases in which it falls.*
 
 | Pixel | Default | Recommended | Difference in points |
 |---|---|---|---|
@@ -133,6 +141,8 @@ before, the best weight depends on how force-free the base is:
 default. At the simulated photosphere the best weight is 0.01; with a base that is closer to
 force-free, it is 1.*
 
+*Wrong lines with two weights of the base term, without preprocessing. **Base**: the regime of the test. **$\nu = 1$** and **$\nu = 0.01$**: fraction of wrong lines with each weight.*
+
 | Base | $\nu = 1$ | $\nu = 0.01$ |
 |---|---|---|
 | Simulated photosphere, 1.54 Mm | 79.2 % | 52.9 % |
@@ -158,6 +168,8 @@ force-free, it is 1.*
 The recommended configuration was applied to three observed regions and compared with the default
 one, line by line, through the angle between each projected line and the loops seen by AIA
 (negative is better):
+
+*Recommended minus default treatment in three observed regions, measured by the angle between each projected line and the AIA loops. **Region**: the active region. **Mean difference in degrees**: mean over the lines, with its interval; negative means the recommended lines follow the loops better. **Median**: the median of the same differences.*
 
 | Region | Mean difference in degrees | Median |
 |---|---|---|
@@ -199,6 +211,8 @@ from above. With an image of 60 loops:
 ## Scripts and result files
 
 Every script writes the file listed next to it in `docs/resultados/`.
+
+*The scripts of these tests. **Script**: the file in `examples/`. **Purpose**: what it tests. **Result file**: the file in `docs/resultados/` where it writes its numbers.*
 
 | Script | Purpose | Result file |
 |---|---|---|

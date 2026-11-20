@@ -12,6 +12,8 @@ sh tools/reproduce_all.sh "" calib                 # only one phase
 The email is only passed to JSOC for the downloads and can be empty if the data are already in
 `data/`. The phases are:
 
+*Phases of `reproduce_all.sh`. **Phase**: the name to pass to run only that one. **What it runs**: its content. **Rough time**: on an 8-core laptop.*
+
 | Phase | What it runs | Rough time on an 8-core laptop |
 |---|---|---|
 | `calib` | calibration suite in boxes of four proportions, noise bias, robustness, flux ropes and external families | 5–7 h |
@@ -21,6 +23,8 @@ The email is only passed to JSOC for the downloads and can be empty if the data 
 | `pruebas` | tests beyond the calibration suite: resolution and unobserved faces in the regions, fields built on the observed flux, region models taken as the truth | about 8 h |
 
 ## The scripts
+
+*The example scripts. **Script**: the file in `examples/`, or its number. **Purpose**: what it computes.*
 
 | Script | Purpose |
 |---|---|
@@ -47,6 +51,8 @@ The email is only passed to JSOC for the downloads and can be empty if the data 
 | `33` to `45` | tests against radiative MHD simulations and the treatment of the base, listed in [Tests against simulations](realistic.md#scripts-and-result-files). They are run one by one and are not part of `reproduce_all.sh` |
 
 The additional checks are in `examples/revision/`:
+
+*The additional checks. **Script**: the file in `examples/revision/`. **Purpose**: what it computes. **What it supports**: the result that relies on it.*
 
 | Script | Purpose | What it supports |
 |---|---|---|

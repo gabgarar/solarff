@@ -9,6 +9,8 @@ The defaults are those of the code. The [API reference](../api/core.md) has the 
 
 `download_sharp(harpnum, time, email, out_dir="data", segments=(...))`
 
+*Parameters of `download_sharp`. **Parameter**: its name. **Default**: its value if not given; *required* if it has none. **Meaning**: what it is.*
+
 | Parameter | Default | Meaning |
 |---|---|---|
 | `harpnum` | required | HARP number of the region. `search_sharp(time, noaa=...)` finds it |
@@ -20,6 +22,8 @@ The defaults are those of the code. The [API reference](../api/core.md) has the 
 ### `load_sharp_cea` {#load_sharp_cea}
 
 `load_sharp_cea(br, bp=None, bt=None, rebin=1)`
+
+*Parameters of `load_sharp_cea`. Columns as in the table above.*
 
 | Parameter | Default | Meaning |
 |---|---|---|
@@ -35,6 +39,8 @@ The `Magnetogram` it returns has `rebin(factor)`, `crop(xslice, yslice)`, `balan
 `preprocess(mag, mu1=1, mu2=1, mu3=0.01, mu4=0.01, max_iter=500, fix_bz=False, verbose=True)`
 
 It minimises $\mu_1 L_1 + \mu_2 L_2 + \mu_3 L_3 + \mu_4 L_4$ ([equations](../method.md#step-1-preprocessing)).
+
+*Parameters of `preprocess`. **Parameter**, **Default**, **Meaning** as above. **When to change it**: the situations that call for another value.*
 
 | Parameter | Default | Meaning | When to change it |
 |---|---|---|---|
@@ -54,6 +60,8 @@ It minimises $\mu_1 L_1 + \mu_2 L_2 + \mu_3 L_3 + \mu_4 L_4$ ([equations](../met
 
 `potential_field(mag, nz, pad=1.0)` and `lfff(mag, alpha, nz, pad=1.0, heights=None)`
 
+*Parameters of `potential_field` and `lfff`. Columns as in the first table of this page.*
+
 | Parameter | Default | Meaning |
 |---|---|---|
 | `nz` | required | levels in height. The step is `mag.dx` |
@@ -66,6 +74,8 @@ It minimises $\mu_1 L_1 + \mu_2 L_2 + \mu_3 L_3 + \mu_4 L_4$ ([equations](../met
 `nlfff_lbfgs(mag, nz, initial=None, nd=None, relax_bottom=0.1, eps=0.03, smooth=0.01, div_weight=1.0, max_iter=2000, tol=1e-6, chunk=50, threads=None, verbose=True, return_result=False)`
 
 The recommended solver. It needs PyTorch ([equations](../method.md#step-2-extrapolation)).
+
+*Parameters of `nlfff_lbfgs`. Columns as in the table of `preprocess`.*
 
 | Parameter | Default | Meaning | When to change it |
 |---|---|---|---|
@@ -98,6 +108,8 @@ dependencies beyond NumPy.
 
 `nlfff_grad_rubin(mag, nz, polarity="P", initial=None, max_iter=40, tol=1e-3, relax=0.5, stride=None, ...)`
 
+*Parameters of `nlfff_grad_rubin`. Columns as in the first table of this page.*
+
 | Parameter | Default | Meaning |
 |---|---|---|
 | `polarity` | `"P"` | take α from the positive (`"P"`) or the negative (`"N"`) polarity |
@@ -117,6 +129,8 @@ See the table in [Field lines and confidence](lines-confidence.md#1-seeds-where-
 
 `trace_field_lines(field, seeds, ds=0.5, max_steps=4000, b_min=0.001)`
 
+*Parameters of `trace_field_lines`. Columns as in the first table of this page.*
+
 | Parameter | Default | Meaning |
 |---|---|---|
 | `seeds` | required | array `(N, 3)` in Mm |
@@ -127,6 +141,8 @@ See the table in [Field lines and confidence](lines-confidence.md#1-seeds-where-
 ### `assess_lines` and `confidence_map` {#assess_lines}
 
 `assess_lines(field, lines, mag=None, noise_bt=100.0, calibration=None, extra=None)`
+
+*Parameters of `assess_lines`. Columns as in the first table of this page.*
 
 | Parameter | Default | Meaning |
 |---|---|---|
@@ -145,6 +161,8 @@ See the tables in [A full study and its report](study-report.md).
 ## Analytical fields {#analytical-fields}
 
 `low_lou_magnetogram(noise=0.0, rng=0, nx=64, ny=64, nz=64, n=1, m=1, l=0.3, phi=π/4, length_mm=50, bmax=1000)`
+
+*Parameters of `low_lou_magnetogram`. Columns as in the first table of this page.*
 
 | Parameter | Default | Meaning |
 |---|---|---|

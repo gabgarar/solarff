@@ -26,6 +26,8 @@ $$
 The last relation follows from taking the divergence: in an exact solution $\alpha$ is constant along
 each field line. Three models of increasing realism follow from what is assumed about $\alpha$.
 
+*The three models of the coronal field. **Model**: its name. **Assumption**: what it assumes about α, the ratio between the current and the field. **Boundary data needed**: what has to be measured at the base.*
+
 | Model | Assumption | Boundary data needed |
 |---|---|---|
 | Potential | $\alpha = 0$ (no currents) | $B_z$ |
@@ -53,6 +55,8 @@ flowchart LR
 
 Each step is one function call:
 
+*The chain of calls. **Step**: what is done. **Function**: the call. **Input** and **Output**: what it takes and what it returns.*
+
 | Step | Function | Input | Output |
 |---|---|---|---|
 | Read data | `load_sharp_cea`, `from_sunpy` | SHARP CEA segments | `Magnetogram` |
@@ -66,6 +70,8 @@ Each step is one function call:
 
 **`Magnetogram`**, the photospheric boundary on a local Cartesian grid.
 
+*Attributes of a `Magnetogram`. **Attribute**: its name. **Meaning**: what it holds. **Units**: its units; a dash if it has none.*
+
 | Attribute | Meaning | Units |
 |---|---|---|
 | `bx`, `by`, `bz` | field components, arrays of shape (nx, ny); `bz` is vertical | G |
@@ -75,6 +81,8 @@ Each step is one function call:
 | `meta` | header information | — |
 
 **`VectorField3D`**, a field in the volume.
+
+*Attributes of a `VectorField3D`. Columns as in the table above.*
 
 | Attribute | Meaning | Units |
 |---|---|---|
@@ -103,6 +111,8 @@ $$
 where $L_1$ is the net force, $L_2$ the net torque, $L_3 = \sum|\mathbf{B}-\mathbf{B}_{\rm obs}|^2$
 the distance to the data and $L_4 = \sum|\Delta\mathbf{B}|^2$ the smoothness. Each term is normalised
 by its mean, so the weights do not depend on the size or strength of the magnetogram.
+
+*Parameters of `preprocess`. **Parameter**: its name. **Default**: its value if not given. **Meaning**: what it controls.*
 
 | Parameter | Default | Meaning |
 |---|---|---|
@@ -144,6 +154,8 @@ oscillations. The weighting function $w$ is 1 in the interior and falls to 0 in 
 `nd` cells next to the side and top boundaries, which are fixed to the potential field. The gradient
 is exact, by automatic differentiation, and the minimiser is L-BFGS.
 
+*Parameters of `nlfff_lbfgs`. **Parameter**: its name. **Default**: its value if not given. **Symbol and meaning**: its symbol in the functional above and what it controls.*
+
 | Parameter of `nlfff_lbfgs` | Default | Symbol and meaning |
 |---|---|---|
 | `nz` | required | number of grid levels in height |
@@ -175,6 +187,8 @@ and the misfit to the data at the base.*
 A field line is the solution of $d\mathbf{r}/ds = \mathbf{B}/|\mathbf{B}|$. It is integrated in both
 directions from a seed with fourth-order Runge–Kutta on the trilinearly interpolated field.
 
+*Parameters of `trace_field_lines`. Columns as in the table of `preprocess`.*
+
 | Parameter of `trace_field_lines` | Default | Meaning |
 |---|---|---|
 | `seeds` | required | array (N, 3) of starting points, in Mm |
@@ -193,6 +207,8 @@ are at the base (`closed`).
 
 Three quantities are computed on each extrapolated line, with no knowledge of the true field.
 
+*The three indicators of each line. **Indicator**: its name. **Definition**: how it is computed. **Why it reveals a wrong line**: the reason it is related to the error.*
+
 | Indicator | Definition | Why it reveals a wrong line |
 |---|---|---|
 | Variation of α | $x_1 = \log_{10}$ of the spread of $\alpha$ along the line, relative to its mean | $\alpha$ must be constant along a line of an exact solution |
@@ -208,6 +224,8 @@ $$
 
 and the confidence is $1 - p$. The published coefficients, with $\beta_0 = -1.33$, are:
 
+*The published coefficients of the confidence. **Term**: the indicator $x_i$. **$\mu_i$** and **$\sigma_i$**: the mean and standard deviation used to standardise it. **$\beta_i$**: its weight in the logistic regression; positive means that a larger value makes the line more likely to be wrong.*
+
 | Term $x_i$ | $\mu_i$ | $\sigma_i$ | $\beta_i$ |
 |---|---|---|---|
 | $\log_{10}$ (variation of α) | −0.788 | 0.606 | +0.79 |
@@ -218,6 +236,8 @@ and the confidence is $1 - p$. The published coefficients, with $\beta_0 = -1.33
 The whole model fits in this table, so it can be applied without the library.
 
 **Output of `assess_lines(field, lines, mag)`:**
+
+*Output of `assess_lines`. **Key**: the entry of the dictionary. **Content**: what it holds.*
 
 | Key | Content |
 |---|---|
@@ -237,6 +257,8 @@ $$
 
 A line is wrong if $\epsilon > 0.1$ or if it changes between open and closed. The model is then
 judged by:
+
+*Measures of how good the confidence is. **Measure**: its name. **Definition**: how it is computed. **Question it answers**: what it tells the user.*
 
 | Measure | Definition | Question it answers |
 |---|---|---|
@@ -273,6 +295,8 @@ difference between them is the numerical error of the helicity.
 
 **Output of `helicity_report(field)`:**
 
+*Output of `helicity_report`. **Key**: the entry of the dictionary. **Content**: what it holds. **Units**: its units; a dash if it has none.*
+
 | Key | Content | Units |
 |---|---|---|
 | `energy` | `E`, `E_p`, `E_free`, `E_J`, `E_div`, `E_div_frac` and the other terms of the decomposition | erg |
@@ -282,6 +306,8 @@ difference between them is the numerical error of the helicity.
 | `potential` | the reference potential field $\mathbf{B}_p$ | G |
 
 Three more diagnostics describe whether a region can erupt:
+
+*Diagnostics of eruptivity. **Quantity**: its name. **Definition**: its formula. **Function**: the call that computes it.*
 
 | Quantity | Definition | Function |
 |---|---|---|

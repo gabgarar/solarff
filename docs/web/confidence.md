@@ -59,6 +59,8 @@ vol = sff.reliable_volume(nl, lines, a["reliable"])     # 3D mask of cells threa
 Bottom: predicted against observed probability, AUC per family left out, and wrong lines against
 resolution.*
 
+*What the threshold changes, in the calibration suite. **Threshold**: the confidence from which a line is accepted. **Lines accepted**: fraction of all lines at or above it. **Wrong among the accepted**: fraction of those that are wrong.*
+
 | Threshold | Lines accepted | Wrong among the accepted |
 |---|---|---|
 | 0.7 | 62 % | 8.4 % |
