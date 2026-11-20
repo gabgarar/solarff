@@ -1,0 +1,2178 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="solarff: nonlinear force-free field (NLFFF) extrapolation of the solar coronal magnetic field in Python, from SDO/HMI vector magnetograms, with a confidence for every field line">
+      
+      
+        <meta name="author" content="Gabriel García">
+      
+      
+        <link rel="canonical" href="https://gabgarar.github.io/solarff/getting-started/parameters/">
+      
+      
+        <link rel="prev" href="../benchmarks/">
+      
+      
+        <link rel="next" href="../../method/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../img/sun.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
+    
+    
+      
+        <title>Parameter reference - solarff</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../css/refs.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#parameter-reference" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="solarff" class="md-header__button md-logo" aria-label="solarff" data-md-component="logo">
+      
+  <img src="../../img/sun.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            solarff
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Parameter reference
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="amber"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="amber"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/gabgarar/solarff" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gabgarar/solarff
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+  Getting started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../method/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Method and equations
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../confidence/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Per-line confidence
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../realistic/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Tests against simulations
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../view3d/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  3D view
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../diagnostics/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Diagnostics
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../reproduce/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Reproducing the results
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../api/core/" class="md-tabs__link">
+          
+  
+  
+  API reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../references/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  References
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../cite/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Cite
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="solarff" class="md-nav__button md-logo" aria-label="solarff" data-md-component="logo">
+      
+  <img src="../../img/sun.svg" alt="logo">
+
+    </a>
+    solarff
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/gabgarar/solarff" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gabgarar/solarff
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting started
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hmi-region/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    An HMI active region
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lines-confidence/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Field lines and confidence
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../study-report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A full study and its report
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../energy-eruptivity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Energy and eruptivity
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aia-loops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Comparison with AIA loops
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../benchmarks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benchmarks and simulations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parameter reference
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parameter reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#download_sharp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        download_sharp
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#load_sharp_cea" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        load_sharp_cea
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#preprocess" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Preprocessing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extrapolation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extrapolation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Extrapolation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#potential_field-and-lfff" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        potential_field and lfff
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nlfff_lbfgs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        nlfff_lbfgs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nlfff" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        nlfff (classic)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nlfff_grad_rubin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        nlfff_grad_rubin
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Field lines
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Field lines">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#seeds_from_magnetogram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        seeds_from_magnetogram
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trace_field_lines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        trace_field_lines
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#assess_lines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        assess_lines and confidence_map
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#run_study" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A full study
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#analytical-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analytical fields
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../method/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Method and equations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../confidence/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Per-line confidence
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../realistic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tests against simulations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../view3d/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D view
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../diagnostics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagnostics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reproduce/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reproducing the results
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data and fields
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/extrapolation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extrapolation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/confidence/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lines and confidence
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/diagnostics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Energy, helicity and topology
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/other/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analytic fields, studies and reports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../references/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    References
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cite/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cite
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#download_sharp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        download_sharp
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#load_sharp_cea" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        load_sharp_cea
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#preprocess" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Preprocessing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extrapolation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extrapolation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Extrapolation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#potential_field-and-lfff" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        potential_field and lfff
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nlfff_lbfgs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        nlfff_lbfgs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nlfff" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        nlfff (classic)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nlfff_grad_rubin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        nlfff_grad_rubin
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Field lines
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Field lines">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#seeds_from_magnetogram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        seeds_from_magnetogram
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trace_field_lines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        trace_field_lines
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#assess_lines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        assess_lines and confidence_map
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#run_study" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A full study
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#analytical-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analytical fields
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="parameter-reference">Parameter reference<a class="headerlink" href="#parameter-reference" title="Permanent link">&para;</a></h1>
+<p>The parameters of the functions used in a normal workflow, what they do and when to change them.
+The defaults are those of the code. The <a href="../../api/core/">API reference</a> has the full signatures.</p>
+<h2 id="data">Data<a class="headerlink" href="#data" title="Permanent link">&para;</a></h2>
+<h3 id="download_sharp"><code>download_sharp</code><a class="headerlink" href="#download_sharp" title="Permanent link">&para;</a></h3>
+<p><code>download_sharp(harpnum, time, email, out_dir="data", segments=(...))</code></p>
+<p><em>Parameters of <code>download_sharp</code>. <strong>Parameter</strong>: its name. <strong>Default</strong>: its value if not given; <em>required</em> if it has none. <strong>Meaning</strong>: what it is.</em></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>harpnum</code></td>
+<td>required</td>
+<td>HARP number of the region. <code>search_sharp(time, noaa=...)</code> finds it</td>
+</tr>
+<tr>
+<td><code>time</code></td>
+<td>required</td>
+<td>time in ISO format, in TAI, e.g. <code>"2011-02-15T00:00:00"</code></td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td>required</td>
+<td>address registered at JSOC; passed to JSOC only</td>
+</tr>
+<tr>
+<td><code>out_dir</code></td>
+<td><code>"data"</code></td>
+<td>folder for the FITS files</td>
+</tr>
+<tr>
+<td><code>segments</code></td>
+<td><code>Br</code>, <code>Bp</code>, <code>Bt</code> and their errors</td>
+<td>the errors are needed for the Monte Carlo</td>
+</tr>
+</tbody>
+</table>
+<h3 id="load_sharp_cea"><code>load_sharp_cea</code><a class="headerlink" href="#load_sharp_cea" title="Permanent link">&para;</a></h3>
+<p><code>load_sharp_cea(br, bp=None, bt=None, rebin=1)</code></p>
+<p><em>Parameters of <code>load_sharp_cea</code>. Columns as in the table above.</em></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>br</code></td>
+<td>required</td>
+<td>the <code>Br</code> file, or the folder that holds the three segments</td>
+</tr>
+<tr>
+<td><code>bp</code>, <code>bt</code></td>
+<td><code>None</code></td>
+<td>the other two files. With <code>br</code> alone the magnetogram has only <span class="arithmatex">\(B_z\)</span>: enough for the potential and linear fields</td>
+</tr>
+<tr>
+<td><code>rebin</code></td>
+<td>1</td>
+<td>average blocks of <code>rebin × rebin</code> pixels. 2 to 4 for HMI</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>Magnetogram</code> it returns has <code>rebin(factor)</code>, <code>crop(xslice, yslice)</code>, <code>balance_flux()</code> and
+<code>pad(...)</code>, and the components <code>bx</code>, <code>by</code>, <code>bz</code> in G on a grid of side <code>dx</code> Mm.</p>
+<h2 id="preprocess">Preprocessing<a class="headerlink" href="#preprocess" title="Permanent link">&para;</a></h2>
+<p><code>preprocess(mag, mu1=1, mu2=1, mu3=0.01, mu4=0.01, max_iter=500, fix_bz=False, verbose=True)</code></p>
+<p>It minimises <span class="arithmatex">\(\mu_1 L_1 + \mu_2 L_2 + \mu_3 L_3 + \mu_4 L_4\)</span> (<a href="../../method/#step-1-preprocessing">equations</a>).</p>
+<p><em>Parameters of <code>preprocess</code>. <strong>Parameter</strong>, <strong>Default</strong>, <strong>Meaning</strong> as above. <strong>When to change it</strong>: the situations that call for another value.</em></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Default</th>
+<th>Meaning</th>
+<th>When to change it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mu1</code>, <code>mu2</code></td>
+<td>1</td>
+<td>weight of the net force and of the net torque</td>
+<td>rarely</td>
+</tr>
+<tr>
+<td><code>mu3</code></td>
+<td>0.01</td>
+<td>weight of the distance to the data. Larger keeps the result closer to the observation</td>
+<td>0.1 for photospheric data (<a href="../../realistic/#recommended-treatment-of-a-photospheric-base">why</a>)</td>
+</tr>
+<tr>
+<td><code>mu4</code></td>
+<td>0.01</td>
+<td>weight of the smoothing</td>
+<td>rarely; it is the ratio <code>mu4/mu3</code> that matters</td>
+</tr>
+<tr>
+<td><code>max_iter</code></td>
+<td>500</td>
+<td>iterations of the minimiser</td>
+<td>if it stops before converging</td>
+</tr>
+<tr>
+<td><code>fix_bz</code></td>
+<td><code>False</code></td>
+<td>change only the transverse field</td>
+<td>to keep the observed <span class="arithmatex">\(B_z\)</span> exactly</td>
+</tr>
+<tr>
+<td><code>verbose</code></td>
+<td><code>True</code></td>
+<td>print the progress</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The per-line confidence is calibrated with the defaults.</p>
+</div>
+<h2 id="extrapolation">Extrapolation<a class="headerlink" href="#extrapolation" title="Permanent link">&para;</a></h2>
+<h3 id="potential_field-and-lfff"><code>potential_field</code> and <code>lfff</code><a class="headerlink" href="#potential_field-and-lfff" title="Permanent link">&para;</a></h3>
+<p><code>potential_field(mag, nz, pad=1.0)</code> and <code>lfff(mag, alpha, nz, pad=1.0, heights=None)</code></p>
+<p><em>Parameters of <code>potential_field</code> and <code>lfff</code>. Columns as in the first table of this page.</em></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nz</code></td>
+<td>required</td>
+<td>levels in height. The step is <code>mag.dx</code></td>
+</tr>
+<tr>
+<td><code>alpha</code></td>
+<td>required</td>
+<td>force-free parameter of the linear field, in Mm⁻¹. <code>estimate_alpha(mag)</code> gives one. It must be below <code>alpha_max(mag)</code></td>
+</tr>
+<tr>
+<td><code>pad</code></td>
+<td>1</td>
+<td>zero padding of the Fourier domain. 2 reduces the effect of the periodic copies, which matters for the decay index; it also lowers the largest admissible α</td>
+</tr>
+<tr>
+<td><code>heights</code></td>
+<td><code>None</code></td>
+<td>explicit heights in Mm, to evaluate only some layers</td>
+</tr>
+</tbody>
+</table>
+<h3 id="nlfff_lbfgs"><code>nlfff_lbfgs</code><a class="headerlink" href="#nlfff_lbfgs" title="Permanent link">&para;</a></h3>
+<p><code>nlfff_lbfgs(mag, nz, initial=None, nd=None, relax_bottom=0.1, eps=0.03, smooth=0.01, div_weight=1.0, max_iter=2000, tol=1e-6, chunk=50, threads=None, verbose=True, return_result=False)</code></p>
+<p>The recommended solver. It needs PyTorch (<a href="../../method/#step-2-extrapolation">equations</a>).</p>
+<p><em>Parameters of <code>nlfff_lbfgs</code>. Columns as in the table of <code>preprocess</code>.</em></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Default</th>
+<th>Meaning</th>
+<th>When to change it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mag</code></td>
+<td>required</td>
+<td>vector magnetogram, preferably preprocessed</td>
+<td></td>
+</tr>
+<tr>
+<td><code>nz</code></td>
+<td>required</td>
+<td>levels in height</td>
+<td>about half of the shorter side</td>
+</tr>
+<tr>
+<td><code>initial</code></td>
+<td>potential field</td>
+<td>starting field; its side and top faces stay fixed</td>
+<td>to start from another model</td>
+</tr>
+<tr>
+<td><code>nd</code></td>
+<td>about 10 % of the shorter side, at least 4</td>
+<td>width of the buffer layer next to the side and top faces, in cells</td>
+<td></td>
+</tr>
+<tr>
+<td><code>relax_bottom</code></td>
+<td>0.1</td>
+<td>weight <span class="arithmatex">\(\nu\)</span> of the term that ties the transverse field of the base to the data. Smaller: freer base. <code>None</code>: fixed base</td>
+<td>0.01 for photospheric data; 1 or <code>None</code> for a nearly force-free base (<a href="../../realistic/#how-much-to-trust-the-base">why</a>)</td>
+</tr>
+<tr>
+<td><code>eps</code></td>
+<td>0.03</td>
+<td>regularisation near null points, as a fraction of max <span class="arithmatex">\(\lvert B_z\rvert\)</span></td>
+<td></td>
+</tr>
+<tr>
+<td><code>smooth</code></td>
+<td>0.01</td>
+<td>weight <span class="arithmatex">\(\lambda\)</span> of the smoothness term, which suppresses grid-scale oscillations</td>
+<td></td>
+</tr>
+<tr>
+<td><code>div_weight</code></td>
+<td>1</td>
+<td>weight of the divergence term against the force term</td>
+<td>4 as a sensitivity test only</td>
+</tr>
+<tr>
+<td><code>max_iter</code></td>
+<td>2000</td>
+<td>maximum iterations</td>
+<td>4000 for large regions</td>
+</tr>
+<tr>
+<td><code>tol</code></td>
+<td>10⁻⁶</td>
+<td>stop when the functional falls relatively by less than this per iteration, averaged over <code>chunk</code> iterations</td>
+<td></td>
+</tr>
+<tr>
+<td><code>threads</code></td>
+<td><code>None</code></td>
+<td>CPU threads for PyTorch; by default PyTorch decides, usually all the cores</td>
+<td>to leave cores free</td>
+</tr>
+<tr>
+<td><code>return_result</code></td>
+<td><code>False</code></td>
+<td>return also the history</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>After the run, <code>nl.meta</code> keeps <code>iterations</code>, <code>message</code>, <code>L_final</code>, and the two terms of the
+functional, <code>L_force</code> and <code>L_data</code>.</p>
+<h3 id="nlfff"><code>nlfff</code> (classic)<a class="headerlink" href="#nlfff" title="Permanent link">&para;</a></h3>
+<p><code>nlfff(mag, nz, initial=None, nd=None, max_iter=5000, tol=1e-5, patience=50, mu0=None, eps=0.03, ...)</code></p>
+<p>Optimisation method of <a class="citation" href="../../references/#wheatland2000">Wheatland et al. (2000)</a> and <a class="citation" href="../../references/#wiegelmann2004">Wiegelmann (2004)</a>, with a fixed base and no
+dependencies beyond NumPy.
+<code>patience</code> is the number of iterations over which the change of the functional is averaged, and
+<code>mu0</code> the initial step. Use it when PyTorch is not available.</p>
+<h3 id="nlfff_grad_rubin"><code>nlfff_grad_rubin</code><a class="headerlink" href="#nlfff_grad_rubin" title="Permanent link">&para;</a></h3>
+<p><code>nlfff_grad_rubin(mag, nz, polarity="P", initial=None, max_iter=40, tol=1e-3, relax=0.5, stride=None, ...)</code></p>
+<p><em>Parameters of <code>nlfff_grad_rubin</code>. Columns as in the first table of this page.</em></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>polarity</code></td>
+<td><code>"P"</code></td>
+<td>take α from the positive (<code>"P"</code>) or the negative (<code>"N"</code>) polarity</td>
+</tr>
+<tr>
+<td><code>max_iter</code></td>
+<td>40</td>
+<td>Grad–Rubin iterations</td>
+</tr>
+<tr>
+<td><code>tol</code></td>
+<td>10⁻³</td>
+<td>stop when the field changes by less than this between iterations</td>
+</tr>
+<tr>
+<td><code>relax</code></td>
+<td>0.5</td>
+<td>under-relaxation, which stabilises the iteration</td>
+</tr>
+<tr>
+<td><code>stride</code></td>
+<td>automatic</td>
+<td>α is traced from one point of every <code>stride</code> per axis and interpolated. 1 is more accurate and slower</td>
+</tr>
+<tr>
+<td><code>alpha_threshold</code></td>
+<td>0.05</td>
+<td>α is taken only where <span class="arithmatex">\(\lvert B_z\rvert\)</span> exceeds this fraction of the maximum</td>
+</tr>
+</tbody>
+</table>
+<h2 id="lines">Field lines<a class="headerlink" href="#lines" title="Permanent link">&para;</a></h2>
+<h3 id="seeds_from_magnetogram"><code>seeds_from_magnetogram</code><a class="headerlink" href="#seeds_from_magnetogram" title="Permanent link">&para;</a></h3>
+<p>See the table in <a href="../lines-confidence/#1-seeds-where-the-lines-start">Field lines and confidence</a>.</p>
+<h3 id="trace_field_lines"><code>trace_field_lines</code><a class="headerlink" href="#trace_field_lines" title="Permanent link">&para;</a></h3>
+<p><code>trace_field_lines(field, seeds, ds=0.5, max_steps=4000, b_min=0.001)</code></p>
+<p><em>Parameters of <code>trace_field_lines</code>. Columns as in the first table of this page.</em></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>seeds</code></td>
+<td>required</td>
+<td>array <code>(N, 3)</code> in Mm</td>
+</tr>
+<tr>
+<td><code>ds</code></td>
+<td>0.5</td>
+<td>integration step, in cells</td>
+</tr>
+<tr>
+<td><code>max_steps</code></td>
+<td>4000</td>
+<td>longest line, in steps</td>
+</tr>
+<tr>
+<td><code>b_min</code></td>
+<td>0.001</td>
+<td>stop where the field strength falls below this value, in G</td>
+</tr>
+</tbody>
+</table>
+<h3 id="assess_lines"><code>assess_lines</code> and <code>confidence_map</code><a class="headerlink" href="#assess_lines" title="Permanent link">&para;</a></h3>
+<p><code>assess_lines(field, lines, mag=None, noise_bt=100.0, calibration=None, extra=None)</code></p>
+<p><em>Parameters of <code>assess_lines</code>. Columns as in the first table of this page.</em></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mag</code></td>
+<td><code>None</code></td>
+<td>the magnetogram used as the boundary condition; needed by some indicators</td>
+</tr>
+<tr>
+<td><code>noise_bt</code></td>
+<td>100</td>
+<td>noise of the transverse field, in G</td>
+</tr>
+<tr>
+<td><code>calibration</code></td>
+<td>published coefficients</td>
+<td>another set of coefficients, e.g. after recalibrating</td>
+</tr>
+<tr>
+<td><code>extra</code></td>
+<td><code>None</code></td>
+<td>more indicators per line, such as the Monte Carlo instability</td>
+</tr>
+</tbody>
+</table>
+<p><code>confidence_map</code> takes the same arguments plus <code>step</code> (one seed every <code>step</code> pixels) and <code>threshold</code>
+(weakest field seeded, as a fraction of the maximum).</p>
+<h2 id="run_study">A full study<a class="headerlink" href="#run_study" title="Permanent link">&para;</a></h2>
+<p>See the tables in <a href="../study-report/">A full study and its report</a>.</p>
+<h2 id="analytical-fields">Analytical fields<a class="headerlink" href="#analytical-fields" title="Permanent link">&para;</a></h2>
+<p><code>low_lou_magnetogram(noise=0.0, rng=0, nx=64, ny=64, nz=64, n=1, m=1, l=0.3, phi=π/4, length_mm=50, bmax=1000)</code></p>
+<p><em>Parameters of <code>low_lou_magnetogram</code>. Columns as in the first table of this page.</em></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>noise</code></td>
+<td>0</td>
+<td>Gaussian noise added to the magnetogram, in G</td>
+</tr>
+<tr>
+<td><code>rng</code></td>
+<td>0</td>
+<td>seed of the noise</td>
+</tr>
+<tr>
+<td><code>nx</code>, <code>ny</code>, <code>nz</code></td>
+<td>64</td>
+<td>size of the grid</td>
+</tr>
+<tr>
+<td><code>n</code>, <code>m</code></td>
+<td>1</td>
+<td>indices of the Low &amp; Lou solution</td>
+</tr>
+<tr>
+<td><code>l</code></td>
+<td>0.3</td>
+<td>depth of the source below the photosphere</td>
+</tr>
+<tr>
+<td><code>phi</code></td>
+<td>π/4</td>
+<td>tilt of the source axis</td>
+</tr>
+<tr>
+<td><code>length_mm</code></td>
+<td>50</td>
+<td>side of the box in Mm</td>
+</tr>
+<tr>
+<td><code>bmax</code></td>
+<td>1000</td>
+<td>maximum field in G</td>
+</tr>
+</tbody>
+</table>
+<p>The other fields are in <a href="../benchmarks/">Benchmarks and simulations</a>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2026 Gabriel García. BSD 3-Clause license.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+        <script src="../../js/mathjax-config.js"></script>
+      
+        <script src="../../js/tex-svg.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,2021 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="solarff: nonlinear force-free field (NLFFF) extrapolation of the solar coronal magnetic field in Python, from SDO/HMI vector magnetograms, with a confidence for every field line">
+      
+      
+        <meta name="author" content="Gabriel García">
+      
+      
+        <link rel="canonical" href="https://gabgarar.github.io/solarff/realistic/">
+      
+      
+        <link rel="prev" href="../confidence/">
+      
+      
+        <link rel="next" href="../view3d/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../img/sun.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
+    
+    
+      
+        <title>Tests against simulations - solarff</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../css/refs.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#tests-against-simulations" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="solarff" class="md-header__button md-logo" aria-label="solarff" data-md-component="logo">
+      
+  <img src="../img/sun.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            solarff
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Tests against simulations
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="amber"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="amber"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/gabgarar/solarff" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gabgarar/solarff
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../getting-started/" class="md-tabs__link">
+          
+  
+  
+  Getting started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../method/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Method and equations
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../confidence/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Per-line confidence
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Tests against simulations
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../view3d/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  3D view
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../diagnostics/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Diagnostics
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../reproduce/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Reproducing the results
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../api/core/" class="md-tabs__link">
+          
+  
+  
+  API reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../references/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  References
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../cite/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Cite
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="solarff" class="md-nav__button md-logo" aria-label="solarff" data-md-component="logo">
+      
+  <img src="../img/sun.svg" alt="logo">
+
+    </a>
+    solarff
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/gabgarar/solarff" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gabgarar/solarff
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting started
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/hmi-region/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    An HMI active region
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/lines-confidence/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Field lines and confidence
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/study-report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A full study and its report
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/energy-eruptivity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Energy and eruptivity
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/aia-loops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Comparison with AIA loops
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/benchmarks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benchmarks and simulations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/parameters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parameter reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../method/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Method and equations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../confidence/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Per-line confidence
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tests against simulations
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tests against simulations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#how-the-tests-were-made" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How the tests were made
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-a-wrong-line-looks-like" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What a wrong line looks like
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-calibrated-confidence-does-not-hold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The calibrated confidence does not hold
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-still-ranks-the-lines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What still ranks the lines
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-height-of-the-base" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The height of the base
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recommended-treatment-of-a-photospheric-base" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommended treatment of a photospheric base
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-much-to-trust-the-base" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How much to trust the base
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#observed-regions-against-aia-loops" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Observed regions against AIA loops
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-an-image-of-loops-can-say" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What an image of loops can say
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limits-of-these-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limits of these tests
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scripts-and-result-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scripts and result files
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../view3d/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D view
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diagnostics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagnostics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reproduce/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reproducing the results
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data and fields
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/extrapolation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extrapolation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/confidence/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lines and confidence
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/diagnostics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Energy, helicity and topology
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/other/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analytic fields, studies and reports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../references/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    References
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cite/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cite
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#how-the-tests-were-made" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How the tests were made
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-a-wrong-line-looks-like" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What a wrong line looks like
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-calibrated-confidence-does-not-hold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The calibrated confidence does not hold
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-still-ranks-the-lines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What still ranks the lines
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-height-of-the-base" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The height of the base
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recommended-treatment-of-a-photospheric-base" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommended treatment of a photospheric base
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-much-to-trust-the-base" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How much to trust the base
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#observed-regions-against-aia-loops" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Observed regions against AIA loops
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-an-image-of-loops-can-say" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What an image of loops can say
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limits-of-these-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limits of these tests
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scripts-and-result-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scripts and result files
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="tests-against-simulations">Tests against simulations<a class="headerlink" href="#tests-against-simulations" title="Permanent link">&para;</a></h1>
+<p>The per-line confidence of this library is calibrated on exact force-free fields. This page reports
+what happens when the truth is a radiative MHD simulation, whose photosphere is not force-free.</p>
+<div class="admonition warning">
+<p class="admonition-title">Main result</p>
+<p>Against a simulated active region, 62 % of the lines of the default extrapolation are wrong and
+the published confidence does not separate them: 51 % of the accepted lines are wrong. For real
+magnetograms, do not read the confidence as an error probability.</p>
+</div>
+<p>The treatment of the base changes the result more than anything else tested here. A configuration
+that trusts the base less is recommended below for photospheric magnetograms.</p>
+<h2 id="how-the-tests-were-made">How the tests were made<a class="headerlink" href="#how-the-tests-were-made" title="Permanent link">&para;</a></h2>
+<p><em>The simulations used as the truth. <strong>Simulation</strong>: the name of the run in the catalogue. <strong>Code</strong>: the MHD code that produced it. <strong>What it is</strong>: the solar region it represents. <strong>Reference</strong>: the paper that describes it.</em></p>
+<table>
+<thead>
+<tr>
+<th>Simulation</th>
+<th>Code</th>
+<th>What it is</th>
+<th>Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ar098192</code></td>
+<td>MURaM</td>
+<td>active region with a flare</td>
+<td><a class="citation" href="../references/#cheung2019">Cheung et al. (2019)</a></td>
+</tr>
+<tr>
+<td><code>qs024048_by3363</code></td>
+<td>Bifrost</td>
+<td>flux emergence</td>
+<td><a class="citation" href="../references/#hansteen2017">Hansteen et al. (2017)</a></td>
+</tr>
+<tr>
+<td><code>en024048_hion</code></td>
+<td>Bifrost</td>
+<td>enhanced network</td>
+<td><a class="citation" href="../references/#carlsson2016">Carlsson et al. (2016)</a></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>The three are public cubes of the <a href="https://sdc.uio.no/search/simulations">Oslo catalogue</a>.
+  <code>solarff.simulations.reduced_field</code> downloads a snapshot and reduces it to the grid of the
+  extrapolation.</li>
+<li>The magnetogram is the field of the simulation at the base, with the three noise models of the
+  calibration. The active region is used with pixels of 1.54 and 0.77 Mm.</li>
+<li>The lines of the model and of the simulation are traced from the same seeds. A line is wrong by
+  the definition of the calibration: mean distance above 10 % of the length, or a change between
+  open and closed. Some results are also given with 20 %.</li>
+<li>The criteria of every test were written down before running it, and the final tests use
+  snapshots that had not been opened before.</li>
+</ul>
+<h2 id="what-a-wrong-line-looks-like">What a wrong line looks like<a class="headerlink" href="#what-a-wrong-line-looks-like" title="Permanent link">&para;</a></h2>
+<p><img alt="The same seeds in the simulation and in two extrapolations" src="../img/realistic/lines_truth_default_recommended.png" /></p>
+<p><em>One case of the final test, on a snapshot never used before: pixel 0.77 Mm and HMI-like noise. The
+true lines of the simulation are grey; each model line traced from the same seed is blue if it
+follows the true one and orange if it is wrong. Top, seen from above; bottom, from the side. With the
+default treatment of the base 59 % of the 300 lines are wrong, with the recommended one 43 %. The
+default model makes many loops too high and opens lines that are closed in the simulation. 90 lines
+are drawn; the percentages count all 300.</em></p>
+<p><code>examples/46_simulation_figures.py</code> draws the two figures of this page. A version at 300 dpi is
+written to <code>docs/informes/simulations/</code>.</p>
+<h2 id="the-calibrated-confidence-does-not-hold">The calibrated confidence does not hold<a class="headerlink" href="#the-calibrated-confidence-does-not-hold" title="Permanent link">&para;</a></h2>
+<p>Eighteen extrapolations of the simulated active region (three snapshots, two pixels, three noise
+models, 5397 lines), with the default settings and the published coefficients, nothing refitted:</p>
+<p><em>The published confidence in the calibration suite and against the simulated active region. Rows: the fraction of wrong lines, the fraction accepted by the confidence, and the fraction of wrong lines among the accepted, with its interval in brackets.</em></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Calibration suite</th>
+<th>Simulated active region</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Wrong lines</td>
+<td>29 %</td>
+<td>62 %</td>
+</tr>
+<tr>
+<td>Lines accepted (confidence ≥ 0.8)</td>
+<td>51 %</td>
+<td>36 %</td>
+</tr>
+<tr>
+<td>Wrong among the accepted</td>
+<td>4.4 %</td>
+<td>51 % (45 to 56)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>The confidence barely ranks the lines there: AUC 0.61.</li>
+<li><code>CWsin</code> of these models is 0.22 to 0.26, just above the range of the calibration, so the range
+  check of the <a href="../confidence/#applying-it-to-your-own-extrapolation">confidence page</a> does flag
+  them. Passing that check remains necessary, not sufficient.</li>
+<li>The simulation loses 8 % of its free energy across the flare. The models do not reproduce the
+  drop: their free energy changes by 0 to +8 % with the 0.77 Mm pixel and by +14 to +22 % with the
+  1.54 Mm pixel.</li>
+<li>In the two Bifrost runs, which contain no active region, 93 and 97 % of the NLFFF lines are wrong.
+  In the network run the potential field does better than the NLFFF (67 % wrong).</li>
+</ul>
+<h2 id="what-still-ranks-the-lines">What still ranks the lines<a class="headerlink" href="#what-still-ranks-the-lines" title="Permanent link">&para;</a></h2>
+<p>The distance between the NLFFF line and the potential line traced from the same seed,
+<code>potential_departure</code>, ranks the wrong lines. It was found on the MURaM run and then tested on the
+two Bifrost runs, where it reaches AUC 0.82 and 0.95 on its own.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">r</span> <span class="o">=</span> <span class="n">sff</span><span class="o">.</span><span class="n">rank_lines</span><span class="p">(</span><span class="n">nl</span><span class="p">,</span> <span class="n">lines</span><span class="p">,</span> <span class="n">mag</span><span class="o">=</span><span class="n">mag</span><span class="p">)</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">r</span><span class="p">[</span><span class="s2">"order"</span><span class="p">]</span>           <span class="c1"># indices of the lines, from the most to the least reliable</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">r</span><span class="p">[</span><span class="s2">"percentile"</span><span class="p">]</span>      <span class="c1"># 0 for the most reliable line of this model, 1 for the least</span>
+</code></pre></div>
+<ul>
+<li><code>rank_lines</code> uses six terms fitted on the simulations (<code>solarff.confidence.CALIBRATION_MHD</code>). It
+  returns an order and no threshold, and <code>assess_lines</code> refuses that calibration.</li>
+<li>A ranking of this kind, refitted for the recommended configuration on older snapshots, holds on
+  three unused snapshots. With the 20 % definition the AUC is 0.81 and 0.76 for the two pixels, and
+  the best third of the lines is 3.7 and 6.3 % wrong against 24.6 and 22.4 % overall. Its
+  coefficients are in <code>docs/resultados/base_weight_regimes.json</code>.</li>
+<li><strong>It is not confirmed on real data.</strong> In three observed regions the best-ranked lines do not
+  follow the AIA loops better once the height of the lines is taken into account.</li>
+</ul>
+<h2 id="the-height-of-the-base">The height of the base<a class="headerlink" href="#the-height-of-the-base" title="Permanent link">&para;</a></h2>
+<p>With the same cases and the base taken 1.5 Mm above the photosphere, where the field is closer to
+force-free, the wrong lines of the NLFFF fall from 62 % to 29 % (40 % with the 1.54 Mm pixel, 17 %
+with 0.77 Mm). The potential field stays at 71 %. <code>reduced_field(..., z0=1.5)</code> gives that base.
+The published confidence still fails there (AUC 0.55).</p>
+<h2 id="recommended-treatment-of-a-photospheric-base">Recommended treatment of a photospheric base<a class="headerlink" href="#recommended-treatment-of-a-photospheric-base" title="Permanent link">&para;</a></h2>
+<p><em>The two treatments of the base compared on this page. <strong>mu3</strong>, <strong>mu4</strong>: weights of the distance to the data and of the smoothing in <code>preprocess</code>. <strong>relax_bottom</strong>: weight of the base term in <code>nlfff_lbfgs</code>.</em></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>mu3</code></th>
+<th><code>mu4</code></th>
+<th><code>relax_bottom</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Default</td>
+<td>10⁻²</td>
+<td>10⁻²</td>
+<td>10⁻¹</td>
+</tr>
+<tr>
+<td>Recommended for photospheric magnetograms</td>
+<td>10⁻¹</td>
+<td>10⁻²</td>
+<td>10⁻²</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">pp</span> <span class="o">=</span> <span class="n">sff</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">mag</span><span class="p">,</span> <span class="n">mu3</span><span class="o">=</span><span class="mf">1e-1</span><span class="p">,</span> <span class="n">mu4</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">)</span>        <span class="c1"># less smoothing</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">nl</span> <span class="o">=</span> <span class="n">sff</span><span class="o">.</span><span class="n">nlfff_lbfgs</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span> <span class="n">nz</span><span class="o">=</span><span class="mi">48</span><span class="p">,</span> <span class="n">relax_bottom</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">)</span>  <span class="c1"># a base that is trusted less</span>
+</code></pre></div>
+<p>Wrong lines at the simulated photosphere, on three snapshots never used before:</p>
+<p><em>Wrong lines with each treatment, on snapshots never used before. <strong>Pixel</strong>: size of the cell and definition of a wrong line (error above 10 % or 20 % of its length). <strong>Default</strong> and <strong>Recommended</strong>: fraction of wrong lines. <strong>Difference in points</strong>: recommended minus default, with its interval and the number of cases in which it falls.</em></p>
+<table>
+<thead>
+<tr>
+<th>Pixel</th>
+<th>Default</th>
+<th>Recommended</th>
+<th>Difference in points</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.54 Mm, 10 % definition</td>
+<td>64.4 %</td>
+<td>47.9 %</td>
+<td>−16.5 (−19.1 to −13.8), nine of nine cases</td>
+</tr>
+<tr>
+<td>0.77 Mm, 10 % definition</td>
+<td>60.8 %</td>
+<td>44.9 %</td>
+<td>−15.9 (−17.3 to −13.7), three of three cases</td>
+</tr>
+<tr>
+<td>1.54 Mm, 20 % definition</td>
+<td>35.7 %</td>
+<td>24.6 %</td>
+<td>−11.1</td>
+</tr>
+<tr>
+<td>0.77 Mm, 20 % definition</td>
+<td>31.9 %</td>
+<td>22.4 %</td>
+<td>−9.4</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>It has a cost on exact force-free fields.</strong> On the ten analytical families the wrong lines rise
+  from 40.2 to 42.0 % (+1.7 points, 0.6 to 2.8). The published confidence keeps its ranking there
+  (AUC 0.908 to 0.903) and accepts 7.8 % of wrong lines instead of 5.8 %.</li>
+<li><strong>Less smoothing alone</strong> (<code>mu3</code> 10⁻¹, the rest at the defaults) costs nothing on the analytical
+  families (−0.7 points) and gives part of the gain at the simulated photosphere: 62.9 to 52.8 %.</li>
+<li>The defaults of the library are unchanged, because the confidence was calibrated with them.</li>
+</ul>
+<h2 id="how-much-to-trust-the-base">How much to trust the base<a class="headerlink" href="#how-much-to-trust-the-base" title="Permanent link">&para;</a></h2>
+<p><code>relax_bottom</code> is the weight <span class="arithmatex">\(\nu\)</span> of the term that ties the transverse field of the base to the
+data. In a scan of that weight alone, without preprocessing, on snapshots and noise never used
+before, the best weight depends on how force-free the base is:</p>
+<p><img alt="Wrong lines against the weight of the base" src="../img/realistic/base_weight_by_regime.png" /></p>
+<p><em>Each curve is a regime of the test; the open circle is its best weight and the dotted line the
+default. At the simulated photosphere the best weight is 0.01; with a base that is closer to
+force-free, it is 1.</em></p>
+<p><em>Wrong lines with two weights of the base term, without preprocessing. <strong>Base</strong>: the regime of the test. <strong><span class="arithmatex">\(\nu = 1\)</span></strong> and <strong><span class="arithmatex">\(\nu = 0.01\)</span></strong>: fraction of wrong lines with each weight.</em></p>
+<table>
+<thead>
+<tr>
+<th>Base</th>
+<th><span class="arithmatex">\(\nu = 1\)</span></th>
+<th><span class="arithmatex">\(\nu = 0.01\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Simulated photosphere, 1.54 Mm</td>
+<td>79.2 %</td>
+<td>52.9 %</td>
+</tr>
+<tr>
+<td>Simulated photosphere, 0.77 Mm</td>
+<td>70.4 %</td>
+<td>43.1 %</td>
+</tr>
+<tr>
+<td>Simulation at 1.5 Mm height, 1.54 Mm</td>
+<td>24.0 %</td>
+<td>35.9 %</td>
+</tr>
+<tr>
+<td>Exact force-free families, 10 G noise</td>
+<td>21.5 %</td>
+<td>27.1 %</td>
+</tr>
+<tr>
+<td>Exact force-free families, HMI-like noise</td>
+<td>43.1 %</td>
+<td>32.8 %</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>A forced base or a noisy one asks for a small weight. A clean force-free base asks for a large one.
+  With the base at 1.5 Mm and the 0.77 Mm pixel the difference is small (3.4 points), below the bar
+  set in advance.</li>
+<li><strong>A rule of thumb.</strong> Run once with <span class="arithmatex">\(\nu = 0.1\)</span>, take the misfit <span class="arithmatex">\(D\)</span> = <code>nl.meta["L_data"] / 0.1</code>,
+  and use <span class="arithmatex">\(\nu = 10^{-5.4}/D\)</span> limited to 0.001 to 1. Over all the regimes it is on average 3.7
+  points from the best weight of each case, against 4.1 for a fixed 0.03. It is no more than a
+  rule of thumb: at the simulated photosphere with the 0.77 Mm pixel it loses 13.8 points.</li>
+<li><strong>Where the error comes from.</strong> With the true field of the simulation on the side and top faces,
+  which is a diagnostic and not a method, the wrong lines fall from 52.9 to 41.7 %. With a fixed
+  base they stay at 64 to 67 % whatever the faces. At the simulated photosphere the forced base
+  limits the lines more than the unobserved faces.</li>
+</ul>
+<h2 id="observed-regions-against-aia-loops">Observed regions against AIA loops<a class="headerlink" href="#observed-regions-against-aia-loops" title="Permanent link">&para;</a></h2>
+<p>The recommended configuration was applied to three observed regions and compared with the default
+one, line by line, through the angle between each projected line and the loops seen by AIA
+(negative is better):</p>
+<p><em>Recommended minus default treatment in three observed regions, measured by the angle between each projected line and the AIA loops. <strong>Region</strong>: the active region. <strong>Mean difference in degrees</strong>: mean over the lines, with its interval; negative means the recommended lines follow the loops better. <strong>Median</strong>: the median of the same differences.</em></p>
+<table>
+<thead>
+<tr>
+<th>Region</th>
+<th>Mean difference in degrees</th>
+<th>Median</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NOAA 11158</td>
+<td>−1.06 (−2.57 to +0.36)</td>
+<td>+0.45</td>
+</tr>
+<tr>
+<td>NOAA 11429</td>
+<td>−0.54 (−2.25 to +1.22)</td>
+<td>+0.14</td>
+</tr>
+<tr>
+<td>NOAA 12673</td>
+<td>−3.31 (−4.54 to −2.10)</td>
+<td>−3.38</td>
+</tr>
+<tr>
+<td>Combined</td>
+<td>−1.97 (−2.78 to −1.16)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>The three regions point the same way, but only NOAA 12673 excludes zero on its own, and in the
+other two the typical line does not move: the gain is a tail of lines.</p>
+<h2 id="what-an-image-of-loops-can-say">What an image of loops can say<a class="headerlink" href="#what-an-image-of-loops-can-say" title="Permanent link">&para;</a></h2>
+<p>The same angle was measured in the simulation against synthetic loops, which are true lines seen
+from above. With an image of 60 loops:</p>
+<ul>
+<li>The angle follows the truth. Between the recommended and the default model the difference is
+  −1.43° (−2.33 to −0.56), for 17 points fewer wrong lines. Between two equally good models it is
+  −0.06°.</li>
+<li>The angle flags wrong lines of one model. The worst-aligned quarter of the lines is 82 % wrong,
+  the best-aligned half 33 to 38 %.</li>
+<li>It does not choose between models. Taking for each seed the best-aligned line of seven models is
+  worse than the recommended model alone (56.0 against 51.2 % wrong), because some candidate always
+  aligns by chance.</li>
+<li>With a crowded image of 300 loops the difference between the two models is not seen (+0.07°).</li>
+</ul>
+<h2 id="limits-of-these-tests">Limits of these tests<a class="headerlink" href="#limits-of-these-tests" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>One simulated active region.</strong> The snapshots belong to the same run and do not count as
+  independent regions.</li>
+<li><strong>Coarse pixels.</strong> 1.54 and 0.77 Mm, coarser than the simulation and than HMI.</li>
+<li><strong>One code.</strong> The figures are those of the solver of this library.</li>
+<li><strong>Earlier work.</strong> <a class="citation" href="../references/#metcalf2008">Metcalf et al. (2008)</a> compared extrapolations from simulated photospheric and
+  chromospheric fields, <a class="citation" href="../references/#derosa2009">DeRosa et al. (2009)</a> assessed NLFFF models of an observed region,
+  <a class="citation" href="../references/#fleishman2017">Fleishman et al. (2017)</a> tested reconstruction tools against a Bifrost model, and
+  <a class="citation" href="../references/#zhu2019">Zhu &amp; Wiegelmann (2019)</a> tested a magnetohydrostatic extrapolation against a radiative MHD
+  simulation of a flare. These tests add the count of wrong lines, line by line.</li>
+</ul>
+<h2 id="scripts-and-result-files">Scripts and result files<a class="headerlink" href="#scripts-and-result-files" title="Permanent link">&para;</a></h2>
+<p>Every script writes the file listed next to it in <code>docs/resultados/</code>.</p>
+<p><em>The scripts of these tests. <strong>Script</strong>: the file in <code>examples/</code>. <strong>Purpose</strong>: what it tests. <strong>Result file</strong>: the file in <code>docs/resultados/</code> where it writes its numbers.</em></p>
+<table>
+<thead>
+<tr>
+<th>Script</th>
+<th>Purpose</th>
+<th>Result file</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>33_mhd_truth.py</code></td>
+<td>the published confidence against the simulated active region</td>
+<td><code>mhd_truth.json</code></td>
+</tr>
+<tr>
+<td><code>34_mhd_indicators.py</code></td>
+<td>other indicators on the same cases</td>
+<td><code>mhd_indicators.json</code></td>
+</tr>
+<tr>
+<td><code>35_realistic_truths.py</code></td>
+<td>the two Bifrost runs and the departure from the potential line</td>
+<td><code>realistic_truths.json</code></td>
+</tr>
+<tr>
+<td><code>36_mixed_model.py</code></td>
+<td>one model fitted on analytical and simulated truths together</td>
+<td><code>mixed_model.json</code></td>
+</tr>
+<tr>
+<td><code>37_realistic_choice.py</code></td>
+<td>error level from the signal-to-noise, and a choice between the NLFFF and the potential line</td>
+<td><code>realistic_choice.json</code></td>
+</tr>
+<tr>
+<td><code>38_rank_real_regions.py</code></td>
+<td>the ranking in the three observed regions</td>
+<td><code>rank_real_regions.json</code></td>
+</tr>
+<tr>
+<td><code>39_chromospheric_base.py</code></td>
+<td>the base at 1.5 Mm</td>
+<td><code>chromospheric_base.json</code></td>
+</tr>
+<tr>
+<td><code>40_base_treatment.py</code></td>
+<td>scan of the preprocessing weights and of the weight of the base</td>
+<td><code>base_treatment.json</code></td>
+</tr>
+<tr>
+<td><code>41_base_treatment_analytic.py</code></td>
+<td>the recommended configuration on the analytical families</td>
+<td><code>base_treatment_analytic.json</code></td>
+</tr>
+<tr>
+<td><code>42_base_treatment_factorial.py</code></td>
+<td>the two changes taken apart</td>
+<td><code>base_treatment_factorial.json</code></td>
+</tr>
+<tr>
+<td><code>43_base_weight_regimes.py</code></td>
+<td>the weight of the base in each regime, the rule of thumb, the true faces and the ranking, on unused snapshots</td>
+<td><code>base_weight_regimes.json</code></td>
+</tr>
+<tr>
+<td><code>44_recommended_regions_aia.py</code></td>
+<td>the recommended configuration in three observed regions against AIA</td>
+<td><code>recommended_regions_aia.json</code></td>
+</tr>
+<tr>
+<td><code>45_loops_as_measurement.py</code></td>
+<td>synthetic loops as a measurement</td>
+<td><code>loops_as_measurement.json</code></td>
+</tr>
+</tbody>
+</table>
+<p>The scripts need the raw cubes of the simulations, which are large and are downloaded from the
+catalogue on first use.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2026 Gabriel García. BSD 3-Clause license.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+        <script src="../js/mathjax-config.js"></script>
+      
+        <script src="../js/tex-svg.js"></script>
+      
+    
+  </body>
+</html>

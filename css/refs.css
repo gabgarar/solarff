@@ -1,0 +1,19 @@
+/* A reference reached from a citation is not hidden by the header and is highlighted. */
+.md-typeset li > a[id] {
+  scroll-margin-top: 6rem;
+}
+
+.md-typeset li:has(> a[id]:target) {
+  background: var(--md-accent-fg-color--transparent);
+  border-radius: 0.2rem;
+  outline: 0.3rem solid var(--md-accent-fg-color--transparent);
+}
+
+/* Figures: a two-column grid on the home page, and images that never overflow */
+.md-typeset .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 0.6rem; }
+.md-typeset .grid p { margin: 0; }
+.md-typeset img { max-width: 100%; height: auto; }
+
+/* 3D view: wider than the text column, centred on the page */
+.md-typeset .view3d { width: min(96vw, 1500px); position: relative; left: 50%; transform: translateX(-50%); }
+.md-typeset .view3d iframe { width: 100%; height: 82vh; min-height: 520px; border: 1px solid var(--md-default-fg-color--lightest); border-radius: 4px; display: block; }
