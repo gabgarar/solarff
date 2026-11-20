@@ -5,16 +5,24 @@
 [![tests](https://github.com/gabgarar/solarff/actions/workflows/tests.yml/badge.svg)](https://github.com/gabgarar/solarff/actions/workflows/tests.yml)
 [![docs](https://github.com/gabgarar/solarff/actions/workflows/docs.yml/badge.svg)](https://gabgarar.github.io/solarff/)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
-[![License: BSD-3-Clause](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)](LICENSE)
+[![License: BSD-3-Clause](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)](https://github.com/gabgarar/solarff/blob/main/LICENSE)
 
-*Extrapolation of the solar coronal magnetic field from SDO/HMI vector magnetograms, with a
-calibrated confidence for every field line.*
+**Nonlinear force-free field (NLFFF) extrapolation of the solar coronal magnetic field in Python,**
+from SDO/HMI vector magnetograms, with potential and linear force-free fields, field-line tracing, a
+confidence for every field line, free energy, magnetic helicity, twist, decay index, QSLs, and
+comparison with SDO/AIA coronal loops.
 
 **Documentation: <https://gabgarar.github.io/solarff/>**
 
 A nonlinear force-free (NLFFF) extrapolation gives a full 3D field, but not all of it deserves the
 same trust. `solarff` computes the extrapolation and then tells you, line by line, how likely each
 field line is to reproduce the true geometry.
+
+![Field lines of a simulated active region and of two extrapolations](https://gabgarar.github.io/solarff/img/realistic/lines_truth_default_recommended.png)
+
+*The same seeds traced in a radiative MHD simulation of an active region (grey) and in two NLFFF
+extrapolations of its photospheric field: blue lines follow the truth, orange ones are wrong.
+[More](https://gabgarar.github.io/solarff/realistic/).*
 
 ## What it does
 
@@ -112,7 +120,7 @@ maintenance remain the responsibility of the author.
 
 ## License and citation
 
-`solarff` is distributed under the [BSD 3-Clause](LICENSE) license. If you use it in academic work,
+`solarff` is distributed under the [BSD 3-Clause](https://github.com/gabgarar/solarff/blob/main/LICENSE) license. If you use it in academic work,
 please cite the software (`CITATION.cff`; GitHub shows it under "Cite this repository").
 
 > García, G. (2026). *solarff: NLFFF extrapolations with a calibrated per-line confidence* (v1.3.0).

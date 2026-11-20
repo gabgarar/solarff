@@ -1,5 +1,6 @@
 site_name: solarff
-site_description: NLFFF extrapolation of the solar coronal magnetic field with a calibrated per-line confidence
+site_description: "solarff: nonlinear force-free field (NLFFF) extrapolation of the solar coronal magnetic field in Python, from SDO/HMI vector magnetograms, with a confidence for every field line"
+site_author: Gabriel García
 site_url: https://gabgarar.github.io/solarff/
 repo_url: https://github.com/gabgarar/solarff
 repo_name: gabgarar/solarff

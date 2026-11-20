@@ -30,6 +30,20 @@ that trusts the base less is recommended below for photospheric magnetograms.
 - The criteria of every test were written down before running it, and the final tests use
   snapshots that had not been opened before.
 
+## What a wrong line looks like
+
+![The same seeds in the simulation and in two extrapolations](img/realistic/lines_truth_default_recommended.png)
+
+*One case of the final test, on a snapshot never used before: pixel 0.77 Mm and HMI-like noise. The
+true lines of the simulation are grey; each model line traced from the same seed is blue if it
+follows the true one and orange if it is wrong. Top, seen from above; bottom, from the side. With the
+default treatment of the base 59 % of the 300 lines are wrong, with the recommended one 43 %. The
+default model makes many loops too high and opens lines that are closed in the simulation. 90 lines
+are drawn; the percentages count all 300.*
+
+`examples/46_simulation_figures.py` draws the two figures of this page. A version at 300 dpi is
+written to `docs/informes/simulations/`.
+
 ## The calibrated confidence does not hold
 
 Eighteen extrapolations of the simulated active region (three snapshots, two pixels, three noise
@@ -110,7 +124,14 @@ Wrong lines at the simulated photosphere, on three snapshots never used before:
 ## How much to trust the base
 
 `relax_bottom` is the weight $\nu$ of the term that ties the transverse field of the base to the
-data. The best weight depends on how force-free the base is:
+data. In a scan of that weight alone, without preprocessing, on snapshots and noise never used
+before, the best weight depends on how force-free the base is:
+
+![Wrong lines against the weight of the base](img/realistic/base_weight_by_regime.png)
+
+*Each curve is a regime of the test; the open circle is its best weight and the dotted line the
+default. At the simulated photosphere the best weight is 0.01; with a base that is closer to
+force-free, it is 1.*
 
 | Base | $\nu = 1$ | $\nu = 0.01$ |
 |---|---|---|

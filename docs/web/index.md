@@ -1,7 +1,7 @@
 # solarff
 
-**Extrapolation of the solar coronal magnetic field from SDO/HMI vector magnetograms, with a
-calibrated confidence for every field line.**
+**Nonlinear force-free field (NLFFF) extrapolation of the solar coronal magnetic field in Python,
+from SDO/HMI vector magnetograms, with a confidence for every field line.**
 
 A nonlinear force-free (NLFFF) extrapolation gives a full 3D field, but not all of it deserves the
 same trust. `solarff` computes the extrapolation and then tells you, line by line, how likely each
@@ -57,6 +57,12 @@ Every figure below comes from the report of NOAA 11158 that the library writes o
 ![Squashing factor and QSLs](img/report/qmap.png)
 
 </div>
+
+![Field lines of a simulated active region and of two extrapolations](img/realistic/lines_truth_default_recommended.png)
+
+*Tested against a radiative MHD simulation: the same seeds in the simulation (grey) and in two
+extrapolations, blue where the line is right and orange where it is wrong. See
+[Tests against simulations](realistic.md).*
 
 *Field lines of the potential, linear and NLFFF models; confidence of the line that leaves each
 pixel; measurement of the angle with the loops seen by AIA; quasi-separatrix layers at the base.*
