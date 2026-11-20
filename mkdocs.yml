@@ -37,7 +37,15 @@ theme:
 
 nav:
   - Home: index.md
-  - Getting started: getting-started.md
+  - Getting started:
+      - Overview: getting-started/index.md
+      - An HMI active region: getting-started/hmi-region.md
+      - Field lines and confidence: getting-started/lines-confidence.md
+      - A full study and its report: getting-started/study-report.md
+      - Energy and eruptivity: getting-started/energy-eruptivity.md
+      - Comparison with AIA loops: getting-started/aia-loops.md
+      - Benchmarks and simulations: getting-started/benchmarks.md
+      - Parameter reference: getting-started/parameters.md
   - Method and equations: method.md
   - Per-line confidence: confidence.md
   - Tests against simulations: realistic.md

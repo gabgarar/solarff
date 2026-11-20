@@ -86,7 +86,7 @@ against the analytical solution of Low & Lou (1990).
 | Topic | Page |
 |---|---|
 | Physical context, equations, inputs and outputs of each step | [Method and equations](https://gabgarar.github.io/solarff/method/) |
-| Data, first run, sunpy, PDF reports | [Getting started](https://gabgarar.github.io/solarff/getting-started/) |
+| Installation and recipes for each use case, with every parameter explained | [Getting started](https://gabgarar.github.io/solarff/getting-started/) |
 | How to apply the confidence, and its limits | [Per-line confidence](https://gabgarar.github.io/solarff/confidence/) |
 | The confidence against MHD simulations, and the recommended treatment of a photospheric base | [Tests against simulations](https://gabgarar.github.io/solarff/realistic/) |
 | Energy, helicity, twist, decay index, QSLs, Monte Carlo, figures, limitations | [Diagnostics](https://gabgarar.github.io/solarff/diagnostics/) |

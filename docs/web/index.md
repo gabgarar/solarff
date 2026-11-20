@@ -42,9 +42,29 @@ the accepted ones are wrong, against about 30 % of all lines.
     less lowers the wrong lines from 64 to 48 %. Read [Tests against simulations](realistic.md)
     before applying the confidence to a real region.
 
+## What it produces
+
+Every figure below comes from the report of NOAA 11158 that the library writes on its own.
+
+<div class="grid" markdown>
+
+![Field lines of three models](img/report/lines.png)
+
+![Confidence of each line](img/report/confidence.png)
+
+![Comparison with AIA loops](img/report/aia_steps.png)
+
+![Squashing factor and QSLs](img/report/qmap.png)
+
+</div>
+
+*Field lines of the potential, linear and NLFFF models; confidence of the line that leaves each
+pixel; measurement of the angle with the loops seen by AIA; quasi-separatrix layers at the base.*
+
 ## Where to go next
 
-- [Getting started](getting-started.md): installation, data and a first extrapolation.
+- [Getting started](getting-started/index.md): installation and recipes for each use case, from a
+  first extrapolation to a full report, with every parameter explained.
 - [Method and equations](method.md): the physical context, every equation, and the inputs and outputs of each step.
 - [Per-line confidence](confidence.md): how to apply it to your own extrapolation, and its limits.
 - [Tests against simulations](realistic.md): the confidence against MHD simulations, and the

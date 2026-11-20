@@ -18,6 +18,8 @@ The free energy can be defined as the difference with the potential field (E −
 of the current-carrying part (E_J). They differ by 4–19 % in the regions studied, so always state
 which one you quote.
 
+![Energy and helicity of NOAA 11158](img/report/energy_helicity.png)
+
 ## Is the region eruptive?
 
 | Function | What it computes | Usual threshold |
@@ -28,6 +30,15 @@ which one you quote.
 
 For the decay index, compute the potential field with `pad=2`. The periodic copies of the Fourier
 solution distort the decay with height otherwise.
+
+![Twist number](img/report/twist.png)
+
+![Decay index](img/report/decay.png)
+
+![Squashing factor](img/report/qmap.png)
+
+*Twist, decay index and squashing factor of NOAA 11158. Each one is explained in
+[Energy and eruptivity](getting-started/energy-eruptivity.md).*
 
 ## Uncertainties: Monte Carlo with the HMI errors
 
@@ -45,6 +56,8 @@ twist.
 !!! warning "These are lower bounds"
     The Monte Carlo errors include neither systematic errors, nor ambiguity-resolution errors, nor
     the dependence on the extrapolation method.
+
+![Monte Carlo of NOAA 11158](img/report/montecarlo.png)
 
 ## Comparing models
 
@@ -94,6 +107,14 @@ On the Low & Lou benchmark (n = m = 1, 48×48×32 grid) the three models compare
 | `plot_alpha_maps(models, z)` | α on a horizontal slice |
 | `plot_alpha_histogram(models, seeds)` | mean α of each line and its variation along it |
 | `plot_error_maps(models, reference, heights)` | angle between each model and a reference at several heights |
+
+![plot_magnetogram](img/report/magnetogram.png)
+
+![plot_alpha_maps](img/report/alpha_maps.png)
+
+![plot_error_maps](img/report/errors.png)
+
+*`plot_magnetogram`, `plot_alpha_maps` and `plot_error_maps` on NOAA 11158.*
 
 ### Interactive 3D view
 

@@ -8,3 +8,8 @@
   border-radius: 0.2rem;
   outline: 0.3rem solid var(--md-accent-fg-color--transparent);
 }
+
+/* Figures: a two-column grid on the home page, and images that never overflow */
+.md-typeset .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 0.6rem; }
+.md-typeset .grid p { margin: 0; }
+.md-typeset img { max-width: 100%; height: auto; }

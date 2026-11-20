@@ -165,6 +165,11 @@ $$
 which is 0 for an exactly force-free field, and by the fractional flux $\langle|f_i|\rangle$, which
 measures the residual divergence.
 
+![Convergence of the NLFFF in NOAA 11158](img/report/convergence.png)
+
+*History of the functional of `nlfff_lbfgs` in NOAA 11158: the total, the force and divergence term,
+and the misfit to the data at the base.*
+
 ## Step 3: field lines
 
 A field line is the solution of $d\mathbf{r}/ds = \mathbf{B}/|\mathbf{B}|$. It is integrated in both
@@ -179,6 +184,10 @@ directions from a seed with fourth-order Runge–Kutta on the trilinearly interp
 `seeds_from_magnetogram(mag, n, threshold, polarity)` places `n` seeds where abs($B_z$) exceeds
 `threshold` times its maximum. Each `FieldLine` holds its points in Mm, its seed and whether both ends
 are at the base (`closed`).
+
+![The same seeds in three models](img/report/connectivity.png)
+
+*The same numbered seeds traced in the potential, linear and NLFFF models of NOAA 11158.*
 
 ## Step 4: indicators and confidence
 
@@ -235,6 +244,10 @@ judged by:
 | ECE | $\sum_m \frac{\lvert B_m\rvert}{n}\,\lvert\bar y(B_m)-\bar p(B_m)\rvert$ over 10 bins of $p$ | can the probability be read literally? |
 | Brier score | $\frac{1}{n}\sum_i (p_i-y_i)^2$ | both at once |
 | Risk–coverage | fraction of wrong lines among those kept, against the fraction kept | which threshold suits my use? |
+
+![Confidence of the lines of NOAA 11158](img/report/reliable_lines.png)
+
+*Lines accepted by the confidence in colour, the rest in grey.*
 
 ## Step 5: energy, helicity and topology
 

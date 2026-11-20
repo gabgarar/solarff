@@ -21,7 +21,8 @@ a["reliable"]        # boolean mask: confidence >= 0.8
 a["indicators"]      # the indicators the confidence is computed from
 ```
 
-Two more helpers build on it:
+A step-by-step recipe with every parameter is in
+[Field lines and confidence](getting-started/lines-confidence.md). Two more helpers build on it:
 
 ```python
 cm = sff.confidence_map(nl, mag=mag, step=2)            # confidence of the line leaving each pixel
@@ -49,6 +50,14 @@ vol = sff.reliable_volume(nl, lines, a["reliable"])     # 3D mask of cells threa
   `solarff.confidence.CALIBRATION_V1`.
 - **Validation:** leaving out one whole family at a time, so the model is always tested on a
   geometry it has not seen.
+
+![Indicators and calibration](img/report/calibration.png)
+
+![Validation by leaving one family out](img/report/calibration_cv.png)
+
+*Top: the separating power of each indicator, and the error of each line against its confidence.
+Bottom: predicted against observed probability, AUC per family left out, and wrong lines against
+resolution.*
 
 | Threshold | Lines accepted | Wrong among the accepted |
 |---|---|---|
