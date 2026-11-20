@@ -67,6 +67,8 @@ extrapolations, blue where the line is right and orange where it is wrong. See
 *Field lines of the potential, linear and NLFFF models; confidence of the line that leaves each
 pixel; measurement of the angle with the loops seen by AIA; quasi-separatrix layers at the base.*
 
+**[Explore three active regions in 3D](view3d.md)**, in the browser.
+
 ## Where to go next
 
 - [Getting started](getting-started/index.md): installation and recipes for each use case, from a

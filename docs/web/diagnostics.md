@@ -118,6 +118,8 @@ On the Low & Lou benchmark (n = m = 1, 48×48×32 grid) the three models compare
 
 ### Interactive 3D view
 
+[Try it with three active regions](view3d.md).
+
 `tools/lines3d.py` writes a single HTML page with every line traced from the base of one or more regions. The page
 draws the lines in 3D over the magnetogram. They can be coloured by apex height, by confidence or by the confidence
 model that accepts them, and hovering over a line shows its confidence. The horizontal field can be added as arrows:

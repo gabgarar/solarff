@@ -50,6 +50,7 @@ nav:
   - Method and equations: method.md
   - Per-line confidence: confidence.md
   - Tests against simulations: realistic.md
+  - 3D view: view3d.md
   - Diagnostics: diagnostics.md
   - Reproducing the results: reproduce.md
   - API reference:
